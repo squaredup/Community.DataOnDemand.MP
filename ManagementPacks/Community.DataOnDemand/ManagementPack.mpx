@@ -1,0 +1,26 @@
+﻿<ManagementPackFragment SchemaVersion="2.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+  <LanguagePacks>
+    <LanguagePack ID="ENU" IsDefault="true">
+      <DisplayStrings>
+        <DisplayString ElementID="Community.DataOnDemand">
+          <Name>Data on Demand - Community Management Pack</Name>
+          <Description>Provides useful SCOM tasks for accessing data on demand from your environment.  Maintained at https://github.com/squaredup/Community.DataOnDemand.MP</Description>          
+        </DisplayString>
+      </DisplayStrings>
+      <KnowledgeArticles>
+        <KnowledgeArticle ElementID="Community.DataOnDemand" Visible="true">
+          <MamlContent>
+            <maml:section xmlns:maml="http://schemas.microsoft.com/maml/2004/10">
+              <maml:title>Summary</maml:title>
+              <maml:para>Provides useful SCOM tasks for accessing data on demand from your environment.</maml:para>
+              <maml:para>Maintained at <maml:navigationLink><maml:linkText>https://github.com/squaredup/Community.DataOnDemand.MP</maml:linkText><maml:uri href="https://github.com/squaredup/Community.DataOnDemand.MP" /></maml:navigationLink></maml:para>
+            </maml:section>
+          </MamlContent>
+        </KnowledgeArticle>
+
+      </KnowledgeArticles>
+    </LanguagePack>
+  </LanguagePacks>
+  
+</ManagementPackFragment>

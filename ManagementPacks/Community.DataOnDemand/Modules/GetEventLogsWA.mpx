@@ -1,0 +1,108 @@
+﻿<ManagementPackFragment SchemaVersion="2.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  
+  <TypeDefinitions>
+    <ModuleTypes>
+      <WriteActionModuleType ID="Community.DataOnDemand.WriteAction.GetEventLogs" Accessibility="Public" Batching="false">
+        <Configuration>
+          <xsd:element name="LogName" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+          <xsd:element name="After" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+          <xsd:element name="Before" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+          <xsd:element name="Top" type="xsd:int" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+          <xsd:element name="EntryType" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+          <xsd:element name="Format" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+          <xsd:element name="TimeoutSeconds" type="xsd:int" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+        </Configuration>
+        <OverrideableParameters>
+          <OverrideableParameter ID="LogName" Selector="$Config/LogName$" ParameterType="string" />
+          <OverrideableParameter ID="After" Selector="$Config/After$" ParameterType="string" />
+          <OverrideableParameter ID="Before" Selector="$Config/Before$" ParameterType="string" />
+          <OverrideableParameter ID="Top" Selector="$Config/Top$" ParameterType="int" />
+          <OverrideableParameter ID="EntryType" Selector="$Config/EntryType$" ParameterType="string" />
+          <OverrideableParameter ID="Format" Selector="$Config/Format$" ParameterType="string" />
+          <OverrideableParameter ID="TimeoutSeconds" Selector="$Config/TimeoutSeconds$" ParameterType="int" />
+        </OverrideableParameters>
+        <ModuleImplementation>
+          <Composite>
+            <MemberModules>
+              <WriteAction ID="WA" TypeID="Windows!Microsoft.Windows.PowerShellWriteAction">
+                <ScriptName>Get-EventLogs.ps1</ScriptName>
+                <ScriptBody>$IncludeFileContent/Scripts/Get-EventLogs.ps1$</ScriptBody>
+                <Parameters>
+                  <Parameter>
+                    <Name>LogName</Name>
+                    <Value>$Config/LogName$</Value>
+                  </Parameter>
+                  <Parameter>
+                    <Name>After</Name>
+                    <Value>$Config/After$</Value>
+                  </Parameter>
+                  <Parameter>
+                    <Name>Before</Name>
+                    <Value>$Config/Before$</Value>
+                  </Parameter>
+                  <Parameter>
+                    <Name>Top</Name>
+                    <Value>$Config/Top$</Value>
+                  </Parameter>
+                  <Parameter>
+                    <Name>EntryType</Name>
+                    <Value>$Config/EntryType$</Value>
+                  </Parameter>
+                  <Parameter>
+                    <Name>Format</Name>
+                    <Value>$Config/Format$</Value>
+                  </Parameter>
+                </Parameters>
+                <TimeoutSeconds>$Config/TimeoutSeconds$</TimeoutSeconds>
+              </WriteAction>
+            </MemberModules>
+            <Composition>
+              <Node ID="WA" />
+            </Composition>
+          </Composite>
+        </ModuleImplementation>
+        <InputType>System!System.BaseData</InputType>
+      </WriteActionModuleType>
+    </ModuleTypes>
+  </TypeDefinitions>
+  
+  <LanguagePacks>
+    <LanguagePack ID="ENU" IsDefault="true">
+      <DisplayStrings>
+        <DisplayString ElementID="Community.DataOnDemand.WriteAction.GetEventLogs">
+          <Name>Data On Demand windows event log enumeration write action</Name>
+          <Description>Displays n events from the specified windows event log.</Description>
+        </DisplayString>
+        <DisplayString ElementID="Community.DataOnDemand.WriteAction.GetEventLogs" SubElementID="LogName">
+          <Name>Event log Name</Name>
+          <Description>E.g. application, system, security.</Description>
+        </DisplayString>
+        <DisplayString ElementID="Community.DataOnDemand.WriteAction.GetEventLogs" SubElementID="After">
+          <Name>Start Date</Name>
+          <Description>Optional start date of records</Description>
+        </DisplayString>
+        <DisplayString ElementID="Community.DataOnDemand.WriteAction.GetEventLogs" SubElementID="Before">
+          <Name>End Date</Name>
+          <Description>Optional End date of records</Description>
+        </DisplayString>
+        <DisplayString ElementID="Community.DataOnDemand.WriteAction.GetEventLogs" SubElementID="Top">
+          <Name>Display count</Name>
+          <Description>Number of records to retrieve</Description>
+        </DisplayString>
+        <DisplayString ElementID="Community.DataOnDemand.WriteAction.GetEventLogs" SubElementID="EntryType">
+          <Name>Severity</Name>
+          <Description>Optional. Valid values are Error, Information,FailureAudit, SuccessAudit, and Warning.</Description>
+        </DisplayString>
+        <DisplayString ElementID="Community.DataOnDemand.WriteAction.GetEventLogs" SubElementID="Format">
+          <Name>Output format</Name>
+          <Description>Allowed values: csv, json, text.</Description>
+        </DisplayString>        
+        <DisplayString ElementID="Community.DataOnDemand.WriteAction.GetEventLogs" SubElementID="TimeoutSeconds">
+          <Name>Timeout (Seconds)</Name>
+          <Description>Script timeout in seconds</Description>
+        </DisplayString>
+      </DisplayStrings>
+    </LanguagePack>
+  </LanguagePacks>
+  
+</ManagementPackFragment>

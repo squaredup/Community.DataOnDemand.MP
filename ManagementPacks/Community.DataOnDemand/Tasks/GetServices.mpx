@@ -1,0 +1,23 @@
+﻿<ManagementPackFragment SchemaVersion="2.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Monitoring>
+    <Tasks>
+      <Task ID="Community.DataOnDemand.GetServices" Accessibility="Public" Timeout="60" Enabled="true" Remotable="false" Target="Windows!Microsoft.Windows.Computer">
+        <Category>Operations</Category>
+        <WriteAction ID="WA" TypeID="Community.DataOnDemand.WriteAction.GetServices">
+          <Format>csv</Format>
+          <TimeoutSeconds>60</TimeoutSeconds>
+        </WriteAction>
+      </Task>
+    </Tasks>
+  </Monitoring>
+  <LanguagePacks>
+    <LanguagePack ID="ENU" IsDefault="true">
+      <DisplayStrings>
+        <DisplayString ElementID="Community.DataOnDemand.GetServices">
+          <Name>List Services (Data On Demand)</Name>
+          <Description>Displays services and their status on the target computer.</Description>
+        </DisplayString>
+      </DisplayStrings>
+    </LanguagePack>
+  </LanguagePacks>
+</ManagementPackFragment>
