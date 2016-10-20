@@ -7,6 +7,12 @@
 *.userosscache
 *.sln.docstates
 
+# Secrets
+*.snk
+
+# Management Pack Projects
+/ManagementPacks/*/MPResources.resources
+
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 
@@ -250,3 +256,4 @@ paket-files/
 # JetBrains Rider
 .idea/
 *.sln.iml
+
