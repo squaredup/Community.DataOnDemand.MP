@@ -25,21 +25,17 @@ if ($Format -eq 'text')
     $OutputObjects `
         | Select-Object Entry, RecordName, RecordType, Data `
         | Format-Table -AutoSize `
-        | Out-String -Width 4096 `
-        | write-host
+        | Out-String -Width 4096
 }
 elseif ($Format -eq 'csv')
 {
     $OutputObjects `
-        | convertto-csv `
-        | Out-String `
-        | write-host
+        | convertto-csv -NoTypeInformation
 }
 elseif ($Format -eq 'json')
 {
     $OutputObjects `
-        | convertto-json `
-        | write-host
+        | convertto-json
 }
 
 # Done. (do not remove blank line following this comment as it can cause problems when script is sent to SCOM agent!)

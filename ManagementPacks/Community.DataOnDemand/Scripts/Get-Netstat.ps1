@@ -167,20 +167,19 @@ if ($Format -eq 'text')
 {
 	ConvertFrom-Csv ($output -replace '%EOL%','') `
         | Format-Table -AutoSize `
-        | Out-String -Width 4096 `
-        | Write-Host
+        | Out-String -Width 4096
 }
 elseif ($Format -eq 'csv')
 {
-	($output -replace '%EOL%','') | Out-String -Width 4096 | Write-Host
+	($output -replace '%EOL%','') | Out-String -Width 4096
 }
 elseif ($Format -eq 'csvEx')
 {
-	$output | Write-Host
+	$output
 }
 elseif ($Format -eq 'json')
 {
-	ConvertFrom-Csv ($output -replace '%EOL%','') | ConvertTo-Json | Write-Host
+	ConvertFrom-Csv ($output -replace '%EOL%','') | ConvertTo-Json
 }
 
 # Done. (do not remove blank line following this comment as it can cause problems when script is sent to SCOM agent!)

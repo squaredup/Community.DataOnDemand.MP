@@ -23,23 +23,19 @@ if ($Format -eq 'text')
         | Sort-Object -Property Name `
         | Select-Object DisplayName, Status, Name  `
         | Format-Table -AutoSize `
-        | Out-String -Width 4096 `
-        | Write-Host
+        | Out-String -Width 4096
 }
 elseif ($Format -eq 'csv')
 {
     Get-Service `
         | Sort-Object -Property Name `
-        | ConvertTo-Csv `
-        | Out-String `
-        | write-host
+        | ConvertTo-Csv -NoTypeInformation
 }
 elseif ($Format -eq 'json')
 {
     Get-Service `
         | Sort-Object -Property Name `
-        | ConvertTo-Json `
-        | write-host
+        | ConvertTo-Json
 }
 
 # Done. (do not remove blank line following this comment as it can cause problems when script is sent to SCOM agent!)
