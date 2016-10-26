@@ -14,8 +14,8 @@ This GitHub repository contains the source files. The sealed downloadable manage
 
 To install the Data On Demand MP you will need:
 
-- SCOM 2012 R2 (earlier versions may be supported but are untested)
-- SCOM Admin rights (only Administrators can import management packs)
+* SCOM 2012 R2 (earlier versions may be supported but are untested)
+* SCOM Admin rights (only Administrators can import management packs)
 
 ### Install the SCOM Management Pack
 
@@ -48,3 +48,9 @@ If you have found a specific bug or issue with the tasks in this management pack
 ## Contributions
 
 If you want to suggest some fixes or improvements to the script or management pack, raise an issue on [the GitHub Issues page](https://github.com/squaredup/Community.DataOnDemand.MP/issues) or better, submit the suggested change as a [Pull Request](https://github.com/squaredup/Community.DataOnDemand.MP/pulls).
+
+### Guidelines
+
+* If your change would bring in a non-standard MP reference (i.e a management pack not imported into SCOM by default) then please create a new management pack in the solution.
+* Ensure that there are no outstanding Management Pack Best Practices Analyser issues reported by your change.
+* Task DisplayStrings should be suffixed with `(Data On Demand)`.
