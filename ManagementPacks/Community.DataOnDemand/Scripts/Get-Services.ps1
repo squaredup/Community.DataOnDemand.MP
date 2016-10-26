@@ -9,7 +9,7 @@
     Copyright 2016 Squared Up Limited, All Rights Reserved.
 #>
 Param(
-    [ValidateSet("text","csv","json")]
+    [ValidateSet("text","csv","json","list")]
     [string] $Format = "csv"
 )
 
@@ -37,5 +37,11 @@ elseif ($Format -eq 'json')
         | Sort-Object -Property Name `
         | ConvertTo-Json
 }
-
+elseif ($Format -eq 'list')
+{
+    Get-Service `
+        | Sort-Object -Property Name `
+        | Select-Object DisplayName, Status, Name  `
+        | Format-List
+}
 # Done. (do not remove blank line following this comment as it can cause problems when script is sent to SCOM agent!)

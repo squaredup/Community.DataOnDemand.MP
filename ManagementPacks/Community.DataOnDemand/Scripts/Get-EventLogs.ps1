@@ -24,7 +24,7 @@ Param(
 	[string] $Before,
     [nullable[int]] $Top,
     [string] $EntryType,
-    [ValidateSet("text","csv","json")]
+    [ValidateSet("text","csv","json", "list")]
     [string] $Format = "csv"
 )
 
@@ -68,6 +68,12 @@ elseif ($Format -eq 'json')
     $EventLogs `
         | Sort-Object -Property TimeGenerated -Descending `
         | ConvertTo-Json
+}
+elseif ($format -eq 'list')
+{
+    $EventLogs `
+        | Sort-Object -Property TimeGenerated -Descending `
+        | Format-List
 }
 
 # Done. (do not remove blank line following this comment as it can cause problems when script is sent to SCOM agent!)

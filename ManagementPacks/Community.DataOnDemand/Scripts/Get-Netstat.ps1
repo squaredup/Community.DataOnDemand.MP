@@ -21,7 +21,7 @@
 	Copyright 2016 Squared Up Limited, All Rights Reserved.
 #>
 Param(
-    [ValidateSet("text","csv","csvEx","json")]
+    [ValidateSet("text","csv","csvEx","json","list")]
     [string] $Format = "csv"
 )
 
@@ -180,6 +180,11 @@ elseif ($Format -eq 'csvEx')
 elseif ($Format -eq 'json')
 {
 	ConvertFrom-Csv ($output -replace '%EOL%','') | ConvertTo-Json
+}
+elseif ($Format -eq 'list')
+{
+	ConvertFrom-Csv ($output -replace '%EOL%','') `
+        | Format-List
 }
 
 # Done. (do not remove blank line following this comment as it can cause problems when script is sent to SCOM agent!)

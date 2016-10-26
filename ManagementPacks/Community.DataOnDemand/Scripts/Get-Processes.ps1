@@ -18,7 +18,7 @@ Param(
     [string] $OrderBy = "Pid",
     $Descending = $false,
     [int] $Top = "99999",
-    [ValidateSet("text","csv","json")]
+    [ValidateSet("text","csv","json","list")]
     [string] $Format = "csv"
 )
 
@@ -87,6 +87,13 @@ elseif ($Format -eq 'json')
         | Sort-Object -Property $OrderBy -Descending:$Desc `
         | Select-Object -First $Top `
         | convertto-json
+}
+elseif ($Format -eq 'list')
+{
+    $OutputObjects `
+        | Sort-Object -Property $OrderBy -Descending:$Desc `
+        | Select-Object -First $Top Pid, Name, CpuPercent, PrivateBytes, Description, ParentPid, SessionId, Handles, Threads `
+        | Format-List
 }
 
 # Done. (do not remove blank line following this comment as it can cause problems when script is sent to SCOM agent!)
