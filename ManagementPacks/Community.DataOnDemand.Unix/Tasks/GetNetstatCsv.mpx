@@ -1,0 +1,24 @@
+﻿<ManagementPackFragment SchemaVersion="2.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <Monitoring>
+    <Tasks>
+      <Task ID="Community.DataOnDemand.Unix.Task.GetNetstatCsv" Accessibility="Public" Timeout="60" Enabled="true" Remotable="false" Target="MUL!Microsoft.Unix.Computer">
+        <Category>Operations</Category>
+        <ProbeAction ID="Probe" TypeID="Community.DataOnDemand.Unix.Probe.GetNetstatCsv">
+          <Format>csvEx</Format>
+          <TargetSystem>$Target/Property[Type='MUL!Microsoft.Unix.Computer']/NetworkName$</TargetSystem>
+          <TimeoutSeconds>60</TimeoutSeconds>
+        </ProbeAction>
+      </Task>
+    </Tasks>
+  </Monitoring>
+  <LanguagePacks>
+    <LanguagePack ID="ENU" IsDefault="true">
+      <DisplayStrings>
+        <DisplayString ElementID="Community.DataOnDemand.Unix.Task.GetNetstatCsv">
+          <Name>Get Netstat CSV (Data On Demand)</Name>
+          <Description>Displays established TCP connections on the target computer.</Description>
+        </DisplayString>
+      </DisplayStrings>
+    </LanguagePack>
+  </LanguagePacks>
+</ManagementPackFragment>
