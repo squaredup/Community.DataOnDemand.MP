@@ -8,10 +8,14 @@ if [ -z "$Format" ]; then
 	Format="csv"
 fi
 
+# Store hostname in case it's not availible in certain shells
+localHostName=$(hostname)
+
 lineEnd=""
 case "$Format" in
 	csv)
         lineEnd="\n"
+	;;
     csvEx)
 		lineEnd="%EOL%"
 	;;
@@ -32,9 +36,9 @@ netstat -tpn |
         split($7,pid, "/")
         split($5, remote, ",")
         "ps -o args= --pid " pid[1] | getline args
-        sub(/^[^"].+[^"]$/, "\"&\"", args)
+        sub(/^[^"].+[^"]$/, "\"&amp;\"", args)
         "ps -o comm= --pid " pid[1] | getline comm
-        print "'"$HOSTNAME"'", pid[1], comm, args, toupper($1), $4, $5, $6, remote[1]
+        print "'"$localHostName"'", pid[1], comm, args, toupper($1), $4, $5, $6, remote[1]
     }'
 
 exit

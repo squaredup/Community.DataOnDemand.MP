@@ -28,12 +28,12 @@
                 <Uri>http://schemas.microsoft.com/wbem/wscim/1/cim-schema/2/SCX_OperatingSystem?__cimnamespace=root/scx</Uri>
                 <Selector/>
                 <InvokeAction>ExecuteScript</InvokeAction>
-                <Input><![CDATA[
-                    <p:ExecuteScript_INPUT xmlns:p="http://schemas.microsoft.com/wbem/wscim/1/cim-schema/2/SCX_OperatingSystem">
+                <Input>
+                  <![CDATA[<p:ExecuteScript_INPUT xmlns:p="http://schemas.microsoft.com/wbem/wscim/1/cim-schema/2/SCX_OperatingSystem">
                     <p:script>$IncludeFileContent/Scripts/GetNetstatCSV.sh$</p:script>
                     <p:arguments>$Config/Format$</p:arguments>
                     <p:timeout>$Config/TimeoutSeconds$</p:timeout>
-                    </p:ExecuteScript_INPUT>]]>
+                  </p:ExecuteScript_INPUT>]]>
                 </Input>
               </ProbeAction>
             </MemberModules>
