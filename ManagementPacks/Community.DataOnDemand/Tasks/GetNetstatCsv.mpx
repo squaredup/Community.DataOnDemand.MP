@@ -4,7 +4,7 @@
       <Task ID="Community.DataOnDemand.GetNetstatCsv" Accessibility="Public" Timeout="60" Enabled="true" Remotable="false" Target="Windows!Microsoft.Windows.Computer">
         <Category>Operations</Category>
         <WriteAction ID="WA" TypeID="Community.DataOnDemand.WriteAction.GetNetstatCsv">
-          <Format>csvEx</Format>
+          <Format>csv</Format>
           <TimeoutSeconds>60</TimeoutSeconds>
         </WriteAction>
       </Task>
