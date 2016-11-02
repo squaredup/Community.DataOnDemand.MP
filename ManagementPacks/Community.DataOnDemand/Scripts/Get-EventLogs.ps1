@@ -55,19 +55,24 @@ if ($Format -eq 'text')
     $EventLogs `
         | Sort-Object -Property TimeGenerated -Descending `
         | Format-Table -AutoSize `
-        | Out-String -Width 4096
+		| Out-String -Width 4096 `
+        | Write-Host
 }
 elseif ($Format -eq 'csv')
 {
     $EventLogs `
         | Sort-Object -Property TimeGenerated -Descending `
-        | ConvertTo-Csv -NoTypeInformation
+        | ConvertTo-Csv -NoTypeInformation `
+		| Out-String -Width 4096 `
+		| Write-Host
 }
 elseif ($Format -eq 'json')
 {
     $EventLogs `
         | Sort-Object -Property TimeGenerated -Descending `
-        | ConvertTo-Json
+        | ConvertTo-Json `
+		| Out-String -Width 4096 `
+		| Write-Host
 }
 
 # Done. (do not remove blank line following this comment as it can cause problems when script is sent to SCOM agent!)

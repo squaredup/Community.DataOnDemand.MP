@@ -72,21 +72,26 @@ if ($Format -eq 'text')
         | Sort-Object -Property $OrderBy -Descending:$Desc `
         | Select-Object -First $Top Pid, Name, CpuPercent, PrivateBytes, Description, ParentPid, SessionId, Handles, Threads `
         | Format-Table -AutoSize `
-        | Out-String -Width 4096
+		| Out-String -Width 4096 `
+        | Write-Host
 }
 elseif ($Format -eq 'csv')
 {
     $OutputObjects `
         | Sort-Object -Property $OrderBy -Descending:$Desc `
         | Select-Object -First $Top  `
-        | convertto-csv -NoTypeInformation
+        | convertto-csv -NoTypeInformation `
+		| Out-String -Width 4096 `
+        | Write-Host
 }
 elseif ($Format -eq 'json')
 {
     $OutputObjects `
         | Sort-Object -Property $OrderBy -Descending:$Desc `
         | Select-Object -First $Top `
-        | convertto-json
+        | convertto-json `
+		| Out-String -Width 4096 `
+        | Write-Host
 }
 
 # Done. (do not remove blank line following this comment as it can cause problems when script is sent to SCOM agent!)
