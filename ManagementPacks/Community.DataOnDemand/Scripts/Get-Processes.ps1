@@ -18,7 +18,7 @@ Param(
     [string] $OrderBy = "Pid",
     $Descending = $false,
     [int] $Top = "99999",
-    [ValidateSet("text","csv","json")]
+    [ValidateSet("text","csv","json","list")]
     [string] $Format = "csv"
 )
 
@@ -72,7 +72,7 @@ if ($Format -eq 'text')
         | Sort-Object -Property $OrderBy -Descending:$Desc `
         | Select-Object -First $Top Pid, Name, CpuPercent, PrivateBytes, Description, ParentPid, SessionId, Handles, Threads `
         | Format-Table -AutoSize `
-		| Out-String -Width 4096 `
+        | Out-String -Width 4096 `
         | Write-Host
 }
 elseif ($Format -eq 'csv')
@@ -81,7 +81,7 @@ elseif ($Format -eq 'csv')
         | Sort-Object -Property $OrderBy -Descending:$Desc `
         | Select-Object -First $Top  `
         | convertto-csv -NoTypeInformation `
-		| Out-String -Width 4096 `
+        | Out-String -Width 4096 `
         | Write-Host
 }
 elseif ($Format -eq 'json')
@@ -90,7 +90,16 @@ elseif ($Format -eq 'json')
         | Sort-Object -Property $OrderBy -Descending:$Desc `
         | Select-Object -First $Top `
         | convertto-json `
-		| Out-String -Width 4096 `
+        | Out-String -Width 4096 `
+        | Write-Host
+}
+elseif ($Format -eq 'list')
+{
+    $OutputObjects `
+        | Sort-Object -Property $OrderBy -Descending:$Desc `
+        | Select-Object -First $Top Pid, Name, CpuPercent, PrivateBytes, Description, ParentPid, SessionId, Handles, Threads `
+        | Format-List `
+        | Out-String -Width 4096 `
         | Write-Host
 }
 

@@ -9,7 +9,7 @@
     Copyright 2016 Squared Up Limited, All Rights Reserved.
 #>
 Param(
-    [ValidateSet("text","csv","json")]
+    [ValidateSet("text","csv","json","list")]
     [string] $Format = "csv"
 )
 
@@ -23,7 +23,7 @@ if ($Format -eq 'text')
         | Sort-Object -Property Name `
         | Select-Object DisplayName, Status, Name  `
         | Format-Table -AutoSize `
-		| Out-String -Width 4096 `
+        | Out-String -Width 4096 `
         | Write-Host
 }
 elseif ($Format -eq 'csv')
@@ -31,7 +31,7 @@ elseif ($Format -eq 'csv')
     Get-Service `
         | Sort-Object -Property Name `
         | ConvertTo-Csv -NoTypeInformation `
-		| Out-String -Width 4096 `
+        | Out-String -Width 4096 `
         | Write-Host
 }
 elseif ($Format -eq 'json')
@@ -39,7 +39,16 @@ elseif ($Format -eq 'json')
     Get-Service `
         | Sort-Object -Property Name `
         | ConvertTo-Json `
-		| Out-String -Width 4096 `
+        | Out-String -Width 4096 `
+        | Write-Host
+}
+elseif ($Format -eq 'list')
+{
+    Get-Service `
+        | Sort-Object -Property Name `
+        | Select-Object DisplayName, Status, Name  `
+        | Format-List `
+        | Out-String -Width 4096 `
         | Write-Host
 }
 
