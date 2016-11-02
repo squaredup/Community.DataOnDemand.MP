@@ -5,7 +5,7 @@
         <Category>Operations</Category>
         <WriteAction ID="WA" TypeID="Community.DataOnDemand.WriteAction.GetDnsClientCache">
           <TimeoutSeconds>60</TimeoutSeconds>
-          <Format>text</Format>
+          <Format>csv</Format>
         </WriteAction>
       </Task>
     </Tasks>
