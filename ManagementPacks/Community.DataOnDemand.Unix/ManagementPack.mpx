@@ -14,8 +14,11 @@
               <maml:title>Summary</maml:title>
               <maml:para>Provides useful SCOM tasks for accessing data on demand from your environment.</maml:para>
               <maml:para>This MP provides tasks targeting Unix/Linux operating systems and components.</maml:para>
+            </maml:section>
+            <maml:section xmlns:maml="http://schemas.microsoft.com/maml/2004/10">
+              <maml:title>External</maml:title>
               <maml:para>
-                Maintained at <maml:navigationLink>
+                <maml:navigationLink>
                   <maml:linkText>https://github.com/squaredup/Community.DataOnDemand.MP</maml:linkText>
                   <maml:uri href="https://github.com/squaredup/Community.DataOnDemand.MP" />
                 </maml:navigationLink>
@@ -23,7 +26,6 @@
             </maml:section>
           </MamlContent>
         </KnowledgeArticle>
-
       </KnowledgeArticles>
     </LanguagePack>
   </LanguagePacks>
