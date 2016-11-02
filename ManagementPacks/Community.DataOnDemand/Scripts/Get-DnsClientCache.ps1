@@ -42,23 +42,30 @@ if ($Format -eq 'text')
     $OutputObjects `
         | Select-Object Entry, Name, @{N='RecordType';E={Get-DNSRecordType $_.Type}}, Data `
         | Format-Table -AutoSize `
-        | Out-String -Width 4096
+        | Out-String -Width 4096 `
+		| Write-Host
 }
 elseif ($Format -eq 'csv')
 {
     $OutputObjects `
-        | convertto-csv -NoTypeInformation
+        | convertto-csv -NoTypeInformation `
+		| Out-String -Width 4096 `
+		| Write-Host
 }
 elseif ($Format -eq 'json')
 {
     $OutputObjects `
-        | convertto-json
+        | convertto-json `
+		| Out-String -Width 4096 `
+		| Write-Host
 }
 elseif ($format -eq 'list')
 {
     $OutputObjects `
         | Select-Object Entry, Name, @{N='RecordType';E={Get-DNSRecordType $_.Type}}, Data `
-        | Format-List
+        | Format-List `
+		| Out-String -Width 4096 `
+        | Write-Host
 }
 
 # Done. (do not remove blank line following this comment as it can cause problems when script is sent to SCOM agent!)
