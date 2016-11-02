@@ -7,7 +7,7 @@
           <OrderBy>CpuPercent</OrderBy>
           <Descending>true</Descending>
           <Top>10</Top>
-          <Format>text</Format>
+          <Format>csv</Format>
           <TimeoutSeconds>60</TimeoutSeconds>
         </WriteAction>
       </Task>
