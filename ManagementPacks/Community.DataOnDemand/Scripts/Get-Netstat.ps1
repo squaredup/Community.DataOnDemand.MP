@@ -10,18 +10,18 @@
     Permitted values: text, csv, json
 .NOTES
     netsh is used to find out which ports are being listened to by
-	http.sys.  Any TCP connections to such ports have their process
-	information faked up to an imaginary process called "HTTP.SYS"
-	with a PID of 5. (real PIDs are always a multiple of 4, so this
-	will never clash with a real process PID).
+    http.sys.  Any TCP connections to such ports have their process
+    information faked up to an imaginary process called "HTTP.SYS"
+    with a PID of 5. (real PIDs are always a multiple of 4, so this
+    will never clash with a real process PID).
 
-	Output is sent to Write-Host to simplify consumption of output
-	when run as a SCOM agent task.
+    Output is sent to Write-Host to simplify consumption of output
+    when run as a SCOM agent task.
 
-	Copyright 2016 Squared Up Limited, All Rights Reserved.
+    Copyright 2016 Squared Up Limited, All Rights Reserved.
 #>
 Param(
-    [ValidateSet("text","csv","csvEx","json")]
+    [ValidateSet("text","csv","csvEx","json","list")]
     [string] $Format = "csv"
 )
 
@@ -163,24 +163,39 @@ foreach ($line in $results) {
 }
 
 # Produce output in requested format
+
 if ($Format -eq 'text')
 {
-	ConvertFrom-Csv ($output -replace '%EOL%','') `
+    ConvertFrom-Csv ($output -replace '%EOL%','') `
         | Format-Table -AutoSize `
         | Out-String -Width 4096 `
         | Write-Host
 }
 elseif ($Format -eq 'csv')
 {
-	($output -replace '%EOL%','') | Out-String -Width 4096 | Write-Host
+    $output -replace '%EOL%','' `
+        | Out-String -Width 4096 `
+        | Write-Host
 }
 elseif ($Format -eq 'csvEx')
 {
-	$output | Write-Host
+    $output `
+        | Out-String -Width 4096 `
+        | Write-Host
 }
 elseif ($Format -eq 'json')
 {
-	ConvertFrom-Csv ($output -replace '%EOL%','') | ConvertTo-Json | Write-Host
+    ConvertFrom-Csv ($output -replace '%EOL%','') `
+        | ConvertTo-Json `
+        | Out-String -Width 4096 `
+        | Write-Host
+}
+elseif ($Format -eq 'list')
+{
+    ConvertFrom-Csv ($output -replace '%EOL%','') `
+        | Format-List `
+        | Out-String -Width 4096 `
+        | Write-Host
 }
 
 # Done. (do not remove blank line following this comment as it can cause problems when script is sent to SCOM agent!)

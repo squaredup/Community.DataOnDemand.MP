@@ -21,10 +21,10 @@
 Param(
     [string] $LogName = "system",
     [string] $After,
-	[string] $Before,
+    [string] $Before,
     [nullable[int]] $Top,
     [string] $EntryType,
-    [ValidateSet("text","csv","json")]
+    [ValidateSet("text","csv","json", "list")]
     [string] $Format = "csv"
 )
 
@@ -62,16 +62,25 @@ elseif ($Format -eq 'csv')
 {
     $EventLogs `
         | Sort-Object -Property TimeGenerated -Descending `
-        | ConvertTo-Csv `
-        | Out-String `
-        | write-host
+        | ConvertTo-Csv -NoTypeInformation `
+        | Out-String -Width 4096 `
+        | Write-Host
 }
 elseif ($Format -eq 'json')
 {
     $EventLogs `
         | Sort-Object -Property TimeGenerated -Descending `
         | ConvertTo-Json `
-        | write-host
+        | Out-String -Width 4096 `
+        | Write-Host
+}
+elseif ($format -eq 'list')
+{
+    $EventLogs `
+        | Sort-Object -Property TimeGenerated -Descending `
+        | Format-List `
+        | Out-String -Width 4096 `
+        | Write-Host
 }
 
 # Done. (do not remove blank line following this comment as it can cause problems when script is sent to SCOM agent!)

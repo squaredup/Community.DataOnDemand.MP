@@ -9,7 +9,7 @@
           <Before></Before>
           <Top>4</Top>
           <EntryType></EntryType>
-          <Format>text</Format>
+          <Format>csv</Format>
           <TimeoutSeconds>120</TimeoutSeconds>
         </WriteAction>
       </Task>

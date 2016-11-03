@@ -9,7 +9,7 @@
     Copyright 2016 Squared Up Limited, All Rights Reserved.
 #>
 Param(
-    [ValidateSet("text","csv","json")]
+    [ValidateSet("text","csv","json","list")]
     [string] $Format = "csv"
 )
 
@@ -30,16 +30,26 @@ elseif ($Format -eq 'csv')
 {
     Get-Service `
         | Sort-Object -Property Name `
-        | ConvertTo-Csv `
-        | Out-String `
-        | write-host
+        | ConvertTo-Csv -NoTypeInformation `
+        | Out-String -Width 4096 `
+        | Write-Host
 }
 elseif ($Format -eq 'json')
 {
     Get-Service `
         | Sort-Object -Property Name `
         | ConvertTo-Json `
-        | write-host
+        | Out-String -Width 4096 `
+        | Write-Host
+}
+elseif ($Format -eq 'list')
+{
+    Get-Service `
+        | Sort-Object -Property Name `
+        | Select-Object DisplayName, Status, Name  `
+        | Format-List `
+        | Out-String -Width 4096 `
+        | Write-Host
 }
 
 # Done. (do not remove blank line following this comment as it can cause problems when script is sent to SCOM agent!)
