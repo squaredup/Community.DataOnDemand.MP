@@ -112,7 +112,7 @@ foreach ($line in $results) {
 
     # Work out the process name and description
     $procName = "Unknown"
-    $procDesc = "Unknown"
+    $procDesc = ""
     $procId = [int]$col[4]
     if ($procId -eq 4) {
         $procName = $procDesc = "SYSTEM"
