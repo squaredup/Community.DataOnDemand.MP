@@ -37,7 +37,7 @@ Get Netstat (Data On Demand)     | Windows Computer | Displays established TCP c
 List Processes (Data On Demand)  | Windows Computer | Lists the top 10 processes sorted by CPU usage.
 List Services (Data On Demand)   | Windows Computer | Lists the name and status of services.
 
-**Note** Windows tasks support returning data in json, however this is only supported if PowerShell v3 or later are availible on the target agent.
+**Note:** Windows tasks support returning data in json, however this is only supported if PowerShell v3 or later are availible on the target agent.
 
 ## Help and Assistance
 
