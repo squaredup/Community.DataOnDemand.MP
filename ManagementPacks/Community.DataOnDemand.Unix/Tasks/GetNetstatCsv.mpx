@@ -4,7 +4,7 @@
       <Task ID="Community.DataOnDemand.Unix.Task.GetNetstatCsv" Accessibility="Public" Timeout="60" Enabled="true" Remotable="false" Target="MUL!Microsoft.Unix.Computer">
         <Category>Operations</Category>
         <ProbeAction ID="Probe" TypeID="Community.DataOnDemand.Unix.Probe.GetNetstatCsv">
-          <Format>csvEx</Format>
+          <Format>csv</Format>
           <TargetSystem>$Target/Property[Type='MUL!Microsoft.Unix.Computer']/NetworkName$</TargetSystem>
           <TimeoutSeconds>60</TimeoutSeconds>
         </ProbeAction>
