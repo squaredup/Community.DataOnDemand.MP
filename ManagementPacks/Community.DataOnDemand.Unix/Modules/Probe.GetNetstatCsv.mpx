@@ -54,7 +54,7 @@
       <DisplayStrings>
         <DisplayString ElementID="Community.DataOnDemand.Unix.Probe.GetNetstatCsv">
           <Name>Data On Demand GetNetstatCSV Probe</Name>
-          <Description>Displays established TCP connections collected via netstat -ano</Description>
+          <Description>Displays established TCP connections collected via netstat --tcp --numeric --program</Description>
         </DisplayString>
         <DisplayString ElementID="Community.DataOnDemand.Unix.Probe.GetNetstatCsv" SubElementID="Format">
           <Name>Output format</Name>
