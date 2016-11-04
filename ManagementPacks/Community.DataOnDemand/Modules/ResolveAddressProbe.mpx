@@ -47,8 +47,8 @@
     <LanguagePack ID="ENU" IsDefault="true">
       <DisplayStrings>
         <DisplayString ElementID="Community.DataOnDemand.Probe.ResolveAddress">
-          <Name>Data On Demand windows Resolve Address probe action</Name>
-          <Description>Resolves the listed Ip Addresses or names on the target computer.</Description>
+          <Name>Data On Demand Windows resolve address probe action</Name>
+          <Description>Resolves the listed IP addresses or names on the target computer.</Description>
         </DisplayString>
         <DisplayString ElementID="Community.DataOnDemand.Probe.ResolveAddress" SubElementID="Addresses">
           <Name>Addresses</Name>
@@ -56,7 +56,7 @@
         </DisplayString>
         <DisplayString ElementID="Community.DataOnDemand.Probe.ResolveAddress" SubElementID="Format">
           <Name>Format</Name>
-          <Description>Output format. Allowed values: csv, json, text.</Description>
+          <Description>Output format. Allowed values: csv, json, text, list.</Description>
         </DisplayString>
         <DisplayString ElementID="Community.DataOnDemand.Probe.ResolveAddress" SubElementID="TimeoutSeconds">
           <Name>Timeout (seconds)</Name>
