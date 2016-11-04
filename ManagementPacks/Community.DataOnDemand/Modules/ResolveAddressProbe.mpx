@@ -1,0 +1,69 @@
+﻿<ManagementPackFragment SchemaVersion="2.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+  <TypeDefinitions>
+    <ModuleTypes>
+      <ProbeActionModuleType ID="Community.DataOnDemand.Probe.ResolveAddress" Accessibility="Public" Batching="false">
+        <Configuration>
+          <xsd:element name="Addresses" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+          <xsd:element name="Format" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+          <xsd:element name="TimeoutSeconds" type="xsd:int" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+        </Configuration>
+        <OverrideableParameters>
+          <OverrideableParameter ID="Addresses" Selector="$Config/Addresses$" ParameterType="string" />
+          <OverrideableParameter ID="Format" Selector="$Config/Format$" ParameterType="string" />
+          <OverrideableParameter ID="TimeoutSeconds" Selector="$Config/TimeoutSeconds$" ParameterType="int" />
+        </OverrideableParameters>
+        <ModuleImplementation>
+          <Composite>
+            <MemberModules>
+              <ProbeAction ID="Probe" TypeID="Windows!Microsoft.Windows.PowerShellTriggerOnlyProbe">
+                <ScriptName>Resolve-Address.ps1</ScriptName>
+                <ScriptBody>$IncludeFileContent/Scripts/Resolve-Address.ps1$</ScriptBody>
+                <Parameters>
+                  <Parameter>
+                    <Name>Addresses</Name>
+                    <Value>$Config/Addresses$</Value>
+                  </Parameter>
+                  <Parameter>
+                    <Name>Format</Name>
+                    <Value>$Config/Format$</Value>
+                  </Parameter>
+                </Parameters>
+                <TimeoutSeconds>$Config/TimeoutSeconds$</TimeoutSeconds>
+              </ProbeAction>
+            </MemberModules>
+            <Composition>
+              <Node ID="Probe" />
+            </Composition>
+          </Composite>
+        </ModuleImplementation>
+        <OutputType>Windows!Microsoft.Windows.SerializedObjectData</OutputType>
+        <TriggerOnly>true</TriggerOnly>
+      </ProbeActionModuleType>
+    </ModuleTypes>
+  </TypeDefinitions>
+
+  <LanguagePacks>
+    <LanguagePack ID="ENU" IsDefault="true">
+      <DisplayStrings>
+        <DisplayString ElementID="Community.DataOnDemand.Probe.ResolveAddress">
+          <Name>Data On Demand windows Resolve Address probe action</Name>
+          <Description>Resolves the listed Ip Addresses or names on the target computer.</Description>
+        </DisplayString>
+        <DisplayString ElementID="Community.DataOnDemand.Probe.ResolveAddress" SubElementID="Addresses">
+          <Name>Addresses</Name>
+          <Description>IP addresses or name to resolve, as a comma seperated list.</Description>
+        </DisplayString>
+        <DisplayString ElementID="Community.DataOnDemand.Probe.ResolveAddress" SubElementID="Format">
+          <Name>Format</Name>
+          <Description>Output format. Allowed values: csv, json, text.</Description>
+        </DisplayString>
+        <DisplayString ElementID="Community.DataOnDemand.Probe.ResolveAddress" SubElementID="TimeoutSeconds">
+          <Name>Timeout (seconds)</Name>
+          <Description>Script timeout in seconds</Description>
+        </DisplayString>
+      </DisplayStrings>
+    </LanguagePack>
+  </LanguagePacks>
+
+</ManagementPackFragment>
