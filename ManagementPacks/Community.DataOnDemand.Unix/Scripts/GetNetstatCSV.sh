@@ -5,7 +5,7 @@
 # Arg 1 = Format
 Format="$1"
 if [ -z "$Format" ]; then
-	Format="csv"
+    Format="csv"
 fi
 
 # Store hostname in case it's not availible in certain shells
@@ -13,16 +13,16 @@ localHostName=$(hostname)
 
 lineEnd=""
 case "$Format" in
-	csv)
+    csv)
         lineEnd="\n"
-	;;
+    ;;
     csvEx)
-		lineEnd="%EOL%"
-	;;
-	*)
-		echo "Unknown format type $Format"
-		exit 1
-	;;
+        lineEnd="%EOL%"
+    ;;
+    *)
+        echo "Unknown format type $Format"
+        exit 1
+    ;;
 esac
 
 # Print Header, required by SQUP provider
