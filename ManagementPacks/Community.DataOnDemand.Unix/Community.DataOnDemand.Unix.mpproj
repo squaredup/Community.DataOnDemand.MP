@@ -2,12 +2,12 @@
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <ProjectGuid>{26abaec1-e5bf-4917-8f6b-831231f393b0}</ProjectGuid>
-    <RootNamespace>Community.DataOnDemand</RootNamespace>
-    <Name>Community.DataOnDemand</Name>
-    <ManagementPackName>Community.DataOnDemand</ManagementPackName>
-    <Version>1.2.1.0</Version>
-    <MpFrameworkVersion>v7.0.2</MpFrameworkVersion>
+    <ProjectGuid>{5ab64c9b-dc39-4c6b-a663-7bad80097c4d}</ProjectGuid>
+    <RootNamespace>Community.DataOnDemand.Unix</RootNamespace>
+    <Name>Community.DataOnDemand.Unix</Name>
+    <ManagementPackName>Community.DataOnDemand.Unix</ManagementPackName>
+    <Version>1.0.0.0</Version>
+    <MpFrameworkVersion>v7.0</MpFrameworkVersion>
     <MpFrameworkProfile>OM</MpFrameworkProfile>
     <ProductVersion>1.1.0.0</ProductVersion>
   </PropertyGroup>
@@ -35,13 +35,25 @@
       <Alias>SC</Alias>
       <PackageToBundle>False</PackageToBundle>
     </ManagementPackReference>
+    <ManagementPackReference Include="Microsoft.SystemCenter.WSManagement.Library">
+      <!-- <HintPath>C:\Program Files (x86)\System Center Visual Studio Authoring Extensions\References\OM2012\Microsoft.SystemCenter.WSManagement.Library.mp</HintPath>-->
+      <Alias>MSWL</Alias>
+      <MinVersion>7.0.8517.0</MinVersion>
+      <PackageToBundle>False</PackageToBundle>
+    </ManagementPackReference>
+    <ManagementPackReference Include="Microsoft.Unix.Library">
+      <HintPath>..\..\References\Microsoft.Unix.Library.mp</HintPath>
+      <Alias>MUL</Alias>
+      <MinVersion>7.3.2119.0</MinVersion>
+      <PackageToBundle>False</PackageToBundle>
+    </ManagementPackReference>
     <ManagementPackReference Include="Microsoft.Windows.Library">
       <Alias>Windows</Alias>
       <PackageToBundle>false</PackageToBundle>
     </ManagementPackReference>
     <ManagementPackReference Include="System.Health.Library">
       <Alias>Health</Alias>
-      <PackageToBundle>False</PackageToBundle>
+      <PackageToBundle>false</PackageToBundle>
     </ManagementPackReference>
     <ManagementPackReference Include="System.Library">
       <Alias>System</Alias>
@@ -49,55 +61,29 @@
     </ManagementPackReference>
     <ManagementPackReference Include="Microsoft.SystemCenter.Visualization.Library">
       <Alias>Visualization</Alias>
-      <PackageToBundle>false</PackageToBundle>
+      <PackageToBundle>False</PackageToBundle>
     </ManagementPackReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Modules" />
+    <Folder Include="Tasks" />
+    <Folder Include="Scripts" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ManagementPack.mpx">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Modules\GetDnsClientCacheWA.mpx">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Modules\GetEventLogsWA.mpx">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Modules\GetNetstatCsvWA.mpx">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Modules\GetProcessesWA.mpx">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Modules\GetServicesWA.mpx">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Tasks\GetDnsClientCache.mpx">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Tasks\GetEventLogs.mpx">
+    <Compile Include="Modules\Probe.GetNetstatCsv.mpx">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Tasks\GetNetstatCsv.mpx">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Tasks\GetProcesses.mpx">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Tasks\GetServices.mpx">
-      <SubType>Code</SubType>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Modules" />
-    <Folder Include="Scripts" />
-    <Folder Include="Tasks" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Scripts\Get-DnsClientCache.ps1" />
-    <EmbeddedResource Include="Scripts\Get-EventLogs.ps1" />
-    <EmbeddedResource Include="Scripts\Get-Netstat.ps1" />
-    <EmbeddedResource Include="Scripts\Get-Processes.ps1" />
-    <EmbeddedResource Include="Scripts\Get-Services.ps1" />
+    <EmbeddedResource Include="Scripts\GetNetstatCSV.sh">
+      <SubType>Content</SubType>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\VSAC\Microsoft.SystemCenter.OperationsManager.targets" />
 </Project>

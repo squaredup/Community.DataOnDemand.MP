@@ -13,6 +13,9 @@
 # Management Pack Projects
 /ManagementPacks/*/MPResources.resources
 
+# MP References
+/References
+
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 
@@ -256,4 +259,3 @@ paket-files/
 # JetBrains Rider
 .idea/
 *.sln.iml
-

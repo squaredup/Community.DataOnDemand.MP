@@ -1,14 +1,17 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.23107.0
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{D4B43EB3-688B-4EEE-86BD-088F0B28ABB3}") = "Community.DataOnDemand", "ManagementPacks\Community.DataOnDemand\Community.DataOnDemand.mpproj", "{26ABAEC1-E5BF-4917-8F6B-831231F393B0}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{01C800A1-C2EA-4B4C-86EF-224FAB1D6984}"
 	ProjectSection(SolutionItems) = preProject
+		References\Microsoft.Unix.Library.mp = References\Microsoft.Unix.Library.mp
 		readme.md = readme.md
 	EndProjectSection
+EndProject
+Project("{D4B43EB3-688B-4EEE-86BD-088F0B28ABB3}") = "Community.DataOnDemand.Unix", "ManagementPacks\Community.DataOnDemand.Unix\Community.DataOnDemand.Unix.mpproj", "{5AB64C9B-DC39-4C6B-A663-7BAD80097C4D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -20,6 +23,10 @@ Global
 		{26ABAEC1-E5BF-4917-8F6B-831231F393B0}.Debug|x86.Build.0 = Debug|x86
 		{26ABAEC1-E5BF-4917-8F6B-831231F393B0}.Release|x86.ActiveCfg = Release|x86
 		{26ABAEC1-E5BF-4917-8F6B-831231F393B0}.Release|x86.Build.0 = Release|x86
+		{5AB64C9B-DC39-4C6B-A663-7BAD80097C4D}.Debug|x86.ActiveCfg = Debug|x86
+		{5AB64C9B-DC39-4C6B-A663-7BAD80097C4D}.Debug|x86.Build.0 = Debug|x86
+		{5AB64C9B-DC39-4C6B-A663-7BAD80097C4D}.Release|x86.ActiveCfg = Release|x86
+		{5AB64C9B-DC39-4C6B-A663-7BAD80097C4D}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

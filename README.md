@@ -33,9 +33,10 @@ Display Name                     | Target           | Description
 -------------------------------- | ---------------- | ----------------------
 Get DNS Cache (Data On Demand)   | Windows Computer | Lists all entries in the server's DNS cache.
 List Event Logs (Data On Demand) | Windows Computer | Displays the last 4 entries in the system event log.
-Get Netstat (Data On Demand)     | Windows Computer | Displays established TCP connections using netstat.
+Get Netstat CSV (Data On Demand) | Windows Computer | Displays established TCP connections using netstat.
 List Processes (Data On Demand)  | Windows Computer | Lists the top 10 processes sorted by CPU usage.
 List Services (Data On Demand)   | Windows Computer | Lists the name and status of services.
+Get Netstat CSV (Data On Demand) | Unix Computer    | Displays established TCP connections using netstat.
 
 **Note:** Windows tasks support returning data in JSON, however this is only supported if PowerShell v3 or later are availible on the target agent.
 
