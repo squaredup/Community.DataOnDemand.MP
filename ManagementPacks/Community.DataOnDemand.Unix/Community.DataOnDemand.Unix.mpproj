@@ -76,12 +76,23 @@
     <Compile Include="Modules\Probe.GetNetstatCsv.mpx">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Modules\Probe.ResolveAddress.mpx">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Tasks\GetNetstatCsv.mpx">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Tasks\ResolveAddress.mpx">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Scripts\GetNetstatCSV.sh">
+      <SubType>Content</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Scripts\ResolveAddress.sh">
       <SubType>Content</SubType>
     </EmbeddedResource>
   </ItemGroup>
