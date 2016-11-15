@@ -14,21 +14,21 @@
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\Debug\</OutputPath>
-    <GenerateSealed>True</GenerateSealed>
-    <Company>Squared Up Ltd</Company>
-    <Copyright>Copyright (c) Squared Up Limited. All rights reserved.</Copyright>
+    <GenerateSealed>False</GenerateSealed>
+    <Company>MyCompany</Company>
+    <Copyright>Copyright (c) MyCompany. All rights reserved.</Copyright>
     <DelaySigning>False</DelaySigning>
-    <AssemblyOriginatorKeyFile>..\..\data-on-demand.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <DebugSymbols>false</DebugSymbols>
     <OutputPath>bin\Release\</OutputPath>
+    <GenerateSealed>True</GenerateSealed>
     <DelaySigning>False</DelaySigning>
     <Company>Squared Up Ltd</Company>
     <Copyright>Copyright (c) Squared Up Limited. All rights reserved.</Copyright>
     <DelaySign>false</DelaySign>
     <AssemblyOriginatorKeyFile>..\..\data-on-demand.snk</AssemblyOriginatorKeyFile>
-    <GenerateSealed>True</GenerateSealed>
   </PropertyGroup>
   <ItemGroup>
     <ManagementPackReference Include="Microsoft.SystemCenter.Library">
