@@ -8,6 +8,20 @@ if [ -z "$Format" ]; then
     Format="csv"
 fi
 
+lineEnd=""
+case "$Format" in
+    csv)
+        lineEnd="\n"
+    ;;
+    csvEx)
+        lineEnd="%EOL%"
+    ;;
+    *)
+        echo "Unknown format type $Format"
+        exit 1
+    ;;
+esac
+
 # Arg 2 = Hostnames or addresses
 AddressArg="$2"
 if [ -z "$AddressArg" ]; then	
