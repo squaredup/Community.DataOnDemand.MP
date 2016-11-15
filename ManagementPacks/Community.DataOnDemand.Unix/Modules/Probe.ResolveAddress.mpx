@@ -60,7 +60,7 @@
         </DisplayString>
         <DisplayString ElementID="Community.DataOnDemand.Unix.Probe.ResolveAddress" SubElementID="Addresses">
           <Name>Addresses</Name>
-          <Description>IP addresses or name to resolve, as a comma seperated list.</Description>
+          <Description>IP addresses or names to resolve, as a comma seperated list.</Description>
         </DisplayString>
         <DisplayString ElementID="Community.DataOnDemand.Unix.Probe.ResolveAddress" SubElementID="Format">
           <Name>Format</Name>
