@@ -63,9 +63,9 @@ foreach my $query (@queries) {
         }    
     }
     else {        
-        my $ipaddr = gethostbyname($query);
-        if ($ipaddr) {
-            $ipaddr = inet_ntoa(inet_aton($query));
+        my @result = gethostbyname($query);
+        if (@result) {
+            my $ipaddr = inet_ntoa($result[4]);
             print "$ipaddr,$query$lineEnd";
         } 
     }
