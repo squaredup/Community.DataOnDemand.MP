@@ -42,9 +42,11 @@ sub _is_ipv4 {
 
     return undef unless defined($value);
 
+    # Capture each octet using a regex, so we can examine their range
     my (@octets) = $value =~ /^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/;
     return undef unless (@octets == 4);
     foreach (@octets) {
+        # False if octet is outside range 0-255 or has a leading 0s (e.g 010 )
         return undef if $_ &lt; 0 || $_ &gt; 255;
         return undef if $_ =~ /^0\d{1,2}$/;
     }
@@ -56,13 +58,15 @@ print "IpAddress,HostName$lineEnd";
 
 # Process queries based on query type (A or PTR)
 foreach my $query (@queries) {
-    if (_is_ipv4($query)) {            
+    if (_is_ipv4($query)) {
+        # PTR Record lookup            
         my $hostname = gethostbyaddr(inet_aton($query), AF_INET);
         if ($hostname){
             print "$query,$hostname$lineEnd";
         }    
     }
-    else {        
+    else {
+        # A Record lookup, returning first address only
         my @result = gethostbyname($query);
         if (@result) {
             my $ipaddr = inet_ntoa($result[4]);
