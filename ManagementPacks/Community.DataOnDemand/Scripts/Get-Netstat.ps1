@@ -74,6 +74,14 @@ for( $i = 0; $i -lt $data.Length; $i++) {
     }
 }
 
+# Holds connection states
+$stateMap = @{}
+$establishedString = "ESTABLISHED"
+foreach ($result in [System.Net.NetworkInformation.IPGlobalProperties]::GetIPGlobalProperties().GetActiveTCPConnections())
+{
+    $stateMap.Add("$($result.LocalEndPoint)->$($result.RemoteEndPoint)", [int]$result.State)
+}
+
 # Run netstat.exe
 $results = @(netstat -ano)
 
@@ -83,7 +91,18 @@ foreach ($line in $results) {
     if ($line -notmatch '^\s*TCP\b') { continue }
     if ($line -match '^\s*TCP\s+\[::') { continue }
     $col = $line.split(' ',[System.StringSplitOptions]::RemoveEmptyEntries)
-    if ($col[3] -ne 'ESTABLISHED') { continue }
+    
+    # Only interested in established connections - update the established string so if a race occurs we can estimate based on the local text.
+    $cachedState = $stateMap[$stateKey]
+    if ($cachedState -eq 5)
+    {
+        $establishedString = $col[3]
+    }
+    elseif ($cachedState -ne 5 -or $col[3] -ne $establishedString)
+    {
+        continue
+    }
+
     if ($col[1].StartsWith('127.0.0.1')) { continue }
 
     # Now process the local and remote addresses
