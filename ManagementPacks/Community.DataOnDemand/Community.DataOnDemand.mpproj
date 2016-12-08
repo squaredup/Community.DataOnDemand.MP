@@ -6,7 +6,7 @@
     <RootNamespace>Community.DataOnDemand</RootNamespace>
     <Name>Community.DataOnDemand</Name>
     <ManagementPackName>Community.DataOnDemand</ManagementPackName>
-    <Version>1.2.1.0</Version>
+    <Version>1.2.2.0</Version>
     <MpFrameworkVersion>v7.0.2</MpFrameworkVersion>
     <MpFrameworkProfile>OM</MpFrameworkProfile>
     <ProductVersion>1.1.0.0</ProductVersion>
