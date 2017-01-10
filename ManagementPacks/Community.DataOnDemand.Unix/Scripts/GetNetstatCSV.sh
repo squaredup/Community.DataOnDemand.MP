@@ -35,9 +35,11 @@ netstat -tpn |
         gsub(/:/, ",")
         split($7,pid, "/")
         split($5, remote, ",")
-        argQuery = "ps -o args= --pid " pid[1] " | cut -c-256"
+        argQuery = "ps -o args= --pid " pid[1] " | cut -c-128"
         argQuery | getline args
         close(argQuery)
+        if (length(args) == 128 &amp;&amp; substr(args,length(args)-2,3))
+            args = args "..."
         sub(/^[^"].+[^"]$/, "\"&amp;\"", args)
         commandQuery = "ps -o comm= --pid " pid[1]
         commandQuery | getline comm

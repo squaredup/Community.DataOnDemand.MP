@@ -166,7 +166,11 @@ foreach ($line in $results) {
     }
 
     # CSV escape procDesc and shorten
-    $procDesc = $procDesc.Substring(0, [System.Math]::Min(256,$procDesc.length))
+    $maxlength = 128
+    $procDesc = $procDesc.Substring(0, [System.Math]::Min($maxlength,$procDesc.length))
+    if ($procDesc.length -eq $maxlength -and $procDesc -notmatch '\.{3}$') {
+        $procDesc = "$procDesc..."
+    }
     $procDesc = '"' + ($procDesc -replace '"','""') + '"'
 
     # Emit a CSV line for our consumer...
