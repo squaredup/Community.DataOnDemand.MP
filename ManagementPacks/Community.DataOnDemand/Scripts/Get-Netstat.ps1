@@ -166,7 +166,8 @@ foreach ($line in $results) {
     }
 
     # CSV escape procDesc and shorten
-    $procDesc = '"' + ($procDesc.Substring(0,256) -replace '"','""') + '"'
+    $procDesc = $procDesc.Substring(0, [System.Math]::Min(256,$procDesc.length))
+    $procDesc = '"' + ($procDesc -replace '"','""') + '"'
 
     # Emit a CSV line for our consumer...
     $output += '{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10}%EOL%' -f `
