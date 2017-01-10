@@ -35,9 +35,13 @@ netstat -tpn |
         gsub(/:/, ",")
         split($7,pid, "/")
         split($5, remote, ",")
-        "ps -o args= --pid " pid[1] | getline args
+        argQuery = "ps -o args= --pid " pid[1] " | cut -c-256"
+        argQuery | getline args
+        close(argQuery)
         sub(/^[^"].+[^"]$/, "\"&amp;\"", args)
-        "ps -o comm= --pid " pid[1] | getline comm
+        commandQuery = "ps -o comm= --pid " pid[1]
+        commandQuery | getline comm
+        close(commandQuery)
         print "'"$localHostName"'", pid[1], comm, args, toupper($1), $4, $5, $6, remote[1]
     }'
 

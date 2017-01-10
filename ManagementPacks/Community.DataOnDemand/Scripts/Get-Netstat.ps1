@@ -165,8 +165,8 @@ foreach ($line in $results) {
         $dnsName = $dnsCache[$addrs[2]]
     }
 
-    # CSV escape procDesc
-    $procDesc = '"' + ($procDesc -replace '"','""') + '"'
+    # CSV escape procDesc and shorten
+    $procDesc = '"' + ($procDesc.Substring(0,256) -replace '"','""') + '"'
 
     # Emit a CSV line for our consumer...
     $output += '{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10}%EOL%' -f `
