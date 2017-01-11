@@ -10,6 +10,7 @@ fi
 
 # Store hostname in case it's not availible in certain shells
 localHostName=$(hostname)
+processDescMaxLength=128
 
 lineEnd=""
 case "$Format" in
@@ -31,14 +32,14 @@ echo -n "Computername,PID,ProcessName,ProcessDescription,Protocol,LocalAddress,L
 # Output netstat info in required format.  -tpn gives us TCP only connections, without host/port lookup, and includes PIDs
 netstat -tpn |
     grep ESTABLISHED |    
-    awk -v ORS="$lineEnd" -v OFS=',' '{
+    awk -v ORS="$lineEnd" -v OFS=',' -v processDescMaxLength=$processDescMaxLength '{
         gsub(/:/, ",")
         split($7,pid, "/")
         split($5, remote, ",")
-        argQuery = "ps -o args= --pid " pid[1] " | cut -c-128"
+        argQuery = "ps -o args= --pid " pid[1] " | cut -c-" processDescMaxLength
         argQuery | getline args
         close(argQuery)
-        if (length(args) == 128 &amp;&amp; substr(args,length(args)-2,3))
+        if (length(args) == processDescMaxLength &amp;&amp; substr(args,length(args)-2,3))
             args = args "..."
         sub(/^[^"].+[^"]$/, "\"&amp;\"", args)
         commandQuery = "ps -o comm= --pid " pid[1]
