@@ -165,13 +165,12 @@ foreach ($line in $results) {
         $dnsName = $dnsCache[$addrs[2]]
     }
 
-    # CSV escape procDesc and shorten
+    # CSV escape procDesc and shorten, appending ... if not already present
     $maxlength = 128
-    $procDesc = $procDesc.Substring(0, [System.Math]::Min($maxlength,$procDesc.length))
-    if ($procDesc.length -eq $maxlength -and $procDesc -notmatch '\.{3}$') {
-        $procDesc = "$procDesc..."
+    if ($procDesc.length -gt $maxlength) {
+        $procDesc = $procDesc.Substring(0, $maxlength) -replace '(?<!\.{3})$','...'
     }
-    $procDesc = '"' + ($procDesc -replace '"','""') + '"'
+    $procDesc = '"' + $procDesc.Replace('"','""') + '"'
 
     # Emit a CSV line for our consumer...
     $output += '{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10}%EOL%' -f `
