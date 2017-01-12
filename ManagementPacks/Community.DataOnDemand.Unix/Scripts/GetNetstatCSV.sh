@@ -33,12 +33,18 @@ echo -n "Computername,PID,ProcessName,ProcessDescription,Protocol,LocalAddress,L
 netstat -tpn |
     grep ESTABLISHED |    
     awk -v ORS="$lineEnd" -v OFS=',' -v processDescMaxLength=$processDescMaxLength '{
-        # Convert : into , globally, which will give us the port columns from the output naturally.
-        gsub(/:/, ",")
+        # Local Endpoint Address->Port split
+        localEpSplit = match($4, ":[0-9]+$")
+        localAddr = substr($4, 0, localEpSplit - 1)
+        localPort = substr($4, localEpSplit + 1)
 
-        # Extract PID and remote endpoint
-        split($7,pid, "/")
-        split($5, remote, ",")
+        # Remote Endpoint Address->Port split
+        remoteEpSplit = match($5, ":[0-9]+$")
+        remoteAddr = substr($5, 0, remoteEpSplit - 1)
+        remotePort = substr($5, remoteEpSplit + 1)
+
+        # Extract PID
+        split($7,pid, "/")        
         
         # Query for command (with args) that started the process
         argQuery = "ps -o args= --pid " pid[1] " | cut -c-" processDescMaxLength
@@ -59,7 +65,7 @@ netstat -tpn |
         close(commandQuery)
 
         # Finally, print records
-        print "'"$localHostName"'", pid[1], comm, args, toupper($1), $4, $5, $6, remote[1]
+        print "'"$localHostName"'", pid[1], comm, args, toupper($1), localAddr, localPort, remoteAddr, remotePort, $6, remoteAddr
     }'
 
 exit
