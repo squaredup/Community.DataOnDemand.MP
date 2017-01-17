@@ -33,12 +33,12 @@ echo -n "Computername,PID,ProcessName,ProcessDescription,Protocol,LocalAddress,L
 netstat -tpn |
     grep ESTABLISHED |    
     awk -v ORS="$lineEnd" -v OFS=',' -v processDescMaxLength=$processDescMaxLength '{
-        # Local Endpoint Address->Port split
+        # Local Endpoint Address / Port split
         localEpSplit = match($4, ":[0-9]+$")
         localAddr = substr($4, 0, localEpSplit - 1)
         localPort = substr($4, localEpSplit + 1)
 
-        # Remote Endpoint Address->Port split
+        # Remote Endpoint Address / Port split
         remoteEpSplit = match($5, ":[0-9]+$")
         remoteAddr = substr($5, 0, remoteEpSplit - 1)
         remotePort = substr($5, remoteEpSplit + 1)
