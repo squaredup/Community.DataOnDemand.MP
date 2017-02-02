@@ -153,7 +153,7 @@ foreach ($line in $results) {
         }
         else
         {
-            if ($proc.MainModule -and $proc.MainModule.FileVersionInfo) {
+            if ($proc.MainModule -and $proc.MainModule.FileVersionInfo -and $proc.MainModule.FileVersionInfo.FileDescription) {
                 $procDesc = $proc.MainModule.FileVersionInfo.FileDescription
             }
         }
