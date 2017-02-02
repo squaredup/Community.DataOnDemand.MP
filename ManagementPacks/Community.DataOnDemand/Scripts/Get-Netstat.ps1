@@ -8,6 +8,10 @@
     CSV form friendly to automated consumption.
 .PARAMETER Format
     Permitted values: text, csv, json
+.EXAMPLE
+	PS > .\Get-Netstat.ps1 -format csv
+
+	Returns netstat information in the default CSV format.
 .NOTES
     netsh is used to find out which ports are being listened to by
     http.sys.  Any TCP connections to such ports have their process
@@ -18,8 +22,11 @@
     Output is sent to Write-Host to simplify consumption of output
     when run as a SCOM agent task.
 
-    Copyright 2016 Squared Up Limited, All Rights Reserved.
+    Copyright 2017 Squared Up Limited, All Rights Reserved.
+.LINK
+	https://www.squaredup.com
 #>
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingWriteHost", "")]
 Param(
     [ValidateSet("text","csv","csvEx","json","list")]
     [string] $Format = "csv"
@@ -59,7 +66,7 @@ $trueByHttpSysPort = @{}
 
 $data = @()
 netsh http show servicestate verbose=yes view=requestq | ForEach-Object {
-    $data += $_
+    $script:data += $_
 }
 for( $i = 0; $i -lt $data.Length; $i++) {
 
