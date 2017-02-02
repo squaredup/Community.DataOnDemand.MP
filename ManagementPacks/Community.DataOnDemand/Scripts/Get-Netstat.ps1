@@ -66,7 +66,7 @@ $trueByHttpSysPort = @{}
 
 $data = @()
 netsh http show servicestate verbose=yes view=requestq | ForEach-Object {
-    $script:data += $_
+    $data += $_
 }
 for( $i = 0; $i -lt $data.Length; $i++) {
 
