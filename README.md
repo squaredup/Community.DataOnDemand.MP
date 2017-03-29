@@ -10,7 +10,7 @@ To make use of these Management packs, you will need SCOM installed and configur
 
 This GitHub repository contains the source files. The sealed downloadable management packs can be found here:
 
-<https://download.squaredup.com/management-packs/>
+https://download.squaredup.com/#managementpacks
 
 To install the Data On Demand MPs you will need:
 
@@ -46,7 +46,7 @@ Resolve Addresses (Data On Demand) | Windows Computer | Looks up the specified I
 
 ## Releases
 
-While anyone is free to download and import these management pack projects, sealed and signed releases of these management packs will only be availible via <https://download.squaredup.com/management-packs/>.
+While anyone is free to download and import these management pack projects, sealed and signed releases of these management packs will only be availible via https://download.squaredup.com/#managementpacks.
 
 Releases of these management packs will use semantic versioning, and will occur as and when warranted.
 
