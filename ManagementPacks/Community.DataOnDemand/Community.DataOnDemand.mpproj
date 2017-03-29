@@ -6,7 +6,7 @@
     <RootNamespace>Community.DataOnDemand</RootNamespace>
     <Name>Community.DataOnDemand</Name>
     <ManagementPackName>Community.DataOnDemand</ManagementPackName>
-    <Version>1.2.2.0</Version>
+    <Version>1.2.2.1</Version>
     <MpFrameworkVersion>v7.0.2</MpFrameworkVersion>
     <MpFrameworkProfile>OM</MpFrameworkProfile>
     <ProductVersion>1.1.0.0</ProductVersion>
@@ -65,6 +65,9 @@
     <Compile Include="Modules\GetNetstatCsvWA.mpx">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Modules\WatchTcpConnectionsWA.mpx">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Modules\GetProcessesWA.mpx">
       <SubType>Code</SubType>
     </Compile>
@@ -81,6 +84,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Tasks\GetNetstatCsv.mpx">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Tasks\WatchTcpConnections.mpx">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Tasks\GetProcesses.mpx">
@@ -102,6 +108,7 @@
     <EmbeddedResource Include="Scripts\Get-DnsClientCache.ps1" />
     <EmbeddedResource Include="Scripts\Get-EventLogs.ps1" />
     <EmbeddedResource Include="Scripts\Get-Netstat.ps1" />
+    <EmbeddedResource Include="Scripts\Watch-TcpConnections.ps1" />
     <EmbeddedResource Include="Scripts\Get-Processes.ps1" />
     <EmbeddedResource Include="Scripts\Get-Services.ps1" />
     <EmbeddedResource Include="Scripts\Resolve-Address.ps1" />
