@@ -1,20 +1,21 @@
 ﻿<ManagementPackFragment SchemaVersion="2.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <Monitoring>
     <Tasks>
-      <Task ID="Community.DataOnDemand.WatchTcpConnections" Accessibility="Public" Timeout="240" Enabled="true" Remotable="false" Target="Windows!Microsoft.Windows.Computer">
+      <Task ID="Community.DataOnDemand.AgentTask.WatchTcpConnections" Accessibility="Public" Timeout="240" Enabled="true" Remotable="false" Target="Windows!Microsoft.Windows.Computer">
         <Category>Operations</Category>
-        <WriteAction ID="WA" TypeID="Community.DataOnDemand.WriteAction.WatchTcpConnections">
+        <ProbeAction ID="Probe" TypeID="Community.DataOnDemand.Probe.WatchTcpConnections">
           <Interval>60</Interval>
+          <SourceFilePath>$FileResource[Name="Community.DataOnDemand.SourceFile.WatchTcpConnections"]/Path$</SourceFilePath>
           <Format>csv</Format>
           <TimeoutSeconds>240</TimeoutSeconds>
-        </WriteAction>
+        </ProbeAction>
       </Task>
     </Tasks>
   </Monitoring>
   <LanguagePacks>
     <LanguagePack ID="ENU" IsDefault="true">
       <DisplayStrings>
-        <DisplayString ElementID="Community.DataOnDemand.WatchTcpConnections">
+        <DisplayString ElementID="Community.DataOnDemand.AgentTask.WatchTcpConnections">
           <Name>Watch TCP Connections (Data On Demand)</Name>
           <Description>Returns information regarding TCP connections on the target computer monitored over the specified time interval.
           Note: JSON format is only supported if PowerShell v3 or later is installed on the target server.</Description>

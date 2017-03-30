@@ -1,0 +1,9 @@
+﻿<ManagementPackFragment SchemaVersion="2.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Resources>
+    <DeployableResource
+      ID="Community.DataOnDemand.SourceFile.WatchTcpConnections"
+      Accessibility="Public"
+      HasNullStream="false"
+      FileName="Watch-TcpConnections.cs"/>
+  </Resources>
+</ManagementPackFragment>
