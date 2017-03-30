@@ -56,12 +56,12 @@
           <Description>Displays information about TCP connections over the specified interval</Description>
         </DisplayString>
         <DisplayString ElementID="Community.DataOnDemand.Probe.WatchTcpConnections" SubElementID="Interval">
-          <Name>Period to monitor in seconds</Name>
-          <Description></Description>
+          <Name>Interval</Name>
+          <Description>Duration for which to monitor in seconds</Description>
         </DisplayString>
         <DisplayString ElementID="Community.DataOnDemand.Probe.WatchTcpConnections" SubElementID="Format">
           <Name>Output format</Name>
-          <Description>Allowed values: csv, csvEx, json, text.</Description>
+          <Description>Allowed values: csv, csvEx, json, text, list.</Description>
         </DisplayString>
         <DisplayString ElementID="Community.DataOnDemand.Probe.WatchTcpConnections" SubElementID="TimeoutSeconds">
           <Name>Timeout (Seconds)</Name>
