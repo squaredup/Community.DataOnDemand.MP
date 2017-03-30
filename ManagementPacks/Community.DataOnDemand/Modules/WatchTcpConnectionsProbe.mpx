@@ -1,0 +1,74 @@
+﻿<ManagementPackFragment SchemaVersion="2.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+  <TypeDefinitions>
+    <ModuleTypes>
+      <ProbeActionModuleType ID="Community.DataOnDemand.Probe.WatchTcpConnections" Accessibility="Public" Batching="false">
+        <Configuration>
+          <xsd:element name="Interval" type="xsd:int" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+          <xsd:element name="SourceFilePath" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+          <xsd:element name="Format" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+          <xsd:element name="TimeoutSeconds" type="xsd:int" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+        </Configuration>
+        <OverrideableParameters>
+          <OverrideableParameter ID="Interval" Selector="$Config/Interval$" ParameterType="int" />
+          <OverrideableParameter ID="Format" Selector="$Config/Format$" ParameterType="string" />
+          <OverrideableParameter ID="TimeoutSeconds" Selector="$Config/TimeoutSeconds$" ParameterType="int" />
+        </OverrideableParameters>
+        <ModuleImplementation>
+          <Composite>
+            <MemberModules>
+              <ProbeAction ID="Probe" TypeID="Windows!Microsoft.Windows.PowerShellTriggerOnlyProbe">
+                <ScriptName>Watch-TcpConnections.ps1</ScriptName>
+                <ScriptBody>$IncludeFileContent/Scripts/Watch-TcpConnections.ps1$</ScriptBody>
+                <Parameters>
+                  <Parameter>
+                    <Name>Interval</Name>
+                    <Value>$Config/Interval$</Value>
+                  </Parameter>
+                  <Parameter>
+                    <Name>SourceFilePath</Name>
+                    <Value>$Config/SourceFilePath$</Value>
+                  </Parameter>
+                  <Parameter>
+                    <Name>Format</Name>
+                    <Value>$Config/Format$</Value>
+                  </Parameter>
+                </Parameters>
+                <TimeoutSeconds>$Config/TimeoutSeconds$</TimeoutSeconds>
+              </ProbeAction>
+            </MemberModules>
+            <Composition>
+              <Node ID="Probe" />
+            </Composition>
+          </Composite>
+        </ModuleImplementation>
+        <OutputType>Windows!Microsoft.Windows.SerializedObjectData</OutputType>
+        <TriggerOnly>true</TriggerOnly>
+      </ProbeActionModuleType>
+    </ModuleTypes>
+  </TypeDefinitions>
+
+  <LanguagePacks>
+    <LanguagePack ID="ENU" IsDefault="true">
+      <DisplayStrings>
+        <DisplayString ElementID="Community.DataOnDemand.Probe.WatchTcpConnections">
+          <Name>Data On Demand WatchTcpConnections write action</Name>
+          <Description>Displays information about TCP connections over the specified interval</Description>
+        </DisplayString>
+        <DisplayString ElementID="Community.DataOnDemand.Probe.WatchTcpConnections" SubElementID="Interval">
+          <Name>Interval</Name>
+          <Description>Duration for which to monitor in seconds</Description>
+        </DisplayString>
+        <DisplayString ElementID="Community.DataOnDemand.Probe.WatchTcpConnections" SubElementID="Format">
+          <Name>Output format</Name>
+          <Description>Allowed values: csv, csvEx, json, text, list.</Description>
+        </DisplayString>
+        <DisplayString ElementID="Community.DataOnDemand.Probe.WatchTcpConnections" SubElementID="TimeoutSeconds">
+          <Name>Timeout (Seconds)</Name>
+          <Description>Script timeout in seconds</Description>
+        </DisplayString>
+      </DisplayStrings>
+    </LanguagePack>
+  </LanguagePacks>
+
+</ManagementPackFragment>
