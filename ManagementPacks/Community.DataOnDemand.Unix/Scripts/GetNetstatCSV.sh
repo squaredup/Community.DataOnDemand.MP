@@ -3,13 +3,10 @@
 # Copyright 2016 Squared Up Limited, All Rights Reserved.
 # Argument Block
 # Arg 1 = Format
-# Arg 2 = SCXUser configuration
 Format="$1"
 if [ -z "$Format" ]; then
     Format="csv"
 fi
-
-scxUser="$2"
 
 # Store hostname in case it's not availible in certain shells
 localHostName=$(hostname)
@@ -31,12 +28,8 @@ esac
 
 elevate=""
 if [ "$(id -u)" != "0" ]; then
-    # Not currently running as root, check if we are supposed to elevate or not    
-    case "$scxUser" in        
-        *\&lt;Elev\&gt;sudo\&lt;/Elev\&gt;*)
-            elevate="sudo"        
-        ;;
-    esac
+    # Not currently running as root, attempt to elevate
+    elevate="sudo"
 fi
 
 # Store AWK script 
@@ -87,17 +80,22 @@ awkScript='{
 }'
 
 # Print Header, required by SQUP provider
-echo -n "Computername,PID,ProcessName,ProcessDescription,Protocol,LocalAddress,LocalPort,RemoteAddress,RemotePort,State,RemoteAddressIP$lineEnd"
+header="Computername,PID,ProcessName,ProcessDescription,Protocol,LocalAddress,LocalPort,RemoteAddress,RemotePort,State,RemoteAddressIP"
+if [ "$lineEnd" = "\n" ]; then
+	echo "$header"
+else
+	echo -n "$header$lineEnd"
+fi
 
 # Output netstat info in required format.  -tpn gives us TCP only connections, without host/port lookup, and includes PIDs
 if [ "$elevate" != "sudo" ]; then
     netstat -tpn |
         grep ESTABLISHED |    
-            awk -v ORS="$lineEnd" -v OFS=',' -v processDescMaxLength=$processDescMaxLength -v elevate="" "$awkScript"
+            awk -v ORS="$lineEnd" -v OFS=',' -v processDescMaxLength=$processDescMaxLength -v elevate="$elevate" "$awkScript"
 else
     sudo netstat -tpn |
         grep ESTABLISHED |    
-            awk -v ORS="$lineEnd" -v OFS=',' -v processDescMaxLength=$processDescMaxLength -v elevate="sudo " "$awkScript"
+            awk -v ORS="$lineEnd" -v OFS=',' -v processDescMaxLength=$processDescMaxLength -v elevate="$elevate" "$awkScript"
 fi
 
 exit
