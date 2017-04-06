@@ -31,7 +31,7 @@
                 <Input>
                   <![CDATA[<p:ExecuteScript_INPUT xmlns:p="http://schemas.microsoft.com/wbem/wscim/1/cim-schema/2/SCX_OperatingSystem">
                     <p:script>$IncludeFileContent/Scripts/GetNetstatCSV.sh$</p:script>
-                    <p:arguments>"$Config/Format$" "$RunAs[Name="Microsoft.Unix.PrivilegedAccount"]/UserName$"</p:arguments>
+                    <p:arguments>"$Config/Format$" "$RunAs[Name="MUL!Microsoft.Unix.PrivilegedAccount"]/UserName$"</p:arguments>
                     <p:timeout>$Config/TimeoutSeconds$</p:timeout>
                   </p:ExecuteScript_INPUT>]]>
                 </Input>
