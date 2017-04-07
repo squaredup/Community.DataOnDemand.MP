@@ -64,13 +64,15 @@ foreach ($PoshProcess in $PoshProcesses)
         "Handles"=$WmiProcess.HandleCount;
         "Threads"=$WmiProcess.ThreadCount;
     }
+    
 }
-
+# Change the display order based on user selected property being sorted on
+$OutputOrdering = @($OrderBy,"Pid", "Name", "CpuPercent", "PrivateBytes", "Description", "ParentPid", "SessionId", "Handles", "Threads") | Select-Object -Unique
 if ($Format -eq 'text')
 {
     $OutputObjects `
         | Sort-Object -Property $OrderBy -Descending:$Desc `
-        | Select-Object -First $Top Pid, Name, CpuPercent, PrivateBytes, Description, ParentPid, SessionId, Handles, Threads `
+        | Select-Object -First $Top -Property $OutputOrdering `
         | Format-Table -AutoSize `
         | Out-String -Width 4096 `
         | Write-Host
@@ -97,7 +99,7 @@ elseif ($Format -eq 'list')
 {
     $OutputObjects `
         | Sort-Object -Property $OrderBy -Descending:$Desc `
-        | Select-Object -First $Top Pid, Name, CpuPercent, PrivateBytes, Description, ParentPid, SessionId, Handles, Threads `
+        | Select-Object -First $Top -Property $OutputOrdering `
         | Format-List `
         | Out-String -Width 4096 `
         | Write-Host

@@ -21,7 +21,7 @@ if ($Format -eq 'text')
 {
     Get-Service `
         | Sort-Object -Property Name `
-        | Select-Object DisplayName, Status, Name  `
+        | Select-Object Name, Status, DisplayName  `
         | Format-Table -AutoSize `
         | Out-String -Width 4096 `
         | Write-Host
@@ -46,7 +46,7 @@ elseif ($Format -eq 'list')
 {
     Get-Service `
         | Sort-Object -Property Name `
-        | Select-Object DisplayName, Status, Name  `
+        | Select-Object Name, Status, DisplayName  `
         | Format-List `
         | Out-String -Width 4096 `
         | Write-Host
