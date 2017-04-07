@@ -57,7 +57,7 @@ awkScript='{
         else
         {
             # Query for command (with args) that started the process
-            argQuery = elevate "ps -o args= --pid " pid[1] " | cut -c-" processDescMaxLength
+            argQuery = elevate " ps -o args= --pid " pid[1] " | cut -c-" processDescMaxLength
             argQuery | getline args
             close(argQuery)
 
@@ -70,7 +70,7 @@ awkScript='{
             sub(/^[^"].+[^"]$/, "\"&amp;\"", args)
             
             # Query for the process name
-            commandQuery = elevate "ps -o comm= --pid " pid[1]
+            commandQuery = elevate " ps -o comm= --pid " pid[1]
             commandQuery | getline comm
             close(commandQuery)
         }
