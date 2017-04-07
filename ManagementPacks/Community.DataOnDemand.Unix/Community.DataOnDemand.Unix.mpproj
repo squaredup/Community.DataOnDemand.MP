@@ -49,7 +49,7 @@
     </ManagementPackReference>
     <ManagementPackReference Include="Microsoft.Windows.Library">
       <Alias>Windows</Alias>
-      <PackageToBundle>false</PackageToBundle>
+      <PackageToBundle>False</PackageToBundle>
     </ManagementPackReference>
     <ManagementPackReference Include="System.Health.Library">
       <Alias>Health</Alias>
@@ -76,6 +76,9 @@
     <Compile Include="Modules\Probe.GetNetstatCsv.mpx">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Modules\Probe.ExtractUserFromProfile.mpx">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Modules\Probe.ResolveAddress.mpx">
       <SubType>Code</SubType>
     </Compile>
@@ -92,6 +95,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Scripts\ExtractUserFromProfile.ps1" />
     <EmbeddedResource Include="Scripts\ResolveAddress.pl">
       <SubType>Content</SubType>
     </EmbeddedResource>
