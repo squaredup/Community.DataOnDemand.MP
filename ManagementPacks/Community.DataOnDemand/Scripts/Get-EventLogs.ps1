@@ -53,7 +53,7 @@ $EventLogs = Get-EventLog @Params
 # Get properties of object to be displayed in output
 [System.Collections.ArrayList]$OutPutOrdering = $EventLogs | Get-Member -MemberType AliasProperty,Property | Select-Object -ExpandProperty Name
 # Add proprty being sorted on to list of properties (will generate duplicate entry)
-$OutPutOrderings.Insert(0,"TimeGenerated") 
+$OutPutOrdering.Insert(0,"TimeGenerated") 
 # Remove the duplicate from the list of properties (will preserve the first one in the list)
 $OutPutOrdering = $OutPutOrdering | Select-Object -Unique
 

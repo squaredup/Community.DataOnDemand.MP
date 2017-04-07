@@ -17,36 +17,47 @@ Param(
 Set-StrictMode -Version 2.0
 $ErrorActionPreference = "stop"
 
+$Services = Get-Service
+
+# Get properties of object to be displayed in output
+[System.Collections.ArrayList]$OutPutOrdering = $Services | Get-Member -MemberType AliasProperty,Property | Select-Object -ExpandProperty Name
+# Add proprty being sorted on to list of properties (will generate duplicate entry)
+$OutPutOrdering.Insert(0,"Name") 
+# Remove the duplicate from the list of properties (will preserve the first one in the list)
+$OutPutOrdering = $OutPutOrdering | Select-Object -Unique
+
 if ($Format -eq 'text')
 {
-    Get-Service `
+    $Services `
         | Sort-Object -Property Name `
-        | Select-Object Name, Status, DisplayName  `
+        | Select-Object -Property Name, Status, DisplayName `
         | Format-Table -AutoSize `
         | Out-String -Width 4096 `
         | Write-Host
 }
 elseif ($Format -eq 'csv')
 {
-    Get-Service `
+    $Services `
         | Sort-Object -Property Name `
+        | Select-Object -Property $OutputOrdering `
         | ConvertTo-Csv -NoTypeInformation `
         | Out-String -Width 4096 `
         | Write-Host
 }
 elseif ($Format -eq 'json')
 {
-    Get-Service `
+    $Services `
         | Sort-Object -Property Name `
+        | Select-Object -Property $OutputOrdering `
         | ConvertTo-Json `
         | Out-String -Width 4096 `
         | Write-Host
 }
 elseif ($Format -eq 'list')
 {
-    Get-Service `
+    $Services `
         | Sort-Object -Property Name `
-        | Select-Object Name, Status, DisplayName  `
+        | Select-Object -Property Name, Status, DisplayName `
         | Format-List `
         | Out-String -Width 4096 `
         | Write-Host
