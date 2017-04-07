@@ -65,8 +65,7 @@ foreach ($PoshProcess in $PoshProcesses)
     Add-Member -InputObject $OutputObject -MemberType NoteProperty -Name Path -Value $PoshProcess.Path
 
     $OutputObjects += $OutputObject
-    # Do not null object it is used further down to extract correct ordering of object properties
-    #$OutputObject = $Null
+    # Do not null OutputObject object it is used further down to extract correct ordering of object properties
 }
 
 
