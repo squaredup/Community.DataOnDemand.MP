@@ -19,7 +19,7 @@ $ErrorActionPreference = "stop"
 
 $Services = Get-Service
 
-# Get properties of object to be displayed in output
+# Get properties of object to be displayed in output (Get-Memeber does not honor order of properties in object)
 [System.Collections.ArrayList]$OutPutOrdering = $Services | Get-Member -MemberType AliasProperty,Property | Select-Object -ExpandProperty Name
 # Add proprty being sorted, so it will be the first property to be displayed in output(will generate duplicate entry)
 $OutPutOrdering.Insert(0,"Name") 
