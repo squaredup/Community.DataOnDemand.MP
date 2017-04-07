@@ -81,7 +81,7 @@ if ($Format -eq 'text')
 {
     $OutputObjects `
         | Sort-Object -Property $OrderBy -Descending:$Desc `
-        | Select-Object -First $Top -Property $OutputOrdering -ExcludeProperty Path `
+        | Select-Object -First $Top -Property $OutPutOrdering -ExcludeProperty Path `
         | Format-Table -AutoSize `
         | Out-String -Width 4096 `
         | Write-Host
@@ -90,7 +90,7 @@ elseif ($Format -eq 'csv')
 {
     $OutputObjects `
         | Sort-Object -Property $OrderBy -Descending:$Desc `
-        | Select-Object -First $Top -Property $OutputOrdering `
+        | Select-Object -First $Top -Property $OutPutOrdering `
         | convertto-csv -NoTypeInformation `
         | Out-String -Width 4096 `
         | Write-Host
@@ -99,7 +99,7 @@ elseif ($Format -eq 'json')
 {
     $OutputObjects `
         | Sort-Object -Property $OrderBy -Descending:$Desc `
-        | Select-Object -First $Top -Property $OutputOrdering `
+        | Select-Object -First $Top -Property $OutPutOrdering `
         | convertto-json `
         | Out-String -Width 4096 `
         | Write-Host
@@ -108,7 +108,7 @@ elseif ($Format -eq 'list')
 {
     $OutputObjects `
         | Sort-Object -Property $OrderBy -Descending:$Desc `
-        | Select-Object -First $Top -Property $OutputOrdering -ExcludeProperty Path `
+        | Select-Object -First $Top -Property $OutPutOrdering -ExcludeProperty Path `
         | Format-List `
         | Out-String -Width 4096 `
         | Write-Host
