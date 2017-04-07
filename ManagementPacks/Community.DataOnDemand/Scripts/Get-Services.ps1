@@ -21,7 +21,7 @@ $Services = Get-Service
 
 # Get properties of object to be displayed in output
 [System.Collections.ArrayList]$OutPutOrdering = $Services | Get-Member -MemberType AliasProperty,Property | Select-Object -ExpandProperty Name
-# Add proprty being sorted on to list of properties (will generate duplicate entry)
+# Add proprty being sorted, so it will be the first property to be displayed in output(will generate duplicate entry)
 $OutPutOrdering.Insert(0,"Name") 
 # Remove the duplicate from the list of properties (will preserve the first one in the list)
 $OutPutOrdering = $OutPutOrdering | Select-Object -Unique
