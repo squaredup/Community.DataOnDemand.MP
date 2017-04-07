@@ -50,10 +50,18 @@ if ($EntryType) {
 
 $EventLogs = Get-EventLog @Params
 
+# Get properties of object to be displayed in output
+[System.Collections.ArrayList]$OutPutOrdering = $EventLogs | Get-Member -MemberType AliasProperty,Property | Select-Object -ExpandProperty Name
+# Add proprty being sorted on to list of properties (will generate duplicate entry)
+$DefaultProOutPutOrderingperties.Insert(0,"TimeGenerated") 
+# Remove the duplicate from the list of properties (will preserve the first one in the list)
+$OutPutOrdering = $DefaultPrOutPutOrderingoperties | Select-Object -Unique
+
 if ($Format -eq 'text')
 {
     $EventLogs `
         | Sort-Object -Property TimeGenerated -Descending `
+        | Select-Object -Property $OutPutOrdering `
         | Format-Table -AutoSize `
         | Out-String -Width 4096 `
         | Write-Host
@@ -78,6 +86,7 @@ elseif ($format -eq 'list')
 {
     $EventLogs `
         | Sort-Object -Property TimeGenerated -Descending `
+        | Select-Object -Property $OutPutOrdering `
         | Format-List `
         | Out-String -Width 4096 `
         | Write-Host
