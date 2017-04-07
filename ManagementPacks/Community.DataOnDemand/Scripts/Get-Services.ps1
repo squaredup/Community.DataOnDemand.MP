@@ -22,7 +22,7 @@ $Services = Get-Service
 # Get properties of object to be displayed in output (Get-Memeber does not honor order of properties in object)
 [System.Collections.ArrayList]$OutPutOrdering = $Services | Get-Member -MemberType AliasProperty,Property | Select-Object -ExpandProperty Name
 # Add proprty being sorted, so it will be the first property to be displayed in output(will generate duplicate entry)
-$OutPutOrdering.Insert(0,"Name") 
+$OutPutOrdering.Insert(0,"Name")
 # Remove the duplicate from the list of properties (will preserve the first one in the list)
 $OutPutOrdering = $OutPutOrdering | Select-Object -Unique
 
@@ -39,7 +39,7 @@ elseif ($Format -eq 'csv')
 {
     $Services `
         | Sort-Object -Property Name `
-        | Select-Object -Property $OutputOrdering `
+        | Select-Object -Property $OutPutOrdering `
         | ConvertTo-Csv -NoTypeInformation `
         | Out-String -Width 4096 `
         | Write-Host
@@ -48,7 +48,7 @@ elseif ($Format -eq 'json')
 {
     $Services `
         | Sort-Object -Property Name `
-        | Select-Object -Property $OutputOrdering `
+        | Select-Object -Property $OutPutOrdering `
         | ConvertTo-Json `
         | Out-String -Width 4096 `
         | Write-Host
