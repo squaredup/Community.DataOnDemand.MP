@@ -50,10 +50,18 @@ if ($EntryType) {
 
 $EventLogs = Get-EventLog @Params
 
+# Get properties of object to be displayed in output (Get-Memeber does not honor order of properties in object)
+[System.Collections.ArrayList]$OutPutOrdering = $EventLogs | Get-Member -MemberType AliasProperty,Property | Select-Object -ExpandProperty Name
+# Add proprty being sorted, so it will be the first property to be displayed in output(will generate duplicate entry)
+$OutPutOrdering.Insert(0,"TimeGenerated") 
+# Remove the duplicate from the list of properties (will preserve the first one in the list)
+$OutPutOrdering = $OutPutOrdering | Select-Object -Unique
+
 if ($Format -eq 'text')
 {
     $EventLogs `
         | Sort-Object -Property TimeGenerated -Descending `
+        | Select-Object -Property $OutPutOrdering `
         | Format-Table -AutoSize `
         | Out-String -Width 4096 `
         | Write-Host
@@ -62,6 +70,7 @@ elseif ($Format -eq 'csv')
 {
     $EventLogs `
         | Sort-Object -Property TimeGenerated -Descending `
+        | Select-Object -Property $OutPutOrdering `
         | ConvertTo-Csv -NoTypeInformation `
         | Out-String -Width 4096 `
         | Write-Host
@@ -70,6 +79,7 @@ elseif ($Format -eq 'json')
 {
     $EventLogs `
         | Sort-Object -Property TimeGenerated -Descending `
+        | Select-Object -Property $OutPutOrdering `
         | ConvertTo-Json `
         | Out-String -Width 4096 `
         | Write-Host
@@ -78,6 +88,7 @@ elseif ($format -eq 'list')
 {
     $EventLogs `
         | Sort-Object -Property TimeGenerated -Descending `
+        | Select-Object -Property $OutPutOrdering `
         | Format-List `
         | Out-String -Width 4096 `
         | Write-Host
