@@ -70,6 +70,7 @@ elseif ($Format -eq 'csv')
 {
     $EventLogs `
         | Sort-Object -Property TimeGenerated -Descending `
+        | Select-Object -Property $OutPutOrdering `
         | ConvertTo-Csv -NoTypeInformation `
         | Out-String -Width 4096 `
         | Write-Host
@@ -78,6 +79,7 @@ elseif ($Format -eq 'json')
 {
     $EventLogs `
         | Sort-Object -Property TimeGenerated -Descending `
+        | Select-Object -Property $OutPutOrdering `
         | ConvertTo-Json `
         | Out-String -Width 4096 `
         | Write-Host
