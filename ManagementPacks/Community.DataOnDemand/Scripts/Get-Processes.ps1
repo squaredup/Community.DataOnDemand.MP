@@ -15,6 +15,7 @@
     Copyright 2016 Squared Up Limited, All Rights Reserved.
 #>
 Param(
+    [ValidateSet("Pid","Name","CpuPercent","PrivateBytes","Description","ParentPid","SessionId","Handles","Threads","Path")]
     [string] $OrderBy = "Pid",
     $Descending = $false,
     [int] $Top = "99999",
