@@ -51,7 +51,7 @@ foreach ($PoshProcess in $PoshProcesses)
         continue;
     }
 
-    # Create a set of output objects with properties from WMI and posh
+    # Create a set of output objects with properties from WMI and posh with specific ordering of properties
     $OutputObject = New-Object -TypeName PSObject
     Add-Member -InputObject $OutputObject -MemberType NoteProperty -Name Pid -Value $PoshProcess.Id
     Add-Member -InputObject $OutputObject -MemberType NoteProperty -Name Name -Value $PoshProcess.Name
@@ -65,13 +65,13 @@ foreach ($PoshProcess in $PoshProcesses)
     Add-Member -InputObject $OutputObject -MemberType NoteProperty -Name Path -Value $PoshProcess.Path
 
     $OutputObjects += $OutputObject
-    # Do not null OutputObject object it is used further down to extract correct ordering of object properties
+    $OutputObject = $Null
 }
 
 
 # Get properties of object to be displayed in output, note OutputObject must by used as OutputObjects gives strange return
 # Get-Member can not be used here as it does not perserve the property order in the object
-[System.Collections.ArrayList]$OutPutOrdering = $OutputObject.psobject.Properties.Name
+[System.Collections.ArrayList]$OutPutOrdering = $OutputObjects[0].psobject.Properties | Select-Object -ExpandProperty Name
 # Add proprty being sorted, so it will be the first property to be displayed in output(will generate duplicate entry)
 $OutPutOrdering.Insert(0,$OrderBy)
 # Remove the duplicate from the list of properties (will preserve the first one in the list)
