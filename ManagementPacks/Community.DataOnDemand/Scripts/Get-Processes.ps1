@@ -69,7 +69,7 @@ foreach ($PoshProcess in $PoshProcesses)
 }
 
 
-# Get properties of object to be displayed in output, note OutputObject must by used as OutputObjects gives strange return
+# Get properties of object to be displayed in output
 # Get-Member can not be used here as it does not perserve the property order in the object
 [System.Collections.ArrayList]$OutPutOrdering = $OutputObjects[0].psobject.Properties | Select-Object -ExpandProperty Name
 # Add proprty being sorted, so it will be the first property to be displayed in output(will generate duplicate entry)
