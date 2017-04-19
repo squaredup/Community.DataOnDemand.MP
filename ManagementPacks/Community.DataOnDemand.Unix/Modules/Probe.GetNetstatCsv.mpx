@@ -21,25 +21,42 @@
         <ModuleImplementation>
           <Composite>
             <MemberModules>
-              <ProbeAction ID="PassThru" TypeID="System!System.PassThroughProbe">
+              <ProbeAction ID="ExtractUser" TypeID="Community.DataOnDemand.Unix.Probe.ExtractUserFromProfile">
+                <User>$RunAs[Name="MUL!Microsoft.Unix.PrivilegedAccount"]/UserName$</User>
               </ProbeAction>
-              <ProbeAction ID="Probe" TypeID="MUL!Microsoft.Unix.WSMan.Invoke.Privileged.ProbeAction">
-                <TargetSystem>$Config/TargetSystem$</TargetSystem>
-                <Uri>http://schemas.microsoft.com/wbem/wscim/1/cim-schema/2/SCX_OperatingSystem?__cimnamespace=root/scx</Uri>
-                <Selector/>
-                <InvokeAction>ExecuteScript</InvokeAction>
-                <Input>
-                  <![CDATA[<p:ExecuteScript_INPUT xmlns:p="http://schemas.microsoft.com/wbem/wscim/1/cim-schema/2/SCX_OperatingSystem">
+              <ProbeAction ID="Probe" TypeID="MSWL!Microsoft.SystemCenter.WSManagement.Invoker">
+                <Invoke>
+                  <Protocol>https</Protocol>
+                  <TargetSystem>$Config/TargetSystem$</TargetSystem>
+                  <Port>1270</Port>
+                  <Authentication>basic</Authentication>
+                  <UserName>$Data/Property[@Name='User']$</UserName>
+                  <Password>$RunAs[Name="MUL!Microsoft.Unix.PrivilegedAccount"]/Password$</Password>
+                  <SkipCACheck>false</SkipCACheck>
+                  <SkipCNCheck>false</SkipCNCheck>
+                  <OutputErrorIfAny>true</OutputErrorIfAny>
+                  <UTF>utf-8</UTF>
+                  <Uri>http://schemas.microsoft.com/wbem/wscim/1/cim-schema/2/SCX_OperatingSystem?__cimnamespace=root/scx</Uri>
+                  <Selector/>
+                  <InvokeAction>ExecuteScript</InvokeAction>
+                  <Input>
+                    <![CDATA[<p:ExecuteScript_INPUT xmlns:p="http://schemas.microsoft.com/wbem/wscim/1/cim-schema/2/SCX_OperatingSystem">
                     <p:script>$IncludeFileContent/Scripts/GetNetstatCSV.sh$</p:script>
                     <p:arguments>$Config/Format$</p:arguments>
                     <p:timeout>$Config/TimeoutSeconds$</p:timeout>
+                    <p:ElevationType></p:ElevationType>
                   </p:ExecuteScript_INPUT>]]>
-                </Input>
+                  </Input>
+                  <TimeOutInMS>120000</TimeOutInMS>
+                  <EventPolicy>
+                    <EventOnConnectionErrors>false</EventOnConnectionErrors>
+                  </EventPolicy>
+                </Invoke>
               </ProbeAction>
             </MemberModules>
             <Composition>
               <Node ID="Probe">
-                <Node ID="PassThru" />
+                <Node ID="ExtractUser"/>
               </Node>
             </Composition>
           </Composite>          
