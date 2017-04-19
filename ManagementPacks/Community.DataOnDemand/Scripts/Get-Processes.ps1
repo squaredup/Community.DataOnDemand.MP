@@ -15,6 +15,7 @@
     Copyright 2016 Squared Up Limited, All Rights Reserved.
 #>
 Param(
+    [ValidateSet("Pid","Name","CpuPercent","PrivateBytes","Description","ParentPid","SessionId","Handles","Threads","Path")]
     [string] $OrderBy = "Pid",
     $Descending = $false,
     [int] $Top = "99999",
@@ -51,26 +52,37 @@ foreach ($PoshProcess in $PoshProcesses)
         continue;
     }
 
-    # Create a set of output objects with properties from WMI and posh
-    $OutputObjects += New-Object -TypeName PSObject -Property @{
-        "Pid"=$PoshProcess.Id;
-        "ParentPid"=$WmiProcess.CreatingProcessID;
-        "SessionId"=$PoshProcess.SessionId;
-        "Name"=$PoshProcess.Name;
-        "Description"=$PoshProcess.Description;
-        "Path"=$PoshProcess.Path;
-        "CpuPercent"=$WmiProcess.PercentProcessorTime;
-        "PrivateBytes"=$WmiProcess.PrivateBytes;
-        "Handles"=$WmiProcess.HandleCount;
-        "Threads"=$WmiProcess.ThreadCount;
-    }
+    # Create a set of output objects with properties from WMI and posh with specific ordering of properties
+    $OutputObject = New-Object -TypeName PSObject
+    Add-Member -InputObject $OutputObject -MemberType NoteProperty -Name Pid -Value $PoshProcess.Id
+    Add-Member -InputObject $OutputObject -MemberType NoteProperty -Name Name -Value $PoshProcess.Name
+    Add-Member -InputObject $OutputObject -MemberType NoteProperty -Name CpuPercent -Value $WmiProcess.PercentProcessorTime
+    Add-Member -InputObject $OutputObject -MemberType NoteProperty -Name PrivateBytes -Value $WmiProcess.PrivateBytes
+    Add-Member -InputObject $OutputObject -MemberType NoteProperty -Name Description -Value $PoshProcess.Description
+    Add-Member -InputObject $OutputObject -MemberType NoteProperty -Name ParentPid -Value $WmiProcess.CreatingProcessID
+    Add-Member -InputObject $OutputObject -MemberType NoteProperty -Name SessionId -Value $PoshProcess.SessionId
+    Add-Member -InputObject $OutputObject -MemberType NoteProperty -Name Handles -Value $WmiProcess.HandleCount
+    Add-Member -InputObject $OutputObject -MemberType NoteProperty -Name Threads -Value $WmiProcess.ThreadCount
+    Add-Member -InputObject $OutputObject -MemberType NoteProperty -Name Path -Value $PoshProcess.Path
+
+    $OutputObjects += $OutputObject
+    $OutputObject = $Null
 }
+
+
+# Get properties of object to be displayed in output
+# Get-Member can not be used here as it does not perserve the property order in the object
+[System.Collections.ArrayList]$OutPutOrdering = $OutputObjects[0].psobject.Properties | Select-Object -ExpandProperty Name
+# Add proprty being sorted, so it will be the first property to be displayed in output(will generate duplicate entry)
+$OutPutOrdering.Insert(0,$OrderBy)
+# Remove the duplicate from the list of properties (will preserve the first one in the list)
+$OutPutOrdering = $OutPutOrdering | Select-Object -Unique
 
 if ($Format -eq 'text')
 {
     $OutputObjects `
         | Sort-Object -Property $OrderBy -Descending:$Desc `
-        | Select-Object -First $Top Pid, Name, CpuPercent, PrivateBytes, Description, ParentPid, SessionId, Handles, Threads `
+        | Select-Object -First $Top -Property $OutPutOrdering -ExcludeProperty Path `
         | Format-Table -AutoSize `
         | Out-String -Width 4096 `
         | Write-Host
@@ -79,7 +91,7 @@ elseif ($Format -eq 'csv')
 {
     $OutputObjects `
         | Sort-Object -Property $OrderBy -Descending:$Desc `
-        | Select-Object -First $Top  `
+        | Select-Object -First $Top -Property $OutPutOrdering `
         | convertto-csv -NoTypeInformation `
         | Out-String -Width 4096 `
         | Write-Host
@@ -88,7 +100,7 @@ elseif ($Format -eq 'json')
 {
     $OutputObjects `
         | Sort-Object -Property $OrderBy -Descending:$Desc `
-        | Select-Object -First $Top `
+        | Select-Object -First $Top -Property $OutPutOrdering `
         | convertto-json `
         | Out-String -Width 4096 `
         | Write-Host
@@ -97,7 +109,7 @@ elseif ($Format -eq 'list')
 {
     $OutputObjects `
         | Sort-Object -Property $OrderBy -Descending:$Desc `
-        | Select-Object -First $Top Pid, Name, CpuPercent, PrivateBytes, Description, ParentPid, SessionId, Handles, Threads `
+        | Select-Object -First $Top -Property $OutPutOrdering -ExcludeProperty Path `
         | Format-List `
         | Out-String -Width 4096 `
         | Write-Host
