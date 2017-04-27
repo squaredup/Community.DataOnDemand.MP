@@ -34,21 +34,21 @@ $Desc = [System.Convert]::ToBoolean($Descending);
 $PoshProcesses = @(Get-Process)
 
 # Get Proc usage statstics
-# WMI doesn't report process description and other fields
-Function Get-WMIProcPerfSample
+# Wmi doesn't report process description and other fields
+Function Get-WmiProcPerfSample
 {
     # Query Raw per process performance counters, excluding PID 0 as that will have Idle and _Total artificial processes listed.
     Get-WmiObject -Class Win32_PerfRawData_PerfProc_Process -Filter 'IDProcess != 0' -Property IDProcess,CreatingProcessID,PercentProcessorTime,TimeStamp_Sys100NS,ElapsedTime
 }
 
 # Sample activity over 1 second (same as Task manager)
-$WMIPerfData = @{}
+$WmiPerfData = @{}
 $sampleSet1 = @{}
-Get-WMIProcPerfSample | ForEach-Object {$sampleSet1[$_.IDProcess] = $_}
+Get-WmiProcPerfSample | ForEach-Object {$sampleSet1[$_.IDProcess] = $_}
 Start-Sleep -Seconds 1
 
-# Take a second sample, and populate the WMIPerf hashtable with the results
-Foreach ($sample in Get-WMIProcPerfSample) {
+# Take a second sample, and populate the WmiPerf hashtable with the results
+Foreach ($sample in Get-WmiProcPerfSample) {
     # If the process only appears in the second sample (started after the delay) you can use the lifetime values directly
     $procTime = $sample.PercentProcessorTime
     $timeWindow = ($sample.TimeStamp_Sys100NS - $sample.ElapsedTime)
@@ -60,7 +60,7 @@ Foreach ($sample in Get-WMIProcPerfSample) {
         $timeWindow = $sample.TimeStamp_Sys100NS - $sampleSet1[$sample.IDProcess].TimeStamp_Sys100NS
     }
     # Percent Processor Time will be accross all LogicalProcessors and can exceed 100
-    $WMIPerfData["$($sample.IDProcess)"] = New-Object -TypeName PSObject -Property @{
+    $WmiPerfData["$($sample.IDProcess)"] = New-Object -TypeName PSObject -Property @{
         "PID"=$sample.IDProcess;
         "CreatingProcessID"=$sample.CreatingProcessID;
         "PercentProcessorTime"=($procTime / $timeWindow) * 100 / [System.Environment]::ProcessorCount
@@ -70,12 +70,12 @@ Foreach ($sample in Get-WMIProcPerfSample) {
 $OutputObjects= @();
 foreach ($PoshProcess in $PoshProcesses)
 {
-    $WmiProcess = $WMIPerfData["$($PoshProcess.Id)"];
+    $WmiProcess = $WmiPerfData["$($PoshProcess.Id)"];
     if (-not $WmiProcess -or $PoshProcess.Id -eq 0) {
         continue;
     }
 
-    # Create a set of output objects with properties from WMI and posh with specific ordering of properties
+    # Create a set of output objects with properties from Wmi and posh with specific ordering of properties
     $OutputObject = New-Object -TypeName PSObject
     Add-Member -InputObject $OutputObject -MemberType NoteProperty -Name Pid -Value $PoshProcess.Id
     Add-Member -InputObject $OutputObject -MemberType NoteProperty -Name Name -Value $PoshProcess.Name
