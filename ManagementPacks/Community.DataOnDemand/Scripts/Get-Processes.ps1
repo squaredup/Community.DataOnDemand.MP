@@ -37,10 +37,11 @@ $PoshProcesses = @(Get-Process)
 # WMI doesn't report process description and other fields
 Function Get-WMIProcPerfSample
 {
+    # Query Raw per process performance counters, excluding PID 0 as that will have Idle and _Total artificial processes listed.
     Get-WmiObject -Class Win32_PerfRawData_PerfProc_Process -Filter 'IDProcess != 0' -Property IDProcess,CreatingProcessID,PercentProcessorTime,TimeStamp_Sys100NS,ElapsedTime
 }
 
-# Sample activity over 1 second
+# Sample activity over 1 second (same as Task manager)
 $WMIPerfData = @{}
 $sampleSet1 = @{}
 Get-WMIProcPerfSample | ForEach-Object {$sampleSet1[$_.IDProcess] = $_}
