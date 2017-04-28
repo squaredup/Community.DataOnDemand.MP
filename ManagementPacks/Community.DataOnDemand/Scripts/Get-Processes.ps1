@@ -30,39 +30,62 @@ $ErrorActionPreference = "stop"
 # SCOM passes in the string "false" which won't bind to a [bool]
 $Desc = [System.Convert]::ToBoolean($Descending);
 
-# The cmdlet doesn't report % cpu usage, parent process id, ...
+# The cmdlet doesn't report % cpu usage, parent process id
 $PoshProcesses = @(Get-Process)
 
-# WMI doesn't report process description, ...
-$WmiProcesses = @(get-wmiobject Win32_PerfFormattedData_PerfProc_Process)
+# Get Proc usage statstics
+# Wmi doesn't report process description and other fields
+Function Get-WmiProcPerfSample
+{
+    # Query Raw per process performance counters, excluding PID 0 as that will have Idle and _Total artificial processes listed.
+    Get-WmiObject -Class Win32_PerfRawData_PerfProc_Process -Filter 'IDProcess != 0' -Property IDProcess,CreatingProcessID,PercentProcessorTime,TimeStamp_Sys100NS,ElapsedTime
+}
 
-# Iterate through PoshProcesses doing lookups against WmiProcesses for extra info
-# Normalize hash key datatype to string
-# Filter out idle process 0. WMI also reports a bogus _Total process with ID 0.
-$WmiProcessLookup = @{};
-$WmiProcesses | Where-Object { $_.IDProcess -ne 0 } `
-              | Where-Object { -not $WmiProcessLookup.ContainsKey("$($_.IDProcess)")} `
-              | ForEach-Object { $WmiProcessLookup.Add("$($_.IDProcess)",$_) };
+# Sample activity over 1 second (same as Task manager)
+$WmiPerfData = @{}
+$sampleSet1 = @{}
+Get-WmiProcPerfSample | ForEach-Object {$sampleSet1[$_.IDProcess] = $_}
+Start-Sleep -Seconds 1
+
+# Take a second sample, and populate the WmiPerf hashtable with the results
+Foreach ($sample in Get-WmiProcPerfSample) {
+    # If the process only appears in the second sample (started after the delay) you can use the lifetime values directly
+    $procTime = $sample.PercentProcessorTime
+    $timeWindow = ($sample.TimeStamp_Sys100NS - $sample.ElapsedTime)
+
+    # If the process existed in the first sample, use deltas over the sample period
+    If ($sampleSet1.ContainsKey($sample.IDProcess))
+    {
+        $procTime = $sample.PercentProcessorTime - $sampleSet1[$sample.IDProcess].PercentProcessorTime
+        $timeWindow = $sample.TimeStamp_Sys100NS - $sampleSet1[$sample.IDProcess].TimeStamp_Sys100NS
+    }
+    # Percent Processor Time will be accross all LogicalProcessors and can exceed 100
+    $WmiPerfData["$($sample.IDProcess)"] = New-Object -TypeName PSObject -Property @{
+        "PID"=$sample.IDProcess;
+        "CreatingProcessID"=$sample.CreatingProcessID;
+        "PercentProcessorTime"=($procTime / $timeWindow) * 100 / [System.Environment]::ProcessorCount
+    }
+}
 
 $OutputObjects= @();
 foreach ($PoshProcess in $PoshProcesses)
 {
-    $WmiProcess = $WmiProcessLookup["$($PoshProcess.Id)"];
+    $WmiProcess = $WmiPerfData["$($PoshProcess.Id)"];
     if (-not $WmiProcess -or $PoshProcess.Id -eq 0) {
         continue;
     }
 
-    # Create a set of output objects with properties from WMI and posh with specific ordering of properties
+    # Create a set of output objects with properties from Wmi and posh with specific ordering of properties
     $OutputObject = New-Object -TypeName PSObject
     Add-Member -InputObject $OutputObject -MemberType NoteProperty -Name Pid -Value $PoshProcess.Id
     Add-Member -InputObject $OutputObject -MemberType NoteProperty -Name Name -Value $PoshProcess.Name
-    Add-Member -InputObject $OutputObject -MemberType NoteProperty -Name CpuPercent -Value $WmiProcess.PercentProcessorTime
-    Add-Member -InputObject $OutputObject -MemberType NoteProperty -Name PrivateBytes -Value $WmiProcess.PrivateBytes
+    Add-Member -InputObject $OutputObject -MemberType NoteProperty -Name CpuPercent -Value ([Math]::Round($WmiProcess.PercentProcessorTime, 2))
+    Add-Member -InputObject $OutputObject -MemberType NoteProperty -Name PrivateBytes -Value $PoshProcess.PrivateMemorySize64
     Add-Member -InputObject $OutputObject -MemberType NoteProperty -Name Description -Value $PoshProcess.Description
     Add-Member -InputObject $OutputObject -MemberType NoteProperty -Name ParentPid -Value $WmiProcess.CreatingProcessID
     Add-Member -InputObject $OutputObject -MemberType NoteProperty -Name SessionId -Value $PoshProcess.SessionId
-    Add-Member -InputObject $OutputObject -MemberType NoteProperty -Name Handles -Value $WmiProcess.HandleCount
-    Add-Member -InputObject $OutputObject -MemberType NoteProperty -Name Threads -Value $WmiProcess.ThreadCount
+    Add-Member -InputObject $OutputObject -MemberType NoteProperty -Name Handles -Value $PoshProcess.Handles
+    Add-Member -InputObject $OutputObject -MemberType NoteProperty -Name Threads -Value $PoshProcess.Threads.Count
     Add-Member -InputObject $OutputObject -MemberType NoteProperty -Name Path -Value $PoshProcess.Path
 
     $OutputObjects += $OutputObject
@@ -75,8 +98,8 @@ foreach ($PoshProcess in $PoshProcesses)
 [System.Collections.ArrayList]$OutPutOrdering = $OutputObjects[0].psobject.Properties | Select-Object -ExpandProperty Name
 # Add proprty being sorted, so it will be the first property to be displayed in output(will generate duplicate entry)
 $OutPutOrdering.Insert(0,$OrderBy)
-# Remove the duplicate from the list of properties (will preserve the first one in the list)
-$OutPutOrdering = $OutPutOrdering | Select-Object -Unique
+# Remove the duplicate from the list of properties (will preserve the first one in the list), and ensure they are strings to handle a PS v2 object wrapping issue with Select-Object
+$OutPutOrdering = $OutPutOrdering | Select-Object -Unique | Foreach-Object {$_.ToString()}
 
 if ($Format -eq 'text')
 {
