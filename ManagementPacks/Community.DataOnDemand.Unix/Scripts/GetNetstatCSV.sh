@@ -45,9 +45,9 @@ awkScript='{
         remotePort = substr($5, remoteEpSplit + 1)
 
         # Extract PID
-        split($7,pid, "/")        
+        split($7,pid, "/")
 
-        if (pid[1] == "-" || pid[1] == "") 
+        if (pid[1] == "-" || pid[1] == "")
         {
             comm = "Unknown"
             args = ""
@@ -62,12 +62,25 @@ awkScript='{
             close(argQuery)
 
             # Append "..." if the string is max length and does not already end with those characters
-            if (length(args) == processDescMaxLength &amp;&amp; substr(args,length(args)-2,3) != "...")
-                args = args "..."
+            # Avoid using ampersands here to deal with encoding differences between SCOM 2012 and 2016
+            if (length(args) == processDescMaxLength) 
+            {
+                if (substr(args,length(args)-2,3) != "..."))
+                {
+                    args = args "..."
+                }
+            }   
             
             # Escape double quotes, then Wrap the description in double quotes for CSV
+            # Once again avoiding using a replace as that would require an ampersand
             gsub(/"/, "\"\"", args)
-            sub(/^[^"].+[^"]$/, "\"&amp;\"", args)
+            if (substr(args,1,1) != "\"")
+            {
+                if (substr(args,length(args),1) != "\"")
+                {
+                    args = "\"" args "\""
+                }                    
+            }
             
             # Query for the process name
             commandQuery = elevate " ps -o comm= --pid " pid[1]
@@ -82,19 +95,19 @@ awkScript='{
 # Print Header, required by SQUP provider
 header="Computername,PID,ProcessName,ProcessDescription,Protocol,LocalAddress,LocalPort,RemoteAddress,RemotePort,State,RemoteAddressIP"
 if [ "$lineEnd" = "\n" ]; then
-	echo "$header"
+    echo "$header"
 else
-	echo -n "$header$lineEnd"
+    echo -n "$header$lineEnd"
 fi
 
 # Output netstat info in required format.  -tpn gives us TCP only connections, without host/port lookup, and includes PIDs
 if [ "$elevate" != "sudo" ]; then
     netstat -tpn |
-        grep ESTABLISHED |    
+        grep ESTABLISHED |
             awk -v ORS="$lineEnd" -v OFS=',' -v processDescMaxLength=$processDescMaxLength -v elevate="$elevate" "$awkScript"
 else
     sudo netstat -tpn |
-        grep ESTABLISHED |    
+        grep ESTABLISHED |
             awk -v ORS="$lineEnd" -v OFS=',' -v processDescMaxLength=$processDescMaxLength -v elevate="$elevate" "$awkScript"
 fi
 
