@@ -65,7 +65,7 @@ awkScript='{
             # Avoid using ampersands here to deal with encoding differences between SCOM 2012 and 2016
             if (length(args) == processDescMaxLength) 
             {
-                if (substr(args,length(args)-2,3) != "..."))
+                if (substr(args,length(args)-2,3) != "...")
                 {
                     args = args "..."
                 }
