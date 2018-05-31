@@ -71,6 +71,9 @@
     <Compile Include="Modules\GetServicesWA.mpx">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Modules\GetWindowsUpdateHistoryProbe.mpx">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Modules\ResolveAddressProbe.mpx">
       <SubType>Code</SubType>
     </Compile>
@@ -89,6 +92,9 @@
     <Compile Include="Tasks\GetServices.mpx">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Tasks\GetWindowsUpdateHistory.mpx">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Tasks\ResolveAddress.mpx">
       <SubType>Code</SubType>
     </Compile>
@@ -104,6 +110,7 @@
     <EmbeddedResource Include="Scripts\Get-Netstat.ps1" />
     <EmbeddedResource Include="Scripts\Get-Processes.ps1" />
     <EmbeddedResource Include="Scripts\Get-Services.ps1" />
+    <EmbeddedResource Include="Scripts\Get-WindowsUpdateHistory.ps1" />
     <EmbeddedResource Include="Scripts\Resolve-Address.ps1" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\VSAC\Microsoft.SystemCenter.OperationsManager.targets" />

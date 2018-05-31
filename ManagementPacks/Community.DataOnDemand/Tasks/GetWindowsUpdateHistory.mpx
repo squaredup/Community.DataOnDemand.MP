@@ -1,0 +1,28 @@
+<ManagementPackFragment SchemaVersion="2.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Monitoring>
+    <Tasks>
+      <Task ID="Community.DataOnDemand.AgentTask.GetWindowsUpdateHistory" Accessibility="Public" Enabled="true" Remotable="false" Target="Windows!Microsoft.Windows.Computer">
+        <Category>Operations</Category>
+        <ProbeAction ID="Probe" TypeID="Community.DataOnDemand.Probe.GetWindowsUpdateHistory">
+          <ExcludedKB></ExcludedKB>
+          <Format>csv</Format>
+          <TimeoutSeconds>60</TimeoutSeconds>
+          <LastHours></LastHours>
+          <ShowTop></ShowTop>
+        </ProbeAction>
+      </Task>
+    </Tasks>
+  </Monitoring>
+  <LanguagePacks>
+    <LanguagePack ID="ENU" IsDefault="true">
+      <DisplayStrings>
+        <DisplayString ElementID="Community.DataOnDemand.AgentTask.GetWindowsUpdateHistory">
+          <Name>List Update History (Data On Demand)</Name>
+          <Description>Lists Windows Update activity on the target computer.
+            Note: JSON format is only supported if PowerShell v3 or later is installed on the target server.
+          </Description>
+        </DisplayString>
+      </DisplayStrings>
+    </LanguagePack>
+  </LanguagePacks>
+</ManagementPackFragment>

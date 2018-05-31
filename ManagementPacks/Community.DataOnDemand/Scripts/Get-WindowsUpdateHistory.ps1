@@ -18,7 +18,7 @@ Copyright 2018 Squared Up Limited, All Rights Reserved.
 Param(
 	[ValidateSet("text","csv","csvEx","json","list")]
 	[string] $Format = "csv",
-	[int]$ShowTop = [int]::MaxValue,
+	[int]$ShowTop,
     [string]$ExcludedKB,
     [int]$LastHours
 )
@@ -69,7 +69,6 @@ foreach ($item in $queryResult)
 	if($item.Title -match "\(?KB\d{6,7}\)?"){
 
         # put the actual title, minus the KB ref, into the title variable
-        #$split = ($item.Title -split '\s?\((KB\d{6,7})\)')
         $KBArticle = $Matches[0].Trim(' ','(',')')
         $Title = $item.title -replace "\s?\(?$KBArticle\)?",''
 	}
@@ -110,6 +109,10 @@ foreach ($item in $queryResult)
 $WindowsUpdates = @($WindowsUpdates | Sort-Object InstalledOn -Descending:$true)
 
 # loop through the elements to build the output string, limited by ShowTop
+# Due to the way null values are bound by SCOM -> PS, a default value in the param will always be overridden
+if (-not $ShowTop) {
+	$ShowTop = [int]::MaxValue
+}
 $outputCount = [math]::Min($ShowTop, $WindowsUpdates.Count)
 
 for ($i = 0; $i -lt $outputCount; $i++) {
