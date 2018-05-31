@@ -12,15 +12,12 @@ Copyright
 Param(
 	[ValidateSet("text","csv","csvEx","json","list")]
 	[string] $Format = "csv",
-	[int]$ShowTop,
+	[int]$ShowTop = [int]::MaxValue,
 	[string]$ExcludedKB
 )
 
-# define a variable to hold the output
-$output = @()
-
-# put the header in
-$output += 'KB Article,KB Name,Installation Date,Installation Status'
+# define a variable to hold the output, with header as the first item
+$output = @('KB Article,KB Name,Installation Date,Installation Status')
 
 # create a new instance of the Update Session COM object
 $Session = New-Object -ComObject Microsoft.Update.Session
@@ -40,19 +37,17 @@ $queryResult = $Searcher.QueryHistory(0,$HistoryCount)
 # loop through the query results
 foreach ($item in $queryResult)
 {
-	# make sure the title variable is empty
-	$Title = $null
+	# Default to title from query
+    $KBArticle = $null
+    $Title = $item.Title
 
 	# if the title contains a KB article number then...
-	if($item.Title -match "\(KB\d{6,7}\)"){
+	if($item.Title -match "\(?KB\d{6,7}\)?"){
 
-		# split the title apart and put the actual title, minus the KB ref, into the title variable
-		$Title = ($item.Title -split '.*\((KB\d{6,7})\)')[1]
-	}
-	else
-	{
-	# the title is just pulled from the query
-	$Title = $item.Title
+        # put the actual title, minus the KB ref, into the title variable
+        #$split = ($item.Title -split '\s?\((KB\d{6,7})\)')
+        $KBArticle = $Matches[0].Trim(' ','(',')')
+        $Title = $item.title -replace "\s?\(?$KBArticle\)?",''
 	}
 
 	# make sure the result is empty
@@ -73,8 +68,8 @@ foreach ($item in $queryResult)
 	# create a new object and populate it with values; note that the InstallOn value is converted to the local Server time
 	$newObject = New-Object -TypeName PSObject -Property @{
 		InstalledOn =$item.Date;
-		KBArticle = $Title;
-		Name = $item.Title;
+		KBArticle = $KBArticle;
+		Name = $Title;
 		Status = $Result
 	}
 
@@ -99,24 +94,18 @@ if ($ExcludedKB -ne "")
 	}
 }
 
-# create a counter variable
-[int]$loopCounter = 1
+# loop through the elements to build the output string, limited by ShowTop
+$outputCount = [math]::Min($ShowTop, $WindowsUpdates.Count)
 
-# loop through the elements to build the output string
-foreach ($item in $WindowsUpdates)
-{
-	# create a new line in the output file
+for ($i = 0; $i -lt $outputCount; $i++) {
+    $item = $WindowsUpdates[$i]
+
+    # create a new line in the output file
 	$output += '"{0}","{1}","{2}","{3}"%EOL%' -f `
-		$item.KBArticle,
-		$item.Name,
-		$item.InstalledOn.ToString("u"),
-		$item.Status
-
-	# if the parameter for 'top' n was specified then....
-	if ($ShowTop -gt -1)
-	{
-		if ($loopCounter -ge $ShowTop) { break } else { $loopCounter++ }
-	}
+        $item.KBArticle,
+        $item.Name,
+        $item.InstalledOn.ToString("u"),
+        $item.Status
 }
 
 # output to the required format
