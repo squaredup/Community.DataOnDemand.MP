@@ -25,14 +25,19 @@ $Session = New-Object -ComObject Microsoft.Update.Session
 # create a searcher object
 $Searcher = $Session.CreateUpdateSearcher()
 
-# get the count of elements in the history
-$HistoryCount = $Searcher.GetTotalHistoryCount()
-
-# query for the updates
-$queryResult = $Searcher.QueryHistory(0,$HistoryCount)
+# query for all events in the Update History
+$queryResult = $Searcher.QueryHistory(0,$Searcher.GetTotalHistoryCount())
 
 # create a collection to hold the items we are about to create
-[System.Collections.ArrayList]$WindowsUpdates = New-Object -Type System.Collections.ArrayList
+$WindowsUpdates = @()
+
+# Populate Exclusion List (adding if specified)
+$ExclusionList = @()
+if ($ExcludedKB -ne "")
+{
+	# split the string out
+    $ExclusionList = $ExcludedKB.Split(",") | ForEach-Object { $_ -replace '^(KB)?(\d{6,7})','KB$2'}
+}
 
 # loop through the query results
 foreach ($item in $queryResult)
@@ -49,6 +54,11 @@ foreach ($item in $queryResult)
         $KBArticle = $Matches[0].Trim(' ','(',')')
         $Title = $item.title -replace "\s?\(?$KBArticle\)?",''
 	}
+
+    # Skip null entries or if the KBArticle is in the exclusion list
+    if ([string]::IsNullOrEmpty($item.Title) -or $ExclusionList -contains "$KBArticle") {
+        continue;
+    }        
 
 	# make sure the result is empty
 	$Result = $null
@@ -78,21 +88,7 @@ foreach ($item in $queryResult)
 }
 
 # sort by installedOn value
-$WindowsUpdates = ($WindowsUpdates | Sort-Object InstalledOn -Descending:$true)
-
-# next remove any that are being filtered out
-# if any exclusions are specified
-if ($ExcludedKB -ne "")
-{
-	# split the string out
-	$arrExclusionList = $ExcludedKB.Split(",")
-
-	# and then do the filter for each element
-	foreach ($item in $arrExclusionList)
-	{
-		$WindowsUpdates = ($WindowsUpdates | Where-Object { $_.KBArticle -inotlike ('*KB' + $item + "*") })
-	}
-}
+$WindowsUpdates = @($WindowsUpdates | Sort-Object InstalledOn -Descending:$true)
 
 # loop through the elements to build the output string, limited by ShowTop
 $outputCount = [math]::Min($ShowTop, $WindowsUpdates.Count)
