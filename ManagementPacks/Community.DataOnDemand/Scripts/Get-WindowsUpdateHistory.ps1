@@ -46,6 +46,7 @@ if ($ExcludedKB -ne "")
     $ExclusionList = $ExcludedKB.Split(",") | ForEach-Object { $_ -replace '^(KB)?(\d{6,7})','KB$2'}
 }
 
+# generate the date events must be newer than
 $since = [datetime]::MinValue
 if ($LastHours) {
     $since = [datetime]::UtcNow.AddHours(-1 * $LastHours)
