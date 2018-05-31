@@ -22,10 +22,6 @@ $output = @()
 # put the header in
 $output += 'KB Article,KB Name,Installation Date,Installation Status'
 
-# get the name of the current time zone
-$currentTimeZoneName = (Get-WmiObject Win32_TimeZone).StandardName
-$timeZone = [System.TimeZoneInfo]::FindSystemTimeZoneById($currentTimeZoneName)
-
 # create a new instance of the Update Session COM object
 $Session = New-Object -ComObject Microsoft.Update.Session
 
@@ -76,7 +72,7 @@ foreach ($item in $queryResult)
 
 	# create a new object and populate it with values; note that the InstallOn value is converted to the local Server time
 	$newObject = New-Object -TypeName PSObject -Property @{
-		InstalledOn = [System.TimeZoneInfo]::ConvertTimeFromUtc((Get-Date -Date $item.Date), $timeZone);
+		InstalledOn =$item.Date;
 		KBArticle = $Title;
 		Name = $item.Title;
 		Status = $Result
@@ -113,7 +109,7 @@ foreach ($item in $WindowsUpdates)
 	$output += '"{0}","{1}","{2}","{3}"%EOL%' -f `
 		$item.KBArticle,
 		$item.Name,
-		$item.InstalledOn.ToString("g"),
+		$item.InstalledOn.ToString("u"),
 		$item.Status
 
 	# if the parameter for 'top' n was specified then....
