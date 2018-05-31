@@ -29,7 +29,7 @@ $Searcher = $Session.CreateUpdateSearcher()
 $queryResult = $Searcher.QueryHistory(0,$Searcher.GetTotalHistoryCount())
 
 # create a collection to hold the items we are about to create
-$WindowsUpdates = @()
+[System.Collections.ArrayList]$WindowsUpdates = New-Object -Type System.Collections.ArrayList
 
 # Populate Exclusion List (adding if specified)
 $ExclusionList = @()
@@ -97,7 +97,7 @@ for ($i = 0; $i -lt $outputCount; $i++) {
     $item = $WindowsUpdates[$i]
 
     # create a new line in the output file
-	$output += '"{0}","{1}","{2}","{3}"%EOL%' -f `
+	$output += '"{0}","{1}","{2}","{3}"' -f `
         $item.KBArticle,
         $item.Name,
         $item.InstalledOn.ToString("u"),
@@ -107,33 +107,34 @@ for ($i = 0; $i -lt $outputCount; $i++) {
 # output to the required format
 if ($Format -eq 'text')
 {
-	ConvertFrom-Csv ($output -replace '%EOL%','') `
+	ConvertFrom-Csv $output `
 	| Format-Table -AutoSize `
 	| Out-String -Width 4096 `
 	| Write-Host
 }
 elseif ($Format -eq 'csv')
 {
-	$output -replace '%EOL%','' `
+	$output`
 	| Out-String -Width 4096 `
 	| Write-Host
 }
 elseif ($Format -eq 'csvEx')
 {
-	$output `
+    $output `
+    | ForEach-Object {"$_%EOL%"} `
 	| Out-String -Width 4096 `
 	| Write-Host
 }
 elseif ($Format -eq 'json')
 {
-	ConvertFrom-Csv ($output -replace '%EOL%','') `
+	ConvertFrom-Csv $output `
 	| ConvertTo-Json `
 	| Out-String -Width 4096 `
 	| Write-Host
 }
 elseif ($Format -eq 'list')
 {
-	ConvertFrom-Csv ($output -replace '%EOL%','') `
+	ConvertFrom-Csv $output `
 	| Format-List `
 	| Out-String -Width 4096 `
 	| Write-Host
