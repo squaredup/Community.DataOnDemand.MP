@@ -1,19 +1,26 @@
 <#
 .SYNOPSIS
-Community.DataOnDemand windows update enumeration script
+Community.DataOnDemand windows update history enumeration script
 .DESCRIPTION
-This script enumerates windows updates and outputs formatted text
+This script enumerates windows update history and outputs formatted text
 .PARAMETER Format
-Permitted values: text, csv, json
+    Permitted values: text, csv, json, list
+.PARAMETER ShowTop
+    (optional) Max number of results to output
+.PARAMETER ExcludedKB
+    (optional) A comma seperated list of KB numbers to exclude
+.PARAMETER LastHours
+    (optional) Only display update events from the last x hours
 .NOTES
-Copyright
+Copyright 2018 Squared Up Limited, All Rights Reserved.
 #>
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingWriteHost", "")]
 Param(
 	[ValidateSet("text","csv","csvEx","json","list")]
 	[string] $Format = "csv",
 	[int]$ShowTop = [int]::MaxValue,
-	[string]$ExcludedKB
+    [string]$ExcludedKB,
+    [int]$LastHours
 )
 
 # define a variable to hold the output, with header as the first item
@@ -39,9 +46,20 @@ if ($ExcludedKB -ne "")
     $ExclusionList = $ExcludedKB.Split(",") | ForEach-Object { $_ -replace '^(KB)?(\d{6,7})','KB$2'}
 }
 
+$since = [datetime]::MinValue
+if ($LastHours) {
+    $since = [datetime]::UtcNow.AddHours(-1 * $LastHours)
+}
+
 # loop through the query results
 foreach ($item in $queryResult)
 {
+
+    # Skip if update installed outside LastHours timewindow
+    if ($item.Date -lt $since) {
+        continue;
+    }
+
 	# Default to title from query
     $KBArticle = $null
     $Title = $item.Title
