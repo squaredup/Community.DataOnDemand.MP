@@ -65,7 +65,7 @@ foreach ($item in $queryResult)
 	# load the result based on the value of the result code
 	Switch ($item.ResultCode)
 	{
-		0 { $Resul = 'NotStarted'}
+		0 { $Result = 'NotStarted'}
 		1 { $Result = 'InProgress' }
 		2 { $Result = 'Succeeded' }
 		3 { $Result = 'SucceededWithErrors' }
