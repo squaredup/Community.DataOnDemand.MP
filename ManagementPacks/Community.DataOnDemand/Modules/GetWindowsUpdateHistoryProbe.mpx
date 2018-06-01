@@ -59,8 +59,8 @@
     <LanguagePack ID="ENU" IsDefault="true">
       <DisplayStrings>
         <DisplayString ElementID="Community.DataOnDemand.Probe.GetWindowsUpdateHistory">
-          <Name>Data On Demand Windows windows update history probe action</Name>
-          <Description>Returns a list of windows update events on the target computer.</Description>
+          <Name>Data On Demand Windows update history probe action</Name>
+          <Description>Returns a list of Windows update events on the target computer.</Description>
         </DisplayString>
         <DisplayString ElementID="Community.DataOnDemand.Probe.GetWindowsUpdateHistory" SubElementID="ExcludedKB">
           <Name>Excluded KBs</Name>
