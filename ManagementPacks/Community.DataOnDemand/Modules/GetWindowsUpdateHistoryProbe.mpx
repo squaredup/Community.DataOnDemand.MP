@@ -1,0 +1,89 @@
+<ManagementPackFragment SchemaVersion="2.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+  <TypeDefinitions>
+    <ModuleTypes>
+      <ProbeActionModuleType ID="Community.DataOnDemand.Probe.GetWindowsUpdateHistory" Accessibility="Public" Batching="false">
+        <Configuration>
+          <xsd:element name="ExcludedKB" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+          <xsd:element name="Format" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+          <xsd:element name="TimeoutSeconds" type="xsd:int" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+          <xsd:element name="LastHours" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+          <xsd:element name="ShowTop" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+        </Configuration>
+        <OverrideableParameters>
+          <OverrideableParameter ID="ExcludedKB" Selector="$Config/ExcludedKB$" ParameterType="string" />
+          <OverrideableParameter ID="Format" Selector="$Config/Format$" ParameterType="string" />
+          <OverrideableParameter ID="ShowTop" Selector="$Config/ShowTop$" ParameterType="string" />
+          <OverrideableParameter ID="LastHours" Selector="$Config/LastHours$" ParameterType="string" />
+          <OverrideableParameter ID="TimeoutSeconds" Selector="$Config/TimeoutSeconds$" ParameterType="int" />
+        </OverrideableParameters>
+        <ModuleImplementation>
+          <Composite>
+            <MemberModules>
+              <ProbeAction ID="Probe" TypeID="Windows!Microsoft.Windows.PowerShellTriggerOnlyProbe">
+                <ScriptName>Get-WindowsUpdateHistory.ps1</ScriptName>
+                <ScriptBody>$IncludeFileContent/Scripts/Get-WindowsUpdateHistory.ps1$</ScriptBody>
+                <Parameters>
+                  <Parameter>
+                    <Name>ExcludedKB</Name>
+                    <Value>$Config/ExcludedKB$</Value>
+                  </Parameter>
+                  <Parameter>
+                    <Name>Format</Name>
+                    <Value>$Config/Format$</Value>
+                  </Parameter>
+                  <Parameter>
+                    <Name>ShowTop</Name>
+                    <Value>$Config/ShowTop$</Value>
+                  </Parameter>
+                  <Parameter>
+                    <Name>LastHours</Name>
+                    <Value>$Config/LastHours$</Value>
+                  </Parameter>
+                </Parameters>
+                <TimeoutSeconds>$Config/TimeoutSeconds$</TimeoutSeconds>
+              </ProbeAction>
+            </MemberModules>
+            <Composition>
+              <Node ID="Probe" />
+            </Composition>
+          </Composite>
+        </ModuleImplementation>
+        <OutputType>Windows!Microsoft.Windows.SerializedObjectData</OutputType>
+        <TriggerOnly>true</TriggerOnly>
+      </ProbeActionModuleType>
+    </ModuleTypes>
+  </TypeDefinitions>
+
+  <LanguagePacks>
+    <LanguagePack ID="ENU" IsDefault="true">
+      <DisplayStrings>
+        <DisplayString ElementID="Community.DataOnDemand.Probe.GetWindowsUpdateHistory">
+          <Name>Data On Demand Windows update history probe action</Name>
+          <Description>Returns a list of Windows update events on the target computer.</Description>
+        </DisplayString>
+        <DisplayString ElementID="Community.DataOnDemand.Probe.GetWindowsUpdateHistory" SubElementID="ExcludedKB">
+          <Name>Excluded KBs</Name>
+          <Description>A comma seperated list of KBs to exclude from the results.</Description>
+        </DisplayString>
+        <DisplayString ElementID="Community.DataOnDemand.Probe.GetWindowsUpdateHistory" SubElementID="ShowTop">
+          <Name>Top</Name>
+          <Description>If specified, only return the specified number of results.</Description>
+        </DisplayString>
+        <DisplayString ElementID="Community.DataOnDemand.Probe.GetWindowsUpdateHistory" SubElementID="LastHours">
+          <Name>Last Hours</Name>
+          <Description>If specified, only return events from the last X hours.</Description>
+        </DisplayString>
+        <DisplayString ElementID="Community.DataOnDemand.Probe.GetWindowsUpdateHistory" SubElementID="Format">
+          <Name>Format</Name>
+          <Description>Output format. Allowed values: csv, json, text, list.</Description>
+        </DisplayString>
+        <DisplayString ElementID="Community.DataOnDemand.Probe.GetWindowsUpdateHistory" SubElementID="TimeoutSeconds">
+          <Name>Timeout (seconds)</Name>
+          <Description>Script timeout in seconds.</Description>
+        </DisplayString>
+      </DisplayStrings>
+    </LanguagePack>
+  </LanguagePacks>
+
+</ManagementPackFragment>
