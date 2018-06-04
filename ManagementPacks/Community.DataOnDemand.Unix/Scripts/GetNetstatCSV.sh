@@ -1,6 +1,6 @@
 #!/bin/sh
 # Provides netstat information in a format expected by Squared Up's Visual Application Discovery and Analysis feature.
-# Copyright 2016 Squared Up Limited, All Rights Reserved.
+# Copyright 2018 Squared Up Limited, All Rights Reserved.
 # Argument Block
 # Arg 1 = Format
 Format="$1"
@@ -62,7 +62,7 @@ awkScript='{
             close(argQuery)
 
             # Append "..." if the string is max length and does not already end with those characters
-            # Avoid using ampersands here to deal with encoding differences between SCOM 2012 and 2016
+            # Avoid using ampersands here to deal with reported encoding differences in some versions of SCOM 2012 and 2016
             if (length(args) == processDescMaxLength) 
             {
                 if (substr(args,length(args)-2,3) != "...")
@@ -72,15 +72,8 @@ awkScript='{
             }   
             
             # Escape double quotes, then Wrap the description in double quotes for CSV
-            # Once again avoiding using a replace as that would require an ampersand
             gsub(/"/, "\"\"", args)
-            if (substr(args,1,1) != "\"")
-            {
-                if (substr(args,length(args),1) != "\"")
-                {
-                    args = "\"" args "\""
-                }                    
-            }
+            args = "\"" args "\""
             
             # Query for the process name
             commandQuery = elevate " ps -o comm= --pid " pid[1]
