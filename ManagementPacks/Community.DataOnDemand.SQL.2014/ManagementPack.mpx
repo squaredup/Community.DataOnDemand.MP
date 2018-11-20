@@ -4,7 +4,7 @@
       <DisplayStrings>
         <DisplayString ElementID="Community.DataOnDemand.SQL.2014">
           <Name>Data on Demand SQL 2014 - Community Management Pack</Name>
-          <Description>Provides useful SCOM tasks for accessing data on demand from your environment.  This MP contains SQL 2014 targeted tasks.  Maintained at https://github.com/squaredup/Community.DataOnDemand.MP</Description>
+          <Description>Provides useful SCOM tasks for accessing data on demand from your environment. This MP contains SQL 2014 targeted tasks. Maintained at https://github.com/squaredup/Community.DataOnDemand.MP</Description>
         </DisplayString>
       </DisplayStrings>
       <KnowledgeArticles>

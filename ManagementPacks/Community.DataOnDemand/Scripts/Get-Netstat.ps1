@@ -14,7 +14,7 @@
 	Returns netstat information in the default CSV format.
 .NOTES
     netsh is used to find out which ports are being listened to by
-    http.sys.  Any TCP connections to such ports have their process
+    http.sys. Any TCP connections to such ports have their process
     information faked up to an imaginary process called "HTTP.SYS"
     with a PID of 5. (real PIDs are always a multiple of 4, so this
     will never clash with a real process PID).

@@ -4,7 +4,7 @@
       <DisplayStrings>
         <DisplayString ElementID="Community.DataOnDemand">
           <Name>Data on Demand - Community Management Pack</Name>
-          <Description>Provides useful SCOM tasks for accessing data on demand from your environment.  Maintained at https://github.com/squaredup/Community.DataOnDemand.MP</Description>          
+          <Description>Provides useful SCOM tasks for accessing data on demand from your environment. Maintained at https://github.com/squaredup/Community.DataOnDemand.MP</Description>          
         </DisplayString>
       </DisplayStrings>
       <KnowledgeArticles>

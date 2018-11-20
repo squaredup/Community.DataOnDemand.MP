@@ -4,7 +4,7 @@
       <DisplayStrings>
         <DisplayString ElementID="Community.DataOnDemand.SQL.Legacy">
           <Name>Data on Demand SQL Legacy - Community Management Pack</Name>
-          <Description>Provides useful SCOM tasks for accessing data on demand from your environment.  This MP contains SQL 2005 - 2012 targeted tasks.  Maintained at https://github.com/squaredup/Community.DataOnDemand.MP</Description>
+          <Description>Provides useful SCOM tasks for accessing data on demand from your environment. This MP contains SQL 2005 - 2012 targeted tasks. Maintained at https://github.com/squaredup/Community.DataOnDemand.MP</Description>
         </DisplayString>
       </DisplayStrings>
       <KnowledgeArticles>

@@ -4,7 +4,7 @@
 
 The Data on Demand Management Packs contains several useful Microsoft System Center Operations Manager (SCOM) agent tasks, including the Netstat task required by Squared Up Visual Application Discovery & Analysis.
 
-To make use of these Management packs, you will need SCOM installed and configured, monitoring your environment.  No other dependencies are required.
+To make use of these Management packs, you will need SCOM installed and configured, monitoring your environment. No other dependencies are required.
 
 ## Getting started
 

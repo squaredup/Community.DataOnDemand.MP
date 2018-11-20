@@ -4,7 +4,7 @@
       <DisplayStrings>
         <DisplayString ElementID="Community.DataOnDemand.IIS">
           <Name>Data on Demand IIS - Community Management Pack</Name>
-          <Description>Provides useful SCOM tasks for accessing data on demand from your environment. This MP contains IIS targeted tasks.  Maintained at https://github.com/squaredup/Community.DataOnDemand.MP</Description>          
+          <Description>Provides useful SCOM tasks for accessing data on demand from your environment. This MP contains IIS targeted tasks. Maintained at https://github.com/squaredup/Community.DataOnDemand.MP</Description>          
         </DisplayString>
       </DisplayStrings>
       <KnowledgeArticles>
