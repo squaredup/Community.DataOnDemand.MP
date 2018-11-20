@@ -1,0 +1,59 @@
+<ManagementPackFragment SchemaVersion="2.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  
+  <TypeDefinitions>
+    <ModuleTypes>
+      <ProbeActionModuleType ID="Community.DataOnDemand.IIS.Probe.GetIISLogFolderMetrics" Accessibility="Public" Batching="false">
+        <Configuration>
+          <xsd:element name="Format" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+          <xsd:element name="TimeoutSeconds" type="xsd:int" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+        </Configuration>
+        <OverrideableParameters>
+          <OverrideableParameter ID="Format" Selector="$Config/Format$" ParameterType="string" />
+          <OverrideableParameter ID="TimeoutSeconds" Selector="$Config/TimeoutSeconds$" ParameterType="int" />
+        </OverrideableParameters>
+        <ModuleImplementation>
+          <Composite>
+            <MemberModules>
+              <ProbeAction ID="Probe" TypeID="Windows!Microsoft.Windows.PowerShellTriggerOnlyProbe">
+                <ScriptName>Get-IISLogFolderMetrics.ps1</ScriptName>
+                <ScriptBody>$IncludeFileContent/Scripts/Get-IISLogFolderMetrics.ps1$</ScriptBody>
+                <Parameters>
+                  <Parameter>
+                    <Name>Format</Name>
+                    <Value>$Config/Format$</Value>
+                  </Parameter>
+                </Parameters>
+                <TimeoutSeconds>$Config/TimeoutSeconds$</TimeoutSeconds>
+              </ProbeAction>
+            </MemberModules>
+            <Composition>
+              <Node ID="Probe" />
+            </Composition>
+          </Composite>
+        </ModuleImplementation>
+        <OutputType>Windows!Microsoft.Windows.SerializedObjectData</OutputType>
+        <TriggerOnly>true</TriggerOnly>
+      </ProbeActionModuleType>
+    </ModuleTypes>
+  </TypeDefinitions>
+  
+  <LanguagePacks>
+    <LanguagePack ID="ENU" IsDefault="true">
+      <DisplayStrings>
+        <DisplayString ElementID="Community.DataOnDemand.IIS.Probe.GetIISLogFolderMetrics">
+          <Name>Data On Demand Windows Get IIS log folder metrics probe</Name>
+          <Description>Gets log folder size information for all websites installed on the target.</Description>
+        </DisplayString>
+        <DisplayString ElementID="Community.DataOnDemand.IIS.Probe.GetIISLogFolderMetrics" SubElementID="Format">
+          <Name>Format</Name>
+          <Description>Output format. Allowed values: csv, json, text, list.</Description>
+        </DisplayString>
+        <DisplayString ElementID="Community.DataOnDemand.IIS.Probe.GetIISLogFolderMetrics" SubElementID="TimeoutSeconds">
+          <Name>Timeout (seconds)</Name>
+          <Description>Script timeout in seconds</Description>
+        </DisplayString>
+      </DisplayStrings>
+    </LanguagePack>
+  </LanguagePacks>
+
+</ManagementPackFragment>
