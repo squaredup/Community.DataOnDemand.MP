@@ -7,12 +7,15 @@ Project("{D4B43EB3-688B-4EEE-86BD-088F0B28ABB3}") = "Community.DataOnDemand", "M
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{01C800A1-C2EA-4B4C-86EF-224FAB1D6984}"
 	ProjectSection(SolutionItems) = preProject
+		References\Microsoft.SQLServer.Library.mp = References\Microsoft.SQLServer.Library.mp
 		References\Microsoft.Unix.Library.mp = References\Microsoft.Unix.Library.mp
 		References\Microsoft.Windows.InternetInformationServices.CommonLibrary.MP = References\Microsoft.Windows.InternetInformationServices.CommonLibrary.MP
 		readme.md = readme.md
 	EndProjectSection
 EndProject
 Project("{D4B43EB3-688B-4EEE-86BD-088F0B28ABB3}") = "Community.DataOnDemand.Unix", "ManagementPacks\Community.DataOnDemand.Unix\Community.DataOnDemand.Unix.mpproj", "{5AB64C9B-DC39-4C6B-A663-7BAD80097C4D}"
+EndProject
+Project("{D4B43EB3-688B-4EEE-86BD-088F0B28ABB3}") = "Community.DataOnDemand.SQL.Legacy", "ManagementPacks\Community.DataOnDemand.SQL.Legacy\Community.DataOnDemand.SQL.Legacy.mpproj", "{AC88062A-1637-4CBC-8201-39FA175F1D10}"
 EndProject
 Project("{D4B43EB3-688B-4EEE-86BD-088F0B28ABB3}") = "Community.DataOnDemand.IIS", "ManagementPacks\Community.DataOnDemand.IIS\Community.DataOnDemand.IIS.mpproj", "{A50FC640-8D61-4B51-A739-6DE2D36395C8}"
 EndProject

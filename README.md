@@ -17,6 +17,7 @@ To install the Data On Demand MPs you will need:
 * SCOM 2012 R2 (earlier versions may be supported but are untested)
 * SCOM Admin rights (only Administrators can import management packs)
 * If you plan to import the Data On Demand Unix MP, you will need to import and configure the relevant Microsoft Unix management packs first.
+* If you plan to import the Data On Demand SQL MPs, you will need to import and configure the relevant Microsoft SQL management packs first.
 * If you plan to import the Data On Demand IIS MP, you will need to import and configure the relevant Microsoft IIS management packs first.
 
 ### Install the SCOM Management Pack
@@ -37,6 +38,7 @@ Get DNS Cache (Data On Demand)                  | Windows Computer | Lists all e
 Get IIS Worker Processes Data (Data On Demand)  | IIS Webserver    | Displays worker process information about IIS on the target computer.
 Get Netstat CSV (Data On Demand)                | Unix Computer    | Displays established TCP connections using netstat.
 Get Netstat CSV (Data On Demand)                | Windows Computer | Displays established TCP connections using netstat.
+Get SQL Server Connections (Data On Demand)     | SQL DB Engine    | Lists all open connections to the SQL instance, and the databases that are in use by those connections.
 List Event Logs (Data On Demand)                | Windows Computer | Displays the last 4 entries in the system event log.
 List Processes (Data On Demand)                 | Windows Computer | Lists the top 10 processes sorted by CPU usage.
 List Services (Data On Demand)                  | Windows Computer | Lists the name and status of services.

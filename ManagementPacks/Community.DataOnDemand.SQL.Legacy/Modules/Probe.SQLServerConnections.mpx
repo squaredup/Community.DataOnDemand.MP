@@ -1,0 +1,67 @@
+﻿<ManagementPackFragment SchemaVersion="2.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+  <TypeDefinitions>
+    <ModuleTypes>
+      <ProbeActionModuleType ID="Community.DataOnDemand.SQL.Legacy.Probe.SQLServerConnections"
+              Accessibility="Public"
+              Batching="false"
+              PassThrough="false"
+              RunAs="MSSQL!Microsoft.SQLServer.SQLProbeAccount">
+        <Configuration>
+          <xsd:element minOccurs="1" name="DatabaseServer" type="xsd:string" />
+        </Configuration>
+        <OverrideableParameters>
+          <OverrideableParameter ID="DatabaseServer" Selector="$Config/DatabaseServer$" ParameterType="string" />
+        </OverrideableParameters>
+        <ModuleImplementation Isolation="Any">
+          <Composite>
+            <MemberModules>
+              <ProbeAction ID="PassThru" TypeID="System!System.PassThroughProbe" />
+              <ProbeAction ID="OledbProbe" TypeID="System!System.OleDbProbe">
+                <ConnectionString>Provider=SQLOLEDB;Server=$Config/DatabaseServer$;Database=master;Integrated Security=SSPI</ConnectionString>
+                <Query>
+                  select
+                    client_net_address,client_tcp_port,local_net_address,local_tcp_port,DB.name as database_name
+                  from
+                    sys.dm_exec_connections as DEC
+                    inner join sys.dm_exec_sessions as DES on DES.session_id = DEC.most_recent_session_id
+                    left outer join sys.databases as DB on DB.database_id = DES.database_id
+                  where
+                    net_transport = 'TCP'
+                  order by
+                    client_net_address,client_tcp_port
+                </Query>
+                <GetValue>true</GetValue>
+                <IncludeOriginalItem>false</IncludeOriginalItem>
+                <OneRowPerItem>false</OneRowPerItem>
+              </ProbeAction>
+            </MemberModules>
+            <Composition>
+              <Node ID="OledbProbe">
+                <Node ID="PassThru" />
+              </Node>
+            </Composition>
+          </Composite>
+        </ModuleImplementation>
+        <OutputType>System!System.OleDbData</OutputType>
+        <TriggerOnly>true</TriggerOnly>
+      </ProbeActionModuleType>
+    </ModuleTypes>
+  </TypeDefinitions>
+
+  <LanguagePacks>
+    <LanguagePack ID="ENU" IsDefault="true">
+      <DisplayStrings>
+        <DisplayString ElementID="Community.DataOnDemand.SQL.Legacy.Probe.SQLServerConnections">
+          <Name>Data On Demand SQL Server connections probe</Name>
+          <Description>Runs a DB query to list all connections and the database the connection is accessing.</Description>
+        </DisplayString>
+        <DisplayString ElementID="Community.DataOnDemand.SQL.Legacy.Probe.SQLServerConnections" SubElementID="DatabaseServer">
+          <Name>DatabaseServer</Name>
+          <Description>The database server (and instance) to connect to.</Description>
+        </DisplayString>
+      </DisplayStrings>
+    </LanguagePack>
+  </LanguagePacks>
+
+</ManagementPackFragment>
