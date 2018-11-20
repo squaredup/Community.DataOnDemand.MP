@@ -1,0 +1,79 @@
+﻿<ManagementPackFragment SchemaVersion="2.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+  <TypeDefinitions>
+    <ModuleTypes>
+      <ProbeActionModuleType ID="Community.DataOnDemand.SQL.2017.Probe.SQLServerConnections.SQLAuth"
+              Accessibility="Public"
+              Batching="false"
+              PassThrough="false">
+        <Configuration>
+          <xsd:element minOccurs="1" name="DatabaseServer" type="xsd:string" />
+          <xsd:element minOccurs="1" name="UserName" type="xsd:string" />
+          <xsd:element minOccurs="1" name="Password" type="xsd:string" />
+        </Configuration>
+        <OverrideableParameters>
+          <OverrideableParameter ID="DatabaseServer" Selector="$Config/DatabaseServer$" ParameterType="string" />
+          <OverrideableParameter ID="UserName" Selector="$Config/UserName$" ParameterType="string" />
+          <OverrideableParameter ID="Password" Selector="$Config/Password$" ParameterType="string" />
+        </OverrideableParameters>
+        <ModuleImplementation Isolation="Any">
+          <Composite>
+            <MemberModules>
+              <ProbeAction ID="PassThru" TypeID="System!System.PassThroughProbe" />
+              <ProbeAction ID="OledbProbe" TypeID="System!System.OleDbProbe">
+                <ConnectionString>Provider=SQLOLEDB;Server=$Config/DatabaseServer$;Database=master;User ID=$Config/UserName$;Password=$Config/Password$;</ConnectionString>
+                <Query>
+                  select
+                  client_net_address,client_tcp_port,local_net_address,local_tcp_port,DB.name as database_name
+                  from
+                  sys.dm_exec_connections as DEC
+                  inner join sys.dm_exec_sessions as DES on DES.session_id = DEC.most_recent_session_id
+                  left outer join sys.databases as DB on DB.database_id = DES.database_id
+                  where
+                  net_transport = 'TCP'
+                  order by
+                  client_net_address,client_tcp_port
+                </Query>
+                <GetValue>true</GetValue>
+                <IncludeOriginalItem>false</IncludeOriginalItem>
+                <OneRowPerItem>false</OneRowPerItem>
+              </ProbeAction>
+            </MemberModules>
+            <Composition>
+              <Node ID="OledbProbe">
+                <Node ID="PassThru" />
+              </Node>
+            </Composition>
+          </Composite>
+        </ModuleImplementation>
+        <OutputType>System!System.OleDbData</OutputType>
+        <TriggerOnly>true</TriggerOnly>
+      </ProbeActionModuleType>
+    </ModuleTypes>
+  </TypeDefinitions>
+
+  <LanguagePacks>
+    <LanguagePack ID="ENU" IsDefault="true">
+      <DisplayStrings>
+        <DisplayString ElementID="Community.DataOnDemand.SQL.2017.Probe.SQLServerConnections.SQLAuth">
+          <Name>Data On Demand SQL Server connections probe (SQL)</Name>
+          <Description>Runs a DB query to list all connections and the database the connection is accessing, using SQL authentication.</Description>
+        </DisplayString>
+        <DisplayString ElementID="Community.DataOnDemand.SQL.2017.Probe.SQLServerConnections.SQLAuth" SubElementID="DatabaseServer">
+          <Name>DatabaseServer</Name>
+          <Description>The database server (and instance) to connect to.</Description>
+        </DisplayString>
+        <DisplayString ElementID="Community.DataOnDemand.SQL.2017.Probe.SQLServerConnections.SQLAuth" SubElementID="UserName">
+          <Name>User Name</Name>
+          <Description>The SQL auth account to connect as.</Description>
+        </DisplayString>
+        <DisplayString ElementID="Community.DataOnDemand.SQL.2017.Probe.SQLServerConnections.SQLAuth" SubElementID="Password">
+          <Name>Password</Name>
+          <Description>The password for the SQL auth acount.</Description>
+        </DisplayString>
+
+      </DisplayStrings>
+    </LanguagePack>
+  </LanguagePacks>
+
+</ManagementPackFragment>

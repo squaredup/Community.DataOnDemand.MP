@@ -1,0 +1,25 @@
+﻿<ManagementPackFragment SchemaVersion="2.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  
+  <Monitoring>
+    <Tasks>
+      <Task ID="Community.DataOnDemand.SQL.Legacy.AgentTask.GetSqlServerConnections" Accessibility="Public" Timeout="240" Enabled="true" Remotable="true" Target="MSSQL!Microsoft.SQLServer.DBEngine">
+        <Category>Operations</Category>
+        <ProbeAction ID="Probe" TypeID="Community.DataOnDemand.SQL.Legacy.Probe.SQLServerConnections">
+          <DatabaseServer>$Target/Property[Type='MSSQL!Microsoft.SQLServer.DBEngine']/ConnectionString$</DatabaseServer>
+        </ProbeAction>
+      </Task>
+    </Tasks>
+  </Monitoring>
+  
+  <LanguagePacks>
+    <LanguagePack ID="ENU" IsDefault="true">
+      <DisplayStrings>
+        <DisplayString ElementID="Community.DataOnDemand.SQL.Legacy.AgentTask.GetSqlServerConnections">
+          <Name>Get SQL Server Connections (Data On Demand)</Name>
+          <Description>Lists all open connections to the SQL instance, and the databases that are in use by those connections.</Description>
+        </DisplayString>
+      </DisplayStrings>
+    </LanguagePack>
+  </LanguagePacks>
+  
+</ManagementPackFragment>

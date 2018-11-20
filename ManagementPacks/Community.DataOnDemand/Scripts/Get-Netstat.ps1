@@ -7,14 +7,14 @@
     connections at the host and filters and formats the output in a
     CSV form friendly to automated consumption.
 .PARAMETER Format
-    Permitted values: text, csv, json
+    Permitted values: text, csv, json, list
 .EXAMPLE
 	PS > .\Get-Netstat.ps1 -format csv
 
 	Returns netstat information in the default CSV format.
 .NOTES
     netsh is used to find out which ports are being listened to by
-    http.sys.  Any TCP connections to such ports have their process
+    http.sys. Any TCP connections to such ports have their process
     information faked up to an imaginary process called "HTTP.SYS"
     with a PID of 5. (real PIDs are always a multiple of 4, so this
     will never clash with a real process PID).
@@ -46,7 +46,7 @@ IPConfig /DisplayDNS | Select-String -Pattern "Record Name" -Context 0,5 | ForEa
 
 # Emit CSV header
 $output = @()
-$output += 'Computername,PID,ProcessName,ProcessDescription,Protocol,LocalAddress,LocalPort,RemoteAddress,RemotePort,State,RemoteAddressIP%EOL%'
+$output += 'Computername,PID,ProcessName,ProcessDescription,Protocol,LocalAddress,LocalPort,RemoteAddress,RemotePort,State,RemoteAddressIP,ServiceName,SessionId%EOL%'
 
 # Get current process and service info
 $procsByPid = @{}
@@ -139,10 +139,16 @@ foreach ($line in $results) {
         }
     }
 
-    # Work out the process name and description
+    # Work out the service name (if any), process name and description
+	$serviceName = ""
+	$sessionId = 0
     $procName = "Unknown"
     $procDesc = ""
     $procId = [int]$col[4]
+    $procIdUnsigned = [uint32]$col[4]
+    if ($svcsByPid.ContainsKey($procIdUnsigned)) {
+		$serviceName = $svcsByPid[$procIdUnsigned].Name
+    }
     if ($procId -eq 4) {
         $procName = $procDesc = "SYSTEM"
     } elseif ($procId -eq 5) {
@@ -150,8 +156,8 @@ foreach ($line in $results) {
     } elseif ($procsByPid.ContainsKey($procId)) {
         $proc = $procsByPid[$procId]
         $procName = $proc.ProcessName
+		$sessionId = $proc.SessionId
         if($procName -eq 'svchost'){
-            $procIdUnsigned = [uint32]$col[4]
             if ($svcsByPid.ContainsKey($procIdUnsigned)) {
                 $procDesc = $svcsByPid[$procIdUnsigned].DisplayName
             } else {
@@ -180,7 +186,7 @@ foreach ($line in $results) {
     $procDesc = '"' + $procDesc.Replace('"','""') + '"'
 
     # Emit a CSV line for our consumer...
-    $output += '{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10}%EOL%' -f `
+    $output += '{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},"{11}",{12}%EOL%' -f `
         $env:COMPUTERNAME,
         $col[4],
         $procName,
@@ -191,8 +197,9 @@ foreach ($line in $results) {
         $dnsName,
         $ports[2],
         $col[3],
-        $addrs[2]
-
+        $addrs[2],
+		$serviceName.Replace('"','""'),
+		$sessionId
 }
 
 # Produce output in requested format
