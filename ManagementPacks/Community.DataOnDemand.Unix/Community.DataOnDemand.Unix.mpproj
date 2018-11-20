@@ -7,7 +7,7 @@
     <Name>Community.DataOnDemand.Unix</Name>
     <ManagementPackName>Community.DataOnDemand.Unix</ManagementPackName>
     <Version>1.0.0.0</Version>
-    <MpFrameworkVersion>v7.0</MpFrameworkVersion>
+    <MpFrameworkVersion>v7.0.2</MpFrameworkVersion>
     <MpFrameworkProfile>OM</MpFrameworkProfile>
     <ProductVersion>1.1.0.0</ProductVersion>
   </PropertyGroup>
