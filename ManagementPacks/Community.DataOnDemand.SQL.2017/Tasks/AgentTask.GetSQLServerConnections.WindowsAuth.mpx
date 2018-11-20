@@ -1,0 +1,25 @@
+﻿<ManagementPackFragment SchemaVersion="2.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  
+  <Monitoring>
+    <Tasks>
+      <Task ID="Community.DataOnDemand.SQL.2017.AgentTask.GetSqlServerConnections.WindowsAuth" Accessibility="Public" Timeout="240" Enabled="true" Remotable="true" Target="MSSQLCore!Microsoft.SQLServer.Core.DBEngine">
+        <Category>Operations</Category>
+        <ProbeAction ID="Probe" TypeID="Community.DataOnDemand.SQL.2017.Probe.SQLServerConnections.WindowsAuth">
+          <DatabaseServer>$Target/Property[Type='MSSQLCore!Microsoft.SQLServer.Core.DBEngine']/ConnectionString$</DatabaseServer>
+        </ProbeAction>
+      </Task>
+    </Tasks>
+  </Monitoring>
+  
+  <LanguagePacks>
+    <LanguagePack ID="ENU" IsDefault="true">
+      <DisplayStrings>
+        <DisplayString ElementID="Community.DataOnDemand.SQL.2017.AgentTask.GetSqlServerConnections.WindowsAuth">
+          <Name>Get SQL Server Connections via Windows Auth (Data On Demand)</Name>
+          <Description>Lists all open connections to the SQL instance, and the databases that are in use by those connections.</Description>
+        </DisplayString>
+      </DisplayStrings>
+    </LanguagePack>
+  </LanguagePacks>
+  
+</ManagementPackFragment>
