@@ -1,0 +1,28 @@
+﻿<ManagementPackFragment SchemaVersion="2.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  
+  <Monitoring>
+    <Tasks>
+      <Task ID="Community.DataOnDemand.IIS.AgentTask.GetIISWorkerData" Accessibility="Public" Enabled="true" Remotable="false" Target="IIS!Microsoft.Windows.InternetInformationServices.WebServer">
+        <Category>Operations</Category>
+        <ProbeAction ID="Probe" TypeID="Community.DataOnDemand.IIS.Probe.GetIISWorkerData">
+          <Format>csv</Format>
+          <TimeoutSeconds>60</TimeoutSeconds>
+        </ProbeAction>
+      </Task>
+    </Tasks>
+  </Monitoring>
+  
+  <LanguagePacks>
+    <LanguagePack ID="ENU" IsDefault="true">
+      <DisplayStrings>
+        <DisplayString ElementID="Community.DataOnDemand.IIS.AgentTask.GetIISWorkerData">
+          <Name>Get IIS Worker Processes (Data On Demand)</Name>
+          <Description>
+            Displays worker process information about IIS on the target computer.
+            Note: Formats other than CSV are only supported if PowerShell v3 or later is installed on the target server.
+          </Description>
+        </DisplayString>
+      </DisplayStrings>
+    </LanguagePack>
+  </LanguagePacks>
+</ManagementPackFragment>

@@ -1,17 +1,20 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.27130.2027
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{D4B43EB3-688B-4EEE-86BD-088F0B28ABB3}") = "Community.DataOnDemand", "ManagementPacks\Community.DataOnDemand\Community.DataOnDemand.mpproj", "{26ABAEC1-E5BF-4917-8F6B-831231F393B0}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{01C800A1-C2EA-4B4C-86EF-224FAB1D6984}"
 	ProjectSection(SolutionItems) = preProject
 		References\Microsoft.Unix.Library.mp = References\Microsoft.Unix.Library.mp
+		References\Microsoft.Windows.InternetInformationServices.CommonLibrary.MP = References\Microsoft.Windows.InternetInformationServices.CommonLibrary.MP
 		readme.md = readme.md
 	EndProjectSection
 EndProject
 Project("{D4B43EB3-688B-4EEE-86BD-088F0B28ABB3}") = "Community.DataOnDemand.Unix", "ManagementPacks\Community.DataOnDemand.Unix\Community.DataOnDemand.Unix.mpproj", "{5AB64C9B-DC39-4C6B-A663-7BAD80097C4D}"
+EndProject
+Project("{D4B43EB3-688B-4EEE-86BD-088F0B28ABB3}") = "Community.DataOnDemand.IIS", "ManagementPacks\Community.DataOnDemand.IIS\Community.DataOnDemand.IIS.mpproj", "{A50FC640-8D61-4B51-A739-6DE2D36395C8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,8 +30,31 @@ Global
 		{5AB64C9B-DC39-4C6B-A663-7BAD80097C4D}.Debug|x86.Build.0 = Debug|x86
 		{5AB64C9B-DC39-4C6B-A663-7BAD80097C4D}.Release|x86.ActiveCfg = Release|x86
 		{5AB64C9B-DC39-4C6B-A663-7BAD80097C4D}.Release|x86.Build.0 = Release|x86
+		{AC88062A-1637-4CBC-8201-39FA175F1D10}.Debug|x86.ActiveCfg = Debug|x86
+		{AC88062A-1637-4CBC-8201-39FA175F1D10}.Debug|x86.Build.0 = Debug|x86
+		{AC88062A-1637-4CBC-8201-39FA175F1D10}.Release|x86.ActiveCfg = Release|x86
+		{AC88062A-1637-4CBC-8201-39FA175F1D10}.Release|x86.Build.0 = Release|x86
+		{81B72144-E19D-4693-B101-CDAE04607BC5}.Debug|x86.ActiveCfg = Debug|x86
+		{81B72144-E19D-4693-B101-CDAE04607BC5}.Debug|x86.Build.0 = Debug|x86
+		{81B72144-E19D-4693-B101-CDAE04607BC5}.Release|x86.ActiveCfg = Release|x86
+		{81B72144-E19D-4693-B101-CDAE04607BC5}.Release|x86.Build.0 = Release|x86
+		{C9C31A72-2BF7-48A3-AACC-31DDEC851A2C}.Debug|x86.ActiveCfg = Debug|x86
+		{C9C31A72-2BF7-48A3-AACC-31DDEC851A2C}.Debug|x86.Build.0 = Debug|x86
+		{C9C31A72-2BF7-48A3-AACC-31DDEC851A2C}.Release|x86.ActiveCfg = Release|x86
+		{C9C31A72-2BF7-48A3-AACC-31DDEC851A2C}.Release|x86.Build.0 = Release|x86
+		{A50FC640-8D61-4B51-A739-6DE2D36395C8}.Debug|x86.ActiveCfg = Debug|x86
+		{A50FC640-8D61-4B51-A739-6DE2D36395C8}.Debug|x86.Build.0 = Debug|x86
+		{A50FC640-8D61-4B51-A739-6DE2D36395C8}.Release|x86.ActiveCfg = Release|x86
+		{A50FC640-8D61-4B51-A739-6DE2D36395C8}.Release|x86.Build.0 = Release|x86
+		{85C9901D-5AAE-43AF-93F6-27EAD1775962}.Debug|x86.ActiveCfg = Debug|x86
+		{85C9901D-5AAE-43AF-93F6-27EAD1775962}.Debug|x86.Build.0 = Debug|x86
+		{85C9901D-5AAE-43AF-93F6-27EAD1775962}.Release|x86.ActiveCfg = Release|x86
+		{85C9901D-5AAE-43AF-93F6-27EAD1775962}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {1D043758-AE7C-4AD8-A923-ABF9FB461A9B}
 	EndGlobalSection
 EndGlobal
