@@ -8,6 +8,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{01C800A1-C2EA-4B4C-86EF-224FAB1D6984}"
 	ProjectSection(SolutionItems) = preProject
 		References\Microsoft.SQLServer.2014.Discovery.mp = References\Microsoft.SQLServer.2014.Discovery.mp
+		References\Microsoft.SQLServer.2016.Discovery.mp = References\Microsoft.SQLServer.2016.Discovery.mp
+		References\Microsoft.SQLServer.Generic.Presentation.mp = References\Microsoft.SQLServer.Generic.Presentation.mp
 		References\Microsoft.SQLServer.Library.mp = References\Microsoft.SQLServer.Library.mp
 		References\Microsoft.Unix.Library.mp = References\Microsoft.Unix.Library.mp
 		References\Microsoft.Windows.InternetInformationServices.CommonLibrary.MP = References\Microsoft.Windows.InternetInformationServices.CommonLibrary.MP
@@ -21,6 +23,7 @@ EndProject
 Project("{D4B43EB3-688B-4EEE-86BD-088F0B28ABB3}") = "Community.DataOnDemand.SQL.2014", "ManagementPacks\Community.DataOnDemand.SQL.2014\Community.DataOnDemand.SQL.2014.mpproj", "{81B72144-E19D-4693-B101-CDAE04607BC5}"
 EndProject
 Project("{D4B43EB3-688B-4EEE-86BD-088F0B28ABB3}") = "Community.DataOnDemand.SQL.2016", "ManagementPacks\Community.DataOnDemand.SQL.2016\Community.DataOnDemand.SQL.2016.mpproj", "{C9C31A72-2BF7-48A3-AACC-31DDEC851A2C}"
+EndProject
 Project("{D4B43EB3-688B-4EEE-86BD-088F0B28ABB3}") = "Community.DataOnDemand.IIS", "ManagementPacks\Community.DataOnDemand.IIS\Community.DataOnDemand.IIS.mpproj", "{A50FC640-8D61-4B51-A739-6DE2D36395C8}"
 EndProject
 Global
