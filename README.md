@@ -35,6 +35,7 @@ The MPs adds a number of agent tasks to various computer classes, with the suffi
 Display Name                                    | Target           | Description
 ----------------------------------------------- | ---------------- | ----------------------
 Get DNS Cache (Data On Demand)                  | Windows Computer | Lists all entries in the server's DNS cache.
+Get IIS Log Folder Metrics (Data On Demand)     | IIS Webserver    | Displays IIS log file size information on the target computer.
 Get IIS Worker Processes Data (Data On Demand)  | IIS Webserver    | Displays worker process information about IIS on the target computer.
 Get Netstat CSV (Data On Demand)                | Unix Computer    | Displays established TCP connections using netstat.
 Get Netstat CSV (Data On Demand)                | Windows Computer | Displays established TCP connections using netstat.
@@ -42,6 +43,7 @@ Get SQL Server Connections (Data On Demand)     | SQL DB Engine    | Lists all o
 List Event Logs (Data On Demand)                | Windows Computer | Displays the last 4 entries in the system event log.
 List Processes (Data On Demand)                 | Windows Computer | Lists the top 10 processes sorted by CPU usage.
 List Services (Data On Demand)                  | Windows Computer | Lists the name and status of services.
+List Update History (Data On Demand)            | Windows Computer | Lists Windows Update activity on the target computer.
 Resolve Addresses (Data On Demand)              | Unix Computer    | Looks up the specified IP Addresses or names using configured DNS settings on the target computer.
 Resolve Addresses (Data On Demand)              | Windows Computer | Looks up the specified IP Addresses or names using configured DNS settings on the target computer.
 
