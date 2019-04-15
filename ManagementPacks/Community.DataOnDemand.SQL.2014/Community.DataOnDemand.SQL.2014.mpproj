@@ -2,10 +2,10 @@
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <ProjectGuid>{5ab64c9b-dc39-4c6b-a663-7bad80097c4d}</ProjectGuid>
-    <RootNamespace>Community.DataOnDemand.Unix</RootNamespace>
-    <Name>Community.DataOnDemand.Unix</Name>
-    <ManagementPackName>Community.DataOnDemand.Unix</ManagementPackName>
+    <ProjectGuid>{81b72144-e19d-4693-b101-cdae04607bc5}</ProjectGuid>
+    <RootNamespace>Community.DataOnDemand.SQL.2014</RootNamespace>
+    <Name>Community.DataOnDemand.SQL.2014</Name>
+    <ManagementPackName>Community.DataOnDemand.SQL.2014</ManagementPackName>
     <Version>1.0.0.0</Version>
     <MpFrameworkVersion>v7.0.2</MpFrameworkVersion>
     <MpFrameworkProfile>OM</MpFrameworkProfile>
@@ -14,11 +14,12 @@
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\Debug\</OutputPath>
-    <GenerateSealed>True</GenerateSealed>
+    <GenerateSealed>false</GenerateSealed>
     <Company>Squared Up Ltd</Company>
     <Copyright>Copyright (c) Squared Up Limited. All rights reserved.</Copyright>
-    <DelaySigning>False</DelaySigning>
-    <AssemblyOriginatorKeyFile>..\..\data-on-demand.snk</AssemblyOriginatorKeyFile>
+    <DelaySigning>false</DelaySigning>
+    <AssemblyOriginatorKeyFile>..\data-on-demand.snk</AssemblyOriginatorKeyFile>
+    <GenerateSealed>False</GenerateSealed>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <DebugSymbols>false</DebugSymbols>
@@ -31,25 +32,19 @@
     <GenerateSealed>True</GenerateSealed>
   </PropertyGroup>
   <ItemGroup>
+    <ManagementPackReference Include="Microsoft.SQLServer.2014.Discovery">
+      <HintPath>..\..\References\Microsoft.SQLServer.2014.Discovery.mp</HintPath>
+      <Alias>MSSQL</Alias>
+      <MinVersion>6.7.31.0</MinVersion>
+      <PackageToBundle>False</PackageToBundle>
+    </ManagementPackReference>
     <ManagementPackReference Include="Microsoft.SystemCenter.Library">
       <Alias>SC</Alias>
-      <PackageToBundle>False</PackageToBundle>
-    </ManagementPackReference>
-    <ManagementPackReference Include="Microsoft.SystemCenter.WSManagement.Library">
-      <!-- <HintPath>C:\Program Files (x86)\System Center Visual Studio Authoring Extensions\References\OM2012\Microsoft.SystemCenter.WSManagement.Library.mp</HintPath>-->
-      <Alias>MSWL</Alias>
-      <MinVersion>7.0.8517.0</MinVersion>
-      <PackageToBundle>False</PackageToBundle>
-    </ManagementPackReference>
-    <ManagementPackReference Include="Microsoft.Unix.Library">
-      <HintPath>..\..\References\Microsoft.Unix.Library.mp</HintPath>
-      <Alias>MUL</Alias>
-      <MinVersion>7.3.2119.0</MinVersion>
-      <PackageToBundle>False</PackageToBundle>
+      <PackageToBundle>false</PackageToBundle>
     </ManagementPackReference>
     <ManagementPackReference Include="Microsoft.Windows.Library">
       <Alias>Windows</Alias>
-      <PackageToBundle>False</PackageToBundle>
+      <PackageToBundle>false</PackageToBundle>
     </ManagementPackReference>
     <ManagementPackReference Include="System.Health.Library">
       <Alias>Health</Alias>
@@ -57,48 +52,27 @@
     </ManagementPackReference>
     <ManagementPackReference Include="System.Library">
       <Alias>System</Alias>
-      <PackageToBundle>False</PackageToBundle>
+      <PackageToBundle>false</PackageToBundle>
     </ManagementPackReference>
     <ManagementPackReference Include="Microsoft.SystemCenter.Visualization.Library">
       <Alias>Visualization</Alias>
-      <PackageToBundle>False</PackageToBundle>
+      <PackageToBundle>false</PackageToBundle>
     </ManagementPackReference>
   </ItemGroup>
-  <ItemGroup>
+    <ItemGroup>
     <Folder Include="Modules" />
     <Folder Include="Tasks" />
-    <Folder Include="Scripts" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ManagementPack.mpx">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Modules\Probe.GetNetstatCsv.mpx">
+    <Compile Include="Modules\Probe.SQLServerConnections.mpx">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Modules\Probe.ExtractUserFromProfile.mpx">
+    <Compile Include="Tasks\AgentTask.GetSQLServerConnections.mpx">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Modules\Probe.ResolveAddress.mpx">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Tasks\GetNetstatCsv.mpx">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Tasks\ResolveAddress.mpx">
-      <SubType>Code</SubType>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Scripts\GetNetstatCSV.sh">
-      <SubType>Content</SubType>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Scripts\ExtractUserFromProfile.ps1" />
-    <EmbeddedResource Include="Scripts\ResolveAddress.pl">
-      <SubType>Content</SubType>
-    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\VSAC\Microsoft.SystemCenter.OperationsManager.targets" />
 </Project>
