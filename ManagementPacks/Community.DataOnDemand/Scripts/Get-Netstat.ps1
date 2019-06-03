@@ -54,7 +54,7 @@ Get-Process | ForEach-Object {
     $procsByPid[$_.Id] = $_
 }
 $svcsByPid = @{}
-Get-WmiObject win32_Service | ForEach-Object {
+Get-WmiObject -Class Win32_Service -Filter 'ProcessId != 0' -Property Name,DisplayName,ProcessId | ForEach-Object {
     if ($_.ProcessId) {
         $svcsByPid[$_.ProcessId] = $_
     }
