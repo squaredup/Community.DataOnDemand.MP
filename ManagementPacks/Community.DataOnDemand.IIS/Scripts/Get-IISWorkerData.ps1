@@ -171,16 +171,6 @@ if ($wpData) {
     }
 }
 
-$appsByPool = @{}
-if ($appData) {
-	foreach ($app in $appData) {
-		if (-not $appsByPool.ContainsKey($app.AppPool)) {
-			$appsByPool[$app.AppPool] = @{}
-		}
-		$appsByPool[$app.AppPool][$app.App] = $true
-	}
-}
-
 $portsByProcId = @{}
 if ($netshData) {
     foreach ($entry in $netshData) {
