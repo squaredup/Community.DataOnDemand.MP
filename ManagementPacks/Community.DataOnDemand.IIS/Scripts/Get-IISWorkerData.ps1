@@ -161,9 +161,14 @@ $netshData = GetNetshInfo
 $wpData = GetWorkerInfo
 $appData = GetAppInfo
 
-$poolByPid = @{}
+$pidByPool = @{}
 if ($wpData) {
-	$wpData | %{ $poolByPid[[int]$_.Pid] = $_.AppPool }
+    foreach ($worker in $wpData) {
+        if (-not $pidByPool.ContainsKey($worker.AppPool)) {
+            $pidByPool[$worker.AppPool] = @()
+        }
+        $pidByPool[$worker.AppPool] += [int]$worker.Pid
+    }
 }
 
 $appsByPool = @{}
@@ -176,21 +181,45 @@ if ($appData) {
 	}
 }
 
+$portsByProcId = @{}
 if ($netshData) {
-	foreach ($ns in $netshData) {
-		if ($poolByPid.ContainsKey($ns.Pid)) {
-			$pool = $poolByPid[$ns.Pid]
-			if ($appsByPool.ContainsKey($pool)) {
-				foreach($app in $appsByPool[$pool].Keys) {
-					$output += $column -f `
-					$ns.port,
-					$ns.pid,
-					([string]$pool).Replace('"','""'),
-					([string]$app).Replace('"','""')
-				}
-			}
-		}
-	}
+    foreach ($entry in $netshData) {
+        if (-not $portsByProcId.ContainsKey($entry.Pid)) {
+            $portsByProcId[$entry.Pid] = @()
+        }
+        $portsByProcId[$entry.Pid] += $entry.Port
+    }
+}
+
+if ($appData) {
+    foreach ($app in $appData) {
+
+        $pool = $app.AppPool
+
+        # If no workers are currently awake for this pool, still need to output an entry with null pid and port
+        if (-not $pidByPool.ContainsKey($pool)) {
+            $output += $column -f `
+            $null, # port
+            $null, # pid
+            ([string]$pool).Replace('"','""'),
+            ([string]$app.App).Replace('"','""')
+
+            continue;
+        }
+        
+        $pids = $pidByPool[$pool]
+
+        foreach ($procId in $pids) {
+
+            foreach ($port in $portsByProcId[$procId]) {
+                $output += $column -f `
+                $port,
+                $procId,
+                ([string]$pool).Replace('"','""'),
+                ([string]$app.App).Replace('"','""')
+            }
+        }
+    }
 }
 
 # Produce output in requested format
