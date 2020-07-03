@@ -61,7 +61,7 @@
                             targetType: 'inline'
                             script: |
                               ls -path '.\ManagementPacks\*\bin\Release\*.mp' | Copy -Destination .\ -Force
-                              Get-ChildItem . -recursive -force
+                              Get-ChildItem . -recurse -force
                               7za a -tzip Community.DataOnDemand-$(DEMAND_MAJOR_VERSION).$(DEMAND_MINOR_VERSION).$(DEMAND_REVISION)-$(TIMESTAMP)-$(BUILD_NUMBER).zip
                             failOnStderr: true
                         - task: ArtifactoryGenericUpload@2
