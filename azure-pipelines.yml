@@ -39,7 +39,20 @@
                           inputs:
                             targetType: 'inline'
                             script: |
-                              Start-Process msiexec.exe -Wait -ArgumentList '/I VSAE/VisualStudioAuthoringConsole_x86.msi /quiet'
+                              $file.fullname = "VSAE/VisualStudioAuthoringConsole_x86.msi"
+                              $DataStamp = get-date -Format yyyyMMddTHHmmss
+                              $logFile = '{0}-{1}.log' -f $file.fullname,$DataStamp
+                              $MSIArguments = @(
+                                  "/i"
+                                  ('"{0}"' -f $file.fullname)
+                                  "/qn"
+                                  "/norestart"
+                                  "/L*v"
+                                  $logFile
+                              )
+                              Start-Process "msiexec.exe" -ArgumentList $MSIArguments -Wait -NoNewWindow 
+                              
+                              #Start-Process msiexec.exe -Wait -ArgumentList '/I VSAE/VisualStudioAuthoringConsole_x86.msi /quiet'
                             failOnStderr: true
                             failNoOp: true
                         # - #Build the solution SquaredUp.App.sln
