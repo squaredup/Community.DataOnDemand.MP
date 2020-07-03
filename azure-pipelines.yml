@@ -17,5 +17,30 @@
                     job: "buildJob"
                     displayName: "Build Job"
                     steps:
-                        -
-                            
+                        - task: DownloadSecureFile@1
+                          inputs:
+                            secureFile: 'data-on-demand.snk'
+                          name: STRONGNAME_KEY
+                          displayName: "Download secure file"
+                        - #Build the solution SquaredUp.App.sln
+                            task: VSBuild@1
+                            displayName: "Visual Studio Build"
+                            inputs:
+                                solution: "$(buildsolutionFile)"
+                                vsVersion: "15.0"
+                                msbuildArgs: '/verbosity:minimal /p:Version=$(DEMAND_MAJOR_VERSION).$(DEMAND_MINOR_VERSION).$(DEMAND_REVISION).$(BUILD_NUMBER) /p:AssemblyOriginatorKeyFile=$(STRONGNAME_KEY.secureFilePath)'
+                                platform: "$(buildPlatform)"
+                                configuration: "$(buildConfiguration)"
+                                clean: true
+                                restoreNugetPackages: true
+                                msbuildArchitecture: "x86"
+                                createLogFile: true
+                                logFileVerbosity: "detailed"
+                        - task: PowerShell@2
+                          inputs:
+                            targetType: 'inline'
+                            script: |
+                              ls -path '.\ManagementPacks\*\bin\Release\*.mp' | Copy -Destination .\ -Force
+                              Get-ChildItem . -recursive -force
+                              7za a -tzip Community.DataOnDemand-$(DEMAND_MAJOR_VERSION).$(DEMAND_MINOR_VERSION).$(DEMAND_REVISION)-$(TIMESTAMP)-$(BUILD_NUMBER).zip
+                            failOnStderr: true
