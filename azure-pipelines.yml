@@ -75,14 +75,22 @@
                                 msbuildArchitecture: "x86"
                                 createLogFile: true
                                 logFileVerbosity: "detailed"
-                        - task: PowerShell@2
+                        # - task: PowerShell@2
+                        #   inputs:
+                        #     targetType: 'inline'
+                        #     script: |
+                        #       ls -path '.\ManagementPacks\*\bin\Release\*.mp' | Copy -Destination .\ -Force
+                        #       Get-ChildItem . -recurse -force
+                        #       7za a -tzip Community.DataOnDemand-$(DEMAND_MAJOR_VERSION).$(DEMAND_MINOR_VERSION).$(DEMAND_REVISION)-$(TIMESTAMP)-$(BUILD_NUMBER).zip
+                        #     failOnStderr: true
+                        - task: ArchiveFiles@2
                           inputs:
-                            targetType: 'inline'
-                            script: |
-                              ls -path '.\ManagementPacks\*\bin\Release\*.mp' | Copy -Destination .\ -Force
-                              Get-ChildItem . -recurse -force
-                              7za a -tzip Community.DataOnDemand-$(DEMAND_MAJOR_VERSION).$(DEMAND_MINOR_VERSION).$(DEMAND_REVISION)-$(TIMESTAMP)-$(BUILD_NUMBER).zip
-                            failOnStderr: true
+                            rootFolderOrFile: '.\ManagementPacks\*\bin\Release\*.mp'
+                            includeRootFolder: false
+                            archiveType: '7z'
+                            archiveFile: '$(Build.ArtifactStagingDirectory)/Community.DataOnDemand-$(DEMAND_MAJOR_VERSION).$(DEMAND_MINOR_VERSION).$(DEMAND_REVISION)-$(TIMESTAMP)-$(BUILD_NUMBER).zip'
+                            replaceExistingArchive: true
+                            verbose: true
                         - task: ArtifactoryGenericUpload@2
                           inputs:
                             artifactoryService: 'jFrog-Artifactory'
@@ -97,3 +105,8 @@
                                 ]
                               }
                             failNoOp: true
+                        - task: PublishPipelineArtifact@1
+                          inputs:
+                            targetPath: '$(Build.ArtifactStagingDirectory)/Community.DataOnDemand-$(DEMAND_MAJOR_VERSION).$(DEMAND_MINOR_VERSION).$(DEMAND_REVISION)-$(TIMESTAMP)-$(BUILD_NUMBER).zip'
+                            artifact: 'Community.DataOnDemand'
+                            publishLocation: 'pipeline'
