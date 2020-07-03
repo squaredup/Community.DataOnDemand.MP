@@ -22,6 +22,20 @@
                             secureFile: 'data-on-demand.snk'
                           name: STRONGNAME_KEY
                           displayName: "Download secure file"
+                        - task: ArtifactoryGenericDownload@3
+                          inputs:
+                            connection: 'jFrog-Artifactory'
+                            specSource: 'taskConfiguration'
+                            fileSpec: |
+                              {
+                                "files": [
+                                  {
+                                    "pattern": "public/com/squaredup/vsae-msi/VisualStudioAuthoringConsole_x86.msi",
+                                    "target": "VisualStudioAuthoringConsole_x86.msi"
+                                  }
+                                ]
+                              }
+                            failNoOp: true
                         - #Build the solution SquaredUp.App.sln
                             task: VSBuild@1
                             displayName: "Visual Studio Build"
