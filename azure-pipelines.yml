@@ -45,11 +45,13 @@
                               $MSIArguments = @(
                                   "/i"
                                   ('"{0}"' -f $file.fullname)
+                                  "/qn"
                                   "/norestart"
                                   "/L*v"
                                   $logFile
                               )
                               Start-Process "msiexec.exe" -ArgumentList $MSIArguments -Wait -NoNewWindow 
+                              get-content $logFile
                               
                               #Start-Process msiexec.exe -Wait -ArgumentList '/I VSAE/VisualStudioAuthoringConsole_x86.msi /quiet'
                             failOnStderr: true
