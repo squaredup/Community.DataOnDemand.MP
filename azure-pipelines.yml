@@ -85,7 +85,7 @@
                             failOnStderr: true
                         - task: ArchiveFiles@2
                           inputs:
-                            rootFolderOrFile: '.\ManagementPacks\*\bin\Release\*.mp'
+                            rootFolderOrFile: '.\ManagementPacks\**\bin\Release'
                             includeRootFolder: false
                             archiveType: '7z'
                             archiveFile: '$(Build.ArtifactStagingDirectory)/Community.DataOnDemand-$(DEMAND_MAJOR_VERSION).$(DEMAND_MINOR_VERSION).$(DEMAND_REVISION)-$(TIMESTAMP)-$(BUILD_NUMBER).zip'
