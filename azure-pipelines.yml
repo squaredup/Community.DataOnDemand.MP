@@ -98,6 +98,7 @@
                             script: |
                               Get-ChildItem .\output -recurse -force
                               get-childItem .
+                              get-childItem $(Build.ArtifactStagingDirectory)
                               
                             failOnStderr: true
                         - task: ArtifactoryGenericUpload@2
@@ -108,7 +109,7 @@
                               {
                                 "files": [
                                   {
-                                    "pattern": "Community.DataOnDemand-$(DEMAND_MAJOR_VERSION).$(DEMAND_MINOR_VERSION).$(DEMAND_REVISION)-$(TIMESTAMP)-$(BUILD_NUMBER).zip",
+                                    "pattern": "$(Build.ArtifactStagingDirectory)/Community.DataOnDemand-$(DEMAND_MAJOR_VERSION).$(DEMAND_MINOR_VERSION).$(DEMAND_REVISION)-$(TIMESTAMP)-$(BUILD_NUMBER).zip",
                                     "target": "release/com/squaredup/Community.DataOnDemand/$(DEMAND_MAJOR_VERSION).$(DEMAND_MINOR_VERSION).$(DEMAND_REVISION)/Community.DataOnDemand-$(DEMAND_MAJOR_VERSION).$(DEMAND_MINOR_VERSION).$(DEMAND_REVISION)-$(TIMESTAMP)-$(BUILD_NUMBER).zip"
                                   }
                                 ]
