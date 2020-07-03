@@ -40,7 +40,8 @@
                             targetType: 'inline'
                             script: |
                               get-childItem D:\a\1\s\VSAE\com\squaredup\vsae-msi -recurse -force
-                              $file = "D:\a\1\s\VSAE\com\squaredup\vsae-msi/VisualStudioAuthoringConsole_x86.msi"
+
+                              $file = "D:\a\1\s\VSAE\com\squaredup\vsae-msi\VisualStudioAuthoringConsole_x86.msi"
                               $DataStamp = get-date -Format yyyyMMddTHHmmss
                               $logFile = '{0}-{1}.log' -f $file,$DataStamp
                               $MSIArguments = @(
