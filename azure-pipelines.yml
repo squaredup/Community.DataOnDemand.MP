@@ -1,0 +1,21 @@
+--- 
+    name: $(Rev:r)
+    stages: 
+        -
+            stage: buildStage
+            displayName: 'Build Stage'
+            pool:
+                vmImage: "vs2017-win2016"
+                name: Azure Pipelines
+                demands:
+                    - msbuild
+                    - visualstudio
+                    - Cmd
+                    - vstest
+            jobs:
+                - 
+                    job: "buildJob"
+                    displayName: "Build Job"
+                    steps:
+                        -
+                            
