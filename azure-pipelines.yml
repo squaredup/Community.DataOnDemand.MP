@@ -41,35 +41,35 @@
                             script: |
                               $file = "VSAE/VisualStudioAuthoringConsole_x86.msi"
                               $DataStamp = get-date -Format yyyyMMddTHHmmss
-                              $logFile = '{0}-{1}.log' -f $file.fullname,$DataStamp
+                              $logFile = '{0}-{1}.log' -f $file,$DataStamp
                               $MSIArguments = @(
                                   "/i"
-                                  ('"{0}"' -f $file.fullname)
+                                  ('"{0}"' -f $file)
                                   "/qn"
                                   "/norestart"
                                   "/L*v"
                                   $logFile
                               )
-                              Start-Process "msiexec.exe" -ArgumentList $MSIArguments -Wait -NoNewWindow 
+                              Start-Process "msiexec.exe" -ArgumentList $MSIArguments -Wait -NoNewWindow  
                               get-content $logFile
                               
                               #Start-Process msiexec.exe -Wait -ArgumentList '/I VSAE/VisualStudioAuthoringConsole_x86.msi /quiet'
                             failOnStderr: true
                             failNoOp: true
-                        # - #Build the solution SquaredUp.App.sln
-                        #     task: VSBuild@1
-                        #     displayName: "Visual Studio Build"
-                        #     inputs:
-                        #         solution: "$(buildsolutionFile)"
-                        #         vsVersion: "15.0"
-                        #         msbuildArgs: '/verbosity:minimal /p:Version=$(DEMAND_MAJOR_VERSION).$(DEMAND_MINOR_VERSION).$(DEMAND_REVISION).$(BUILD_NUMBER) /p:AssemblyOriginatorKeyFile=$(STRONGNAME_KEY.secureFilePath)'
-                        #         platform: "$(buildPlatform)"
-                        #         configuration: "$(buildConfiguration)"
-                        #         clean: true
-                        #         restoreNugetPackages: true
-                        #         msbuildArchitecture: "x86"
-                        #         createLogFile: true
-                        #         logFileVerbosity: "detailed"
+                        - #Build the solution SquaredUp.App.sln
+                            task: VSBuild@1
+                            displayName: "Visual Studio Build"
+                            inputs:
+                                solution: "$(buildsolutionFile)"
+                                vsVersion: "15.0"
+                                msbuildArgs: '/verbosity:minimal /p:Version=$(DEMAND_MAJOR_VERSION).$(DEMAND_MINOR_VERSION).$(DEMAND_REVISION).$(BUILD_NUMBER) /p:AssemblyOriginatorKeyFile=$(STRONGNAME_KEY.secureFilePath)'
+                                platform: "$(buildPlatform)"
+                                configuration: "$(buildConfiguration)"
+                                clean: true
+                                restoreNugetPackages: true
+                                msbuildArchitecture: "x86"
+                                createLogFile: true
+                                logFileVerbosity: "detailed"
                         - task: PowerShell@2
                           inputs:
                             targetType: 'inline'
