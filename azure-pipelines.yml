@@ -36,10 +36,13 @@
                                 ]
                               }
                         - task: PowerShell@2
+                          name: "prebuildTask"
                           inputs:
                             targetType: 'inline'
                             script: |
                               get-childItem D:\a\1\s\VSAE\com\squaredup\vsae-msi -recurse -force
+                              $date=$(Get-Date -Format "yyyyMMdd.HHmmss");
+                              Write-Host "##vso[task.setvariable variable=Build_Date;isOutput=true]$date"
 
                               $file = "D:\a\1\s\VSAE\com\squaredup\vsae-msi\VisualStudioAuthoringConsole_x86.msi"
                               $DataStamp = get-date -Format yyyyMMddTHHmmss
