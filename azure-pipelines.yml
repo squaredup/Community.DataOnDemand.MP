@@ -92,6 +92,14 @@
                             archiveFile: '$(Build.ArtifactStagingDirectory)/Community.DataOnDemand-$(DEMAND_MAJOR_VERSION).$(DEMAND_MINOR_VERSION).$(DEMAND_REVISION)-$(TIMESTAMP)-$(BUILD_NUMBER).zip'
                             replaceExistingArchive: true
                             verbose: true
+                        - task: PowerShell@2
+                          inputs:
+                            targetType: 'inline'
+                            script: |
+                              Get-ChildItem .\output -recurse -force
+                              get-childItem .
+                              
+                            failOnStderr: true
                         - task: ArtifactoryGenericUpload@2
                           inputs:
                             artifactoryService: 'jFrog-Artifactory'
