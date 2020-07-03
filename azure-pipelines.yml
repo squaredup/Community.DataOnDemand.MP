@@ -45,7 +45,6 @@
                               $MSIArguments = @(
                                   "/i"
                                   ('"{0}"' -f $file.fullname)
-                                  "/qn"
                                   "/norestart"
                                   "/L*v"
                                   $logFile
