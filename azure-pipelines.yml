@@ -39,7 +39,7 @@
                           inputs:
                             targetType: 'inline'
                             script: |
-                              $file.fullname = "VSAE/VisualStudioAuthoringConsole_x86.msi"
+                              $file = "VSAE/VisualStudioAuthoringConsole_x86.msi"
                               $DataStamp = get-date -Format yyyyMMddTHHmmss
                               $logFile = '{0}-{1}.log' -f $file.fullname,$DataStamp
                               $MSIArguments = @(
