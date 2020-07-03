@@ -79,13 +79,14 @@
                           inputs:
                             targetType: 'inline'
                             script: |
-                              #ls -path '.\ManagementPacks\*\bin\Release\*.mp' | Copy -Destination .\ -Force
+                              new-item -path .\output
+                              ls -path '.\ManagementPacks\*\bin\Release\*.mp' | Copy -Destination .\output -Force
                               Get-ChildItem . -recurse -force
                               #7za a -tzip Community.DataOnDemand-$(DEMAND_MAJOR_VERSION).$(DEMAND_MINOR_VERSION).$(DEMAND_REVISION)-$(TIMESTAMP)-$(BUILD_NUMBER).zip
                             failOnStderr: true
                         - task: ArchiveFiles@2
                           inputs:
-                            rootFolderOrFile: '.\ManagementPacks'
+                            rootFolderOrFile: '.\output'
                             includeRootFolder: false
                             archiveType: '7z'
                             archiveFile: '$(Build.ArtifactStagingDirectory)/Community.DataOnDemand-$(DEMAND_MAJOR_VERSION).$(DEMAND_MINOR_VERSION).$(DEMAND_REVISION)-$(TIMESTAMP)-$(BUILD_NUMBER).zip'
