@@ -100,6 +100,6 @@
                             failNoOp: true
                         - task: PublishPipelineArtifact@1
                           inputs:
-                            targetPath: 'ManagementPacks\Community.DataOnDemand.Unix\bin\Release\*.mpb'
+                            targetPath: 'ManagementPacks\Community.DataOnDemand.Unix\bin\Release\Community.DataOnDemand.Unix.mpb'
                             artifact: 'Community.DataOnDemand.Unix.MP'
                             publishLocation: 'pipeline'
