@@ -1,0 +1,105 @@
+--- 
+    name: $(Rev:r)
+    stages: 
+        -
+            stage: buildStage
+            displayName: 'Build Stage'
+            pool:
+                vmImage: "vs2017-win2016"
+                name: Azure Pipelines
+                demands:
+                    - msbuild
+                    - visualstudio
+                    - Cmd
+                    - vstest
+            jobs:
+                - 
+                    job: "buildJob"
+                    displayName: "Build Job"
+                    steps:
+                        - task: DownloadSecureFile@1
+                          inputs:
+                            secureFile: 'data-on-demand.snk'
+                          name: STRONGNAME_KEY
+                          displayName: "Download secure file"
+                        - task: ArtifactoryGenericDownload@3
+                          inputs:
+                            connection: 'jFrog-Artifactory'
+                            specSource: 'taskConfiguration'
+                            fileSpec: |
+                              {
+                                "files": [
+                                  {
+                                    "pattern": "public/com/squaredup/vsae-msi/VisualStudioAuthoringConsole_x86.msi",
+                                    "target": "VSAE/VisualStudioAuthoringConsole_x86.msi"
+                                  }
+                                ]
+                              }
+                        - task: PowerShell@2
+                          name: "prebuildTask"
+                          inputs:
+                            targetType: 'inline'
+                            script: |
+                              get-childItem D:\a\1\s\VSAE\com\squaredup\vsae-msi -recurse -force
+                              $date=$(Get-Date -Format "yyyyMMdd.HHmmss");
+                              Write-Host "##vso[task.setvariable variable=Build_Date;isOutput=true]$date"
+
+                              $file = "D:\a\1\s\VSAE\com\squaredup\vsae-msi\VisualStudioAuthoringConsole_x86.msi"
+                              $DataStamp = get-date -Format yyyyMMddTHHmmss
+                              $logFile = '{0}-{1}.log' -f $file,$DataStamp
+                              $MSIArguments = @(
+                                  "/i"
+                                  ('"{0}"' -f $file)
+                                  "/qn"
+                                  "/norestart"
+                                  "/L*v"
+                                  $logFile
+                              )
+                              Start-Process "msiexec.exe" -ArgumentList $MSIArguments -Wait -NoNewWindow  
+                              get-content $logFile
+                              
+                              #Start-Process msiexec.exe -Wait -ArgumentList '/I VSAE/VisualStudioAuthoringConsole_x86.msi /quiet'
+                            failOnStderr: true
+                            failNoOp: true
+                        - #Build the solution SquaredUp.App.sln
+                            task: VSBuild@1
+                            displayName: "Visual Studio Build"
+                            inputs:
+                                solution: "$(buildsolutionFile)"
+                                vsVersion: "15.0"
+                                msbuildArgs: '/verbosity:minimal /p:Version=$(DEMAND_MAJOR_VERSION).$(DEMAND_MINOR_VERSION).$(DEMAND_REVISION).$(BUILD_NUMBER) /p:AssemblyOriginatorKeyFile=$(STRONGNAME_KEY.secureFilePath)'
+                                platform: "$(buildPlatform)"
+                                configuration: "$(buildConfiguration)"
+                                clean: true
+                                restoreNugetPackages: true
+                                msbuildArchitecture: "x86"
+                                createLogFile: true
+                                logFileVerbosity: "detailed"
+                        - task: PowerShell@2
+                          inputs:
+                            targetType: 'inline'
+                            script: |
+                             # Get-ChildItem .\output -recurse -force
+                              get-childItem .\ManagementPacks/Community.DataOnDemand.Unix/bin/Release/
+                              #get-childItem $(Build.ArtifactStagingDirectory)
+                              
+                            failOnStderr: true
+                        - task: ArtifactoryGenericUpload@2
+                          inputs:
+                            artifactoryService: 'jFrog-Artifactory'
+                            specSource: 'taskConfiguration'
+                            fileSpec: |
+                              {
+                                "files": [
+                                  {
+                                    "pattern": "ManagementPacks\Community.DataOnDemand.Unix\bin\Release\*.mpb",
+                                    "target": "release/com/squaredup/Community.DataOnDemand/$(DEMAND_MAJOR_VERSION).$(DEMAND_MINOR_VERSION).$(DEMAND_REVISION)/Community.DataOnDemand-$(DEMAND_MAJOR_VERSION).$(DEMAND_MINOR_VERSION).$(DEMAND_REVISION)-$(TIMESTAMP)-$(BUILD_NUMBER).zip"
+                                  }
+                                ]
+                              }
+                            failNoOp: true
+                        - task: PublishPipelineArtifact@1
+                          inputs:
+                            targetPath: 'ManagementPacks\Community.DataOnDemand.Unix\bin\Release\*.mpb'
+                            artifact: 'Community.DataOnDemand.Unix.MP'
+                            publishLocation: 'pipeline'
