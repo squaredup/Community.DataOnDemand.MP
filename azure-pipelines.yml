@@ -22,6 +22,7 @@
                             secureFile: 'data-on-demand.snk'
                           name: STRONGNAME_KEY
                           displayName: "Download secure file"
+
                         - task: ArtifactoryGenericDownload@3
                           inputs:
                             connection: 'jFrog-Artifactory'
@@ -35,13 +36,13 @@
                                   }
                                 ]
                               }
+
                         - task: PowerShell@2
                           name: "prebuildTask"
                           inputs:
                             targetType: 'inline'
                             script: |
-                              get-childItem D:\a\1\s\VSAE\com\squaredup\vsae-msi -recurse -force
-                              $date=$(Get-Date -Format "yyyyMMdd.HHmmss");
+                             $date=$(Get-Date -Format "yyyyMMdd.HHmmss");
                               Write-Host "##vso[task.setvariable variable=Build_Date;isOutput=true]$date"
 
                               $file = "D:\a\1\s\VSAE\com\squaredup\vsae-msi\VisualStudioAuthoringConsole_x86.msi"
@@ -57,10 +58,9 @@
                               )
                               Start-Process "msiexec.exe" -ArgumentList $MSIArguments -Wait -NoNewWindow  
                               get-content $logFile
-                              
-                              #Start-Process msiexec.exe -Wait -ArgumentList '/I VSAE/VisualStudioAuthoringConsole_x86.msi /quiet'
                             failOnStderr: true
                             failNoOp: true
+
                         - #Build the solution SquaredUp.App.sln
                             task: VSBuild@1
                             displayName: "Visual Studio Build"
@@ -75,6 +75,7 @@
                                 msbuildArchitecture: "x86"
                                 createLogFile: true
                                 logFileVerbosity: "detailed"
+
                         - task: PowerShell@2
                           inputs:
                             targetType: 'inline'
@@ -82,6 +83,7 @@
                               new-item -path .\output -type directory
                               ls -path '.\ManagementPacks\*\bin\Release\*.mp' | Copy -Destination .\output -Force
                             failOnStderr: true
+
                         - task: ArchiveFiles@2
                           inputs:
                             rootFolderOrFile: '.\output\'
@@ -90,6 +92,7 @@
                             archiveFile: '$(Build.ArtifactStagingDirectory)/Community.DataOnDemand-$(DEMAND_MAJOR_VERSION).$(DEMAND_MINOR_VERSION).$(DEMAND_REVISION)-$(TIMESTAMP)-$(BUILD_NUMBER).zip'
                             replaceExistingArchive: true
                             verbose: true
+
                         - task: PowerShell@2
                           inputs:
                             targetType: 'inline'
@@ -97,8 +100,8 @@
                               Get-ChildItem .\output -recurse -force
                               get-childItem .
                               get-childItem $(Build.ArtifactStagingDirectory)
-                              
                             failOnStderr: true
+
                         - task: ArtifactoryGenericUpload@2
                           inputs:
                             artifactoryService: 'jFrog-Artifactory'
@@ -113,6 +116,7 @@
                                 ]
                               }
                             failNoOp: true
+                            
                         - task: PublishPipelineArtifact@1
                           inputs:
                             targetPath: '$(Build.ArtifactStagingDirectory)/Community.DataOnDemand-$(DEMAND_MAJOR_VERSION).$(DEMAND_MINOR_VERSION).$(DEMAND_REVISION)-$(TIMESTAMP)-$(BUILD_NUMBER).zip'
