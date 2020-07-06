@@ -42,7 +42,7 @@
                           inputs:
                             targetType: 'inline'
                             script: |
-                             $date=$(Get-Date -Format "yyyyMMdd.HHmmss");
+                              $date=$(Get-Date -Format "yyyyMMdd.HHmmss");
                               Write-Host "##vso[task.setvariable variable=Build_Date;isOutput=true]$date"
 
                               $file = "$(System.DefaultWorkingDirectory)\VSAE\com\squaredup\vsae-msi\VisualStudioAuthoringConsole_x86.msi"
@@ -60,7 +60,6 @@
                               get-content $logFile
                             failOnStderr: true
                             failNoOp: true
-
                         - #Build the solution SquaredUp.App.sln
                             task: VSBuild@1
                             displayName: "Visual Studio Build"
@@ -80,26 +79,9 @@
                           inputs:
                             targetType: 'inline'
                             script: |
-                              new-item -path .\output -type directory
-                              ls -path '.\ManagementPacks\*\bin\Release\*.mp' | Copy -Destination .\output -Force
-                            failOnStderr: true
-
-                        - task: ArchiveFiles@2
-                          inputs:
-                            rootFolderOrFile: '.\output\'
-                            includeRootFolder: false
-                            archiveType: '7z'
-                            archiveFile: '$(Build.ArtifactStagingDirectory)/Community.DataOnDemand-$(DEMAND_MAJOR_VERSION).$(DEMAND_MINOR_VERSION).$(DEMAND_REVISION)-$(TIMESTAMP)-$(BUILD_NUMBER).zip'
-                            replaceExistingArchive: true
-                            verbose: true
-
-                        - task: PowerShell@2
-                          inputs:
-                            targetType: 'inline'
-                            script: |
-                              Get-ChildItem .\output -recurse -force
-                              get-childItem .
-                              get-childItem $(Build.ArtifactStagingDirectory)
+                             # Get-ChildItem .\output -recurse -force
+                              get-childItem .\ManagementPacks/Community.DataOnDemand.Unix/bin/Release/
+                              #get-childItem $(Build.ArtifactStagingDirectory)                              
                             failOnStderr: true
 
                         - task: ArtifactoryGenericUpload@2
@@ -110,15 +92,15 @@
                               {
                                 "files": [
                                   {
-                                    "pattern": "$(Build.ArtifactStagingDirectory)/Community.DataOnDemand-$(DEMAND_MAJOR_VERSION).$(DEMAND_MINOR_VERSION).$(DEMAND_REVISION)-$(TIMESTAMP)-$(BUILD_NUMBER).zip",
-                                    "target": "release/com/squaredup/Community.DataOnDemand/$(DEMAND_MAJOR_VERSION).$(DEMAND_MINOR_VERSION).$(DEMAND_REVISION)/Community.DataOnDemand-$(DEMAND_MAJOR_VERSION).$(DEMAND_MINOR_VERSION).$(DEMAND_REVISION)-$(TIMESTAMP)-$(BUILD_NUMBER).zip"
+                                    "pattern": "ManagementPacks\Community.DataOnDemand.Unix\bin\Release\*.mpb",
+                                    "target": "release/com/squaredup/Community.DataOnDemand.Unix/$(DEMAND_MAJOR_VERSION).$(DEMAND_MINOR_VERSION).$(DEMAND_REVISION)/Community.DataOnDemand.Unix-$(DEMAND_MAJOR_VERSION).$(DEMAND_MINOR_VERSION).$(DEMAND_REVISION)-$(TIMESTAMP)-$(BUILD_NUMBER).mpb"
                                   }
                                 ]
                               }
                             failNoOp: true
-
+                            
                         - task: PublishPipelineArtifact@1
                           inputs:
-                            targetPath: '$(Build.ArtifactStagingDirectory)/Community.DataOnDemand-$(DEMAND_MAJOR_VERSION).$(DEMAND_MINOR_VERSION).$(DEMAND_REVISION)-$(TIMESTAMP)-$(BUILD_NUMBER).zip'
-                            artifact: 'Community.DataOnDemand'
+                            targetPath: 'ManagementPacks\Community.DataOnDemand.Unix\bin\Release\Community.DataOnDemand.Unix.mpb'
+                            artifact: 'Community.DataOnDemand.Unix.MP'
                             publishLocation: 'pipeline'
