@@ -67,7 +67,6 @@ stages:
                         platform: "$(buildPlatform)"
                         configuration: "$(buildConfiguration)"
                         clean: true
-                        restoreNugetPackages: true
                         msbuildArchitecture: "x86"
                         createLogFile: true
                         logFileVerbosity: "detailed"
