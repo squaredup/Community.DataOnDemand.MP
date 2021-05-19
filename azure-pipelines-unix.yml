@@ -1,106 +1,93 @@
---- 
-    name: $(Rev:r)
-    stages: 
-        -
-            stage: buildStage
-            displayName: 'Build Stage'
-            pool:
-                vmImage: "vs2017-win2016"
-                name: Azure Pipelines
-                demands:
-                    - msbuild
-                    - visualstudio
-                    - Cmd
-                    - vstest
-            jobs:
-                - 
-                    job: "buildJob"
-                    displayName: "Build Job"
-                    steps:
-                        - task: DownloadSecureFile@1
-                          inputs:
-                            secureFile: 'data-on-demand.snk'
-                          name: STRONGNAME_KEY
-                          displayName: "Download secure file"
+name: '$(Rev:r)'
+stages:
+  - stage: buildStage
+    displayName: Build Stage
+    pool:
+      vmImage: "vs2017-win2016"
+      name: Azure Pipelines
+      demands:
+        - msbuild
+        - visualstudio
+        - Cmd
+        - vstest
+    jobs:
+      - 
+          job: "buildJob"
+          displayName: "Build Job"
+          steps:
+              - task: DownloadSecureFile@1
+                inputs:
+                  secureFile: 'data-on-demand.snk'
+                name: STRONGNAME_KEY
+                displayName: "Download secure file"
 
-                        - task: ArtifactoryGenericDownload@3
-                          inputs:
-                            connection: 'jFrog-Artifactory'
-                            specSource: 'taskConfiguration'
-                            fileSpec: |
-                              {
-                                "files": [
-                                  {
-                                    "pattern": "public/com/squaredup/vsae-msi/VisualStudioAuthoringConsole_x86.msi",
-                                    "target": "VSAE/VisualStudioAuthoringConsole_x86.msi"
-                                  }
-                                ]
-                              }
+              - task: PowerShell@2
+                displayName: Download VSAE
+                name: downloadVSAE
+                inputs:
+                  targetType: inline
+                  script: | 
+                    $s3URI = "https://s3.amazonaws.com/releases.squaredup/squaredupltd/tools%26scripts/vsae-msi/VisualStudioAuthoringConsole_x86.msi"
+                    $file = "$(System.DefaultWorkingDirectory)\VisualStudioAuthoringConsole_x86.msi"
+                    Write-Host "Downloading Build from $s3URI to $file"
+                    (New-Object System.Net.WebClient).DownloadFile($s3URI, $file)
+                    Get-ChildItem $(System.DefaultWorkingDirectory)
+                    Write-Host "##vso[task.setvariable variable=VSAE_InstallerPath]$file"
+                  failOnStderr: true
 
-                        - task: PowerShell@2
-                          name: "prebuildTask"
-                          inputs:
-                            targetType: 'inline'
-                            script: |
-                              $date=$(Get-Date -Format "yyyyMMdd.HHmmss");
-                              Write-Host "##vso[task.setvariable variable=Build_Date;isOutput=true]$date"
+              - task: PowerShell@2
+                displayName: Install VSAE
+                name: installVSAE
+                inputs:
+                  targetType: inline
+                  script: |
+                    $file = "$(VSAE_InstallerPath)"
+                    $DataStamp = get-date -Format yyyyMMddTHHmmss
+                    $logFile = '{0}-{1}.log' -f $file,$DataStamp
+                    $MSIArguments = @(
+                        "/i"
+                        ('"{0}"' -f $file)
+                        "/qn"
+                        "/norestart"
+                        "/L*v"
+                        $logFile
+                    )
+                    Write-Host "Installing Visual Studio Authoring Extensions"
+                    Start-Process "msiexec.exe" -ArgumentList $MSIArguments -Wait -NoNewWindow
+                    Get-Content $logFile
+                  failOnStderr: true
 
-                              $file = "$(System.DefaultWorkingDirectory)\VSAE\com\squaredup\vsae-msi\VisualStudioAuthoringConsole_x86.msi"
-                              $DataStamp = get-date -Format yyyyMMddTHHmmss
-                              $logFile = '{0}-{1}.log' -f $file,$DataStamp
-                              $MSIArguments = @(
-                                  "/i"
-                                  ('"{0}"' -f $file)
-                                  "/qn"
-                                  "/norestart"
-                                  "/L*v"
-                                  $logFile
-                              )
-                              Start-Process "msiexec.exe" -ArgumentList $MSIArguments -Wait -NoNewWindow  
-                              get-content $logFile
-                            failOnStderr: true
-                            failNoOp: true
-                        - #Build the solution SquaredUp.App.sln
-                            task: VSBuild@1
-                            displayName: "Visual Studio Build"
-                            inputs:
-                                solution: "$(buildsolutionFile)"
-                                vsVersion: "15.0"
-                                msbuildArgs: '/verbosity:minimal /p:Version=$(DEMAND_MAJOR_VERSION).$(DEMAND_MINOR_VERSION).$(DEMAND_REVISION).$(BUILD_NUMBER) /p:AssemblyOriginatorKeyFile=$(STRONGNAME_KEY.secureFilePath)'
-                                platform: "$(buildPlatform)"
-                                configuration: "$(buildConfiguration)"
-                                clean: true
-                                restoreNugetPackages: true
-                                msbuildArchitecture: "x86"
-                                createLogFile: true
-                                logFileVerbosity: "detailed"
+              - task: VSBuild@1
+                displayName: "Visual Studio Build"
+                inputs:
+                    solution: "$(buildsolutionFile)"
+                    vsVersion: "15.0"
+                    msbuildArgs: '/verbosity:minimal /p:Version=$(DEMAND_MAJOR_VERSION).$(DEMAND_MINOR_VERSION).$(DEMAND_REVISION).$(BUILD_NUMBER) /p:AssemblyOriginatorKeyFile=$(STRONGNAME_KEY.secureFilePath)'
+                    platform: "$(buildPlatform)"
+                    configuration: "$(buildConfiguration)"
+                    clean: true
+                    restoreNugetPackages: true
+                    msbuildArchitecture: "x86"
+                    createLogFile: true
+                    logFileVerbosity: "detailed"
 
-                        - task: PowerShell@2
-                          inputs:
-                            targetType: 'inline'
-                            script: |
-                             # Get-ChildItem .\output -recurse -force
-                              get-childItem .\ManagementPacks/Community.DataOnDemand.Unix/bin/Release/
-                              #get-childItem $(Build.ArtifactStagingDirectory)                              
-                            failOnStderr: true
+              - task: PublishPipelineArtifact@1
+                inputs:
+                  targetPath: 'ManagementPacks\Community.DataOnDemand.Unix\bin\Release\Community.DataOnDemand.Unix.mpb'
+                  artifact: 'Community.DataOnDemand.Unix.MP'
+                  publishLocation: 'pipeline'
 
-                        - task: ArtifactoryGenericUpload@2
-                          inputs:
-                            artifactoryService: 'jFrog-Artifactory'
-                            specSource: 'taskConfiguration'
-                            fileSpec: |
-                              {
-                                "files": [
-                                  {
-                                    "pattern": "ManagementPacks\Community.DataOnDemand.Unix\bin\Release\*.mpb",
-                                    "target": "release/com/squaredup/Community.DataOnDemand.Unix/$(DEMAND_MAJOR_VERSION).$(DEMAND_MINOR_VERSION).$(DEMAND_REVISION)/Community.DataOnDemand.Unix-$(DEMAND_MAJOR_VERSION).$(DEMAND_MINOR_VERSION).$(DEMAND_REVISION)-$(TIMESTAMP)-$(BUILD_NUMBER).mpb"
-                                  }
-                                ]
-                              }
-                            failNoOp: true
-                            
-                        - task: PublishPipelineArtifact@1
-                          inputs:
-                            targetPath: 'ManagementPacks\Community.DataOnDemand.Unix\bin\Release\Community.DataOnDemand.Unix.mpb'
-                            artifact: 'Community.DataOnDemand.Unix.MP'
-                            publishLocation: 'pipeline'
+              - powershell: |
+                  Write-Host "Configuring AWS Credentials"
+                  aws configure set aws_access_key_id $env:AWS_ACCESS_KEY_ID
+                  aws configure set aws_secret_access_key $env:AWS_SECRET_ACCESS_KEY
+                  aws configure set default.region us-east-1
+                  Write-Host "Successfully Configured AWS Credentials"
+                  Write-Host "Starting Upload"
+                  aws s3 cp "$(System.DefaultWorkingDirectory)\ManagementPacks\Community.DataOnDemand.Unix\bin\Release\Community.DataOnDemand.Unix.mpb" "s3://cibuilds.squaredup/management-packs/Community.DataOnDemand.Unix/$(DEMAND_MAJOR_VERSION).$(DEMAND_MINOR_VERSION).$(DEMAND_REVISION)/Community.DataOnDemand.Unix-$(DEMAND_MAJOR_VERSION).$(DEMAND_MINOR_VERSION).$(DEMAND_REVISION)-$(BUILD_NUMBER).mpb"
+                  Write-Host "Artifacts Uploaded to S3"
+                workingDirectory: '$(System.DefaultWorkingDirectory)'
+                env:
+                    AWS_ACCESS_KEY_ID: $(AWS_ACCESS_KEY_ID)
+                    AWS_SECRET_ACCESS_KEY: $(AWS_SECRET_ACCESS_KEY)
+                displayName: Upload Artifacts to S3
