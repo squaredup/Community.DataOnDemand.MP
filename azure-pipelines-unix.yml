@@ -57,13 +57,6 @@ stages:
                     Write-host "##vso[task.uploadfile]$logFile"
                   failOnStderr: true
 
-              - task: NuGetCommand@2
-                displayName: NuGet restore all dependencies
-                inputs:
-                  command: "restore"
-                  restoreSolution: "$(buildsolutionFile)"
-                  verbosityRestore: "Detailed"
-
               - task: VSBuild@1
                 displayName: "Visual Studio Build"
                 inputs:
