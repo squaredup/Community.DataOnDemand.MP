@@ -72,6 +72,15 @@ stages:
                         createLogFile: true
                         logFileVerbosity: "detailed"
 
+                  - task: PowerShell@2
+                    displayName: "Copy Management Packs"
+                    inputs:
+                      targetType: 'inline'
+                      script: |
+                          New-Item -Path .\output -Type Directory
+                          Get-ChildItem -Path '.\ManagementPacks\*\bin\Release\*.mp' | Copy-Item -Destination .\output -Force
+                      failOnStderr: true
+
                   - task: ArchiveFiles@2
                     inputs:
                       rootFolderOrFile: '.\output\'
