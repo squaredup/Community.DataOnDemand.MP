@@ -54,8 +54,15 @@ stages:
                     )
                     Write-Host "Installing Visual Studio Authoring Extensions"
                     Start-Process "msiexec.exe" -ArgumentList $MSIArguments -Wait -NoNewWindow
-                    Get-Content $logFile
+                    Write-host "##vso[task.uploadfile]$logFile"
                   failOnStderr: true
+
+              - task: NuGetCommand@2
+                displayName: NuGet restore all dependencies
+                inputs:
+                  command: "restore"
+                  restoreSolution: "$(buildsolutionFile)"
+                  verbosityRestore: "Detailed"
 
               - task: VSBuild@1
                 displayName: "Visual Studio Build"
@@ -66,7 +73,6 @@ stages:
                     platform: "$(buildPlatform)"
                     configuration: "$(buildConfiguration)"
                     clean: true
-                    restoreNugetPackages: true
                     msbuildArchitecture: "x86"
                     createLogFile: true
                     logFileVerbosity: "detailed"
