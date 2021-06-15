@@ -77,14 +77,22 @@ stages:
                   publishLocation: 'pipeline'
 
               - powershell: |
-                  Write-Host "Configuring AWS Credentials"
-                  aws configure set aws_access_key_id $env:AWS_ACCESS_KEY_ID
-                  aws configure set aws_secret_access_key $env:AWS_SECRET_ACCESS_KEY
-                  aws configure set default.region us-east-1
-                  Write-Host "Successfully Configured AWS Credentials"
-                  Write-Host "Starting Upload"
-                  aws s3 cp "$(System.DefaultWorkingDirectory)\ManagementPacks\Community.DataOnDemand.Unix\bin\Release\Community.DataOnDemand.Unix.mpb" "s3://cibuilds.squaredup/management-packs/Community.DataOnDemand.Unix/$(DEMAND_MAJOR_VERSION).$(DEMAND_MINOR_VERSION).$(DEMAND_REVISION)/Community.DataOnDemand.Unix-$(DEMAND_MAJOR_VERSION).$(DEMAND_MINOR_VERSION).$(DEMAND_REVISION)-$(BUILD_NUMBER).mpb"
-                  Write-Host "Artifacts Uploaded to S3"
+                  try {
+                      Write-Host "Configuring AWS Credentials"
+                      aws configure set aws_access_key_id $env:AWS_ACCESS_KEY_ID
+                      aws configure set aws_secret_access_key $env:AWS_SECRET_ACCESS_KEY
+                      aws configure set default.region us-east-1
+                      Write-Host "Successfully Configured AWS Credentials"
+                      Write-Host "Starting Upload"
+                      aws s3 cp "$(System.DefaultWorkingDirectory)\ManagementPacks\Community.DataOnDemand.Unix\bin\Release\Community.DataOnDemand.Unix.mpb" "s3://cibuilds.squaredup/management-packs/Community.DataOnDemand.Unix/$(DEMAND_MAJOR_VERSION).$(DEMAND_MINOR_VERSION).$(DEMAND_REVISION)/Community.DataOnDemand.Unix-$(DEMAND_MAJOR_VERSION).$(DEMAND_MINOR_VERSION).$(DEMAND_REVISION)-$(BUILD_NUMBER).mpb"
+                      Write-Host "Artifacts Uploaded to S3"
+                  }
+                  catch {
+                      Write-Host "Failed to Upload Artifact"
+                      Write-Host $_.scriptstackTrace
+                      Write-Host "Response : $_.Exception.Response"
+                      exit -1
+                  }
                 workingDirectory: '$(System.DefaultWorkingDirectory)'
                 env:
                     AWS_ACCESS_KEY_ID: $(AWS_ACCESS_KEY_ID)
