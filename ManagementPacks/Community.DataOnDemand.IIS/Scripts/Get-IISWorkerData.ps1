@@ -48,7 +48,8 @@ $appcmd = "$Env:WinDir\system32\inetsrv\appCmd.exe"
 
 # Useful REs - must avoid using localised strings in here
 $netshRequestqBreakRe = New-Object Regex '^\S'
-$netshPidRe = New-Object Regex '^\s*(?<PID>\d+)\s*$'
+# https://regex101.com/r/qZ9PBy/1
+$netshPidRe = New-Object Regex '^\s*(?:Process IDs:\n\s+(?<PID>\d+)\s*$|Processes:\n\s+ID: (?<PID>\d+),)'
 $netshUrlRe = New-Object Regex ('^\s+https?://[^:]+:(?<PORT>\d+)',[System.Text.RegularExpressions.RegexOptions]::IgnoreCase)
 
 function ProcessBatch {
