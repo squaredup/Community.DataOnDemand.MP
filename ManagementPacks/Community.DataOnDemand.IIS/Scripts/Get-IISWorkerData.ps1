@@ -46,30 +46,9 @@ $appcmd = "$Env:WinDir\system32\inetsrv\appCmd.exe"
 # Custom parsing for netsh output
 #
 
-# Useful REs - must avoid using localised strings in here
-$netshRequestqBreakRe = New-Object Regex '^\S'
-# https://regex101.com/r/qZ9PBy/1
-$netshPidRe = New-Object Regex '^\s*(?:Process IDs:\n\s+(?<PID>\d+)\s*$|Processes:\n\s+ID: (?<PID>\d+),)'
-$netshUrlRe = New-Object Regex ('^\s+https?://[^:]+:(?<PORT>\d+)',[System.Text.RegularExpressions.RegexOptions]::IgnoreCase)
-
-function ProcessBatch {
-    [CmdletBinding()]
-    param(
-        $thisTrueByPort,
-        $thisTrueByPid
-    )
-
-    $results = @();
-    foreach ($port in $thisTrueByPort.Keys) {
-        foreach ($p in $thisTrueByPid.Keys) {
-            $results += New-Object PSObject -Property @{ Port = $port; Pid = $p };
-        }
-    }
-    $thisTrueByPort.Clear();
-    $thisTrueByPid.Clear();
-
-    return ,$results
-}
+# https://regex101.com/r/qZ9PBy/2
+$netshPidRe = New-Object Regex ('^\s*(?:Process IDs:\n(?:\s+(?<PID>\d+)\s*$)+|Processes:\n(?:\s+ID: (?<PID>\d+),.*)+)',[System.Text.RegularExpressions.RegexOptions]::Multiline)
+$netshUrlRe = New-Object Regex ('^\s+https?://[^:]+:(?<PORT>\d+)',([System.Text.RegularExpressions.RegexOptions]::IgnoreCase -bor [System.Text.RegularExpressions.RegexOptions]::Multiline))
 
 function GetNetshInfo {
     [CmdletBinding()]
@@ -80,30 +59,43 @@ function GetNetshInfo {
 
     $netshData = @(&$netsh http show servicestate view=requestq)
 
-    $thisTrueByPort = @{}
-    $thisTrueByPid = @{}
+    $requestQueues = @()
+    $currentQueue = $null
 
     foreach ($line in $netshData) {
-        $breakMatch = $netshRequestqBreakRe.Match($line)
-        if ($breakMatch.Success) {
-            $results += ProcessBatch $thisTrueByPort $thisTrueByPid
-
-        } else {
-            $pidMatch = $netshPidRe.Match($line)
-            if ($pidMatch.Success) {
-                $thisPid = [int]$pidMatch.Groups['PID'].Value
-                $thisTrueByPid[$thisPid] = $true
-            } else {
-                $urlMatch = $netshUrlRe.Match($line)
-                if ($urlMatch.Success) {
-                    $thisPort = [int]$urlMatch.Groups['PORT'].Value
-                    $thisTrueByPort[$thisPort] = $true
-                }
+        if($line -like "Request queue name:*")
+        {
+            if ($null -ne $currentQueue) {
+                $requestQueues += $currentQueue -join "`n"
             }
 
+            $currentQueue = @($line)
+        } elseif ($null -ne $currentQueue) {
+            $currentQueue += $line
         }
     }
-    $results += ProcessBatch $thisTrueByPort $thisTrueByPid
+
+    if($null -ne $currentQueue) {
+        $requestQueues += $currentQueue -join "`n"
+    }
+
+    foreach ($requestQueue in $requestQueues)
+    {
+        $pidMatch = $netshPidRe.Match($requestQueue)
+        if ($pidMatch.Success) {
+            $pids = $pidMatch.Groups['PID'].Captures.Value | ForEach-Object { [int]$_ }
+        } else {
+            $pids = $null
+        }
+        $urlMatches = $netshUrlRe.Matches($requestQueue)
+        $ports = $urlMatches | Select-Object -ExpandProperty Groups | Where-Object { $_.Name -eq 'PORT' } | ForEach-Object { [int]$_.Value }
+        
+        foreach ($port in $ports) {
+            foreach ($pidItem in $pids) {
+                $results += New-Object PSObject -Property @{ Port = $port; Pid = $pidItem };
+            }
+        }
+    }
 
     return ,$results
 }
