@@ -4,8 +4,8 @@ stages:
     - stage: buildStage
       displayName: 'Build Stage'
       pool:
-          vmImage: "vs2017-win2016"
-          name: Azure Pipelines
+          vmImage: $(MANAGEMENT_VM_IMAGE)
+          name: $(MANAGEMENT_AGENT_NAME)
           demands:
               - msbuild
               - visualstudio
