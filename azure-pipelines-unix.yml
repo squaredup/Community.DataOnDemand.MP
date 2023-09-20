@@ -5,11 +5,6 @@ stages:
     pool:
       vmImage: $(MANAGEMENT_VM_IMAGE)
       name: $(MANAGEMENT_AGENT_NAME)
-      demands:
-        - msbuild
-        - visualstudio
-        - Cmd
-        - vstest
     jobs:
       - 
           job: "buildJob"
