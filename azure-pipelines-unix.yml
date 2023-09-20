@@ -56,7 +56,7 @@ stages:
                 displayName: "Visual Studio Build"
                 inputs:
                     solution: "$(buildsolutionFile)"
-                    vsVersion: "15.0"
+                    vsVersion: "17.0"
                     msbuildArgs: '/verbosity:minimal /p:Version=$(DEMAND_MAJOR_VERSION).$(DEMAND_MINOR_VERSION).$(DEMAND_REVISION).$(BUILD_NUMBER) /p:AssemblyOriginatorKeyFile=$(STRONGNAME_KEY.secureFilePath)'
                     platform: "$(buildPlatform)"
                     configuration: "$(buildConfiguration)"
