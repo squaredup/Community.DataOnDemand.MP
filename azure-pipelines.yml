@@ -4,13 +4,8 @@ stages:
     - stage: buildStage
       displayName: 'Build Stage'
       pool:
-          vmImage: "vs2017-win2016"
-          name: Azure Pipelines
-          demands:
-              - msbuild
-              - visualstudio
-              - Cmd
-              - vstest
+          vmImage: $(MANAGEMENT_VM_IMAGE)
+          name: $(MANAGEMENT_AGENT_NAME)
       jobs:
           - 
               job: "buildJob"
@@ -28,8 +23,8 @@ stages:
                     inputs:
                       targetType: inline
                       script: | 
-                        $s3URI = "https://s3.amazonaws.com/releases.squaredup/squaredupltd/tools%26scripts/vsae-msi/VisualStudioAuthoringConsole_x86.msi"
-                        $file = "$(System.DefaultWorkingDirectory)\VisualStudioAuthoringConsole_x86.msi"
+                        $s3URI = "https://s3.amazonaws.com/releases.squaredup/squaredupltd/tools%26scripts/vsae-msi/VisualStudio2022AuthoringConsole_x64_v1.4.1.1.msi"
+                        $file = "$(System.DefaultWorkingDirectory)\VisualStudio2022AuthoringConsole_x64_v1.4.1.1.msi"
                         Write-Host "Downloading Build from $s3URI to $file"
                         (New-Object System.Net.WebClient).DownloadFile($s3URI, $file)
                         Get-ChildItem $(System.DefaultWorkingDirectory)
@@ -62,7 +57,7 @@ stages:
                     displayName: "Visual Studio Build"
                     inputs:
                         solution: "$(buildsolutionFile)"
-                        vsVersion: "15.0"
+                        vsVersion: "17.0"
                         msbuildArgs: '/verbosity:minimal /p:Version=$(DEMAND_MAJOR_VERSION).$(DEMAND_MINOR_VERSION).$(DEMAND_REVISION).$(BUILD_NUMBER) /p:AssemblyOriginatorKeyFile=$(STRONGNAME_KEY.secureFilePath)'
                         platform: "$(buildPlatform)"
                         configuration: "$(buildConfiguration)"
