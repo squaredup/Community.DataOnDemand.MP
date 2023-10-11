@@ -79,7 +79,7 @@ stages:
                     inputs:
                       rootFolderOrFile: '.\output\'
                       includeRootFolder: false
-                      archiveType: '7z'
+                      archiveType: 'zip'
                       archiveFile: '$(Build.ArtifactStagingDirectory)/Community.DataOnDemand-$(DEMAND_MAJOR_VERSION).$(DEMAND_MINOR_VERSION).$(DEMAND_REVISION)-$(BUILD_NUMBER).zip'
                       replaceExistingArchive: true
                       verbose: true
