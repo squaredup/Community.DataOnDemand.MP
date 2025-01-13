@@ -38,9 +38,21 @@ $ErrorActionPreference = "stop"
 
 # Cache for DNS lookup
 $dnsCache = @{}
-IPConfig /DisplayDNS | Select-String -Pattern "Record Name" -Context 0,5 | ForEach-Object {
-    if (($_.Context.PostContext[3] -Split ":")[1].Trim() -eq 'Answer') {
-        $dnsCache[($_.Context.PostContext[4] -Split ":")[1].Trim()] = ($_.Line -Split ":")[1].Trim()
+
+$dnsOutput = ipconfig /DisplayDNS | Out-String
+
+# Split by double newlines which separates each DNS record
+$dnsRecords = $dnsOutput -split "(`r`n){2,}" | Where-Object { -not [string]::IsNullOrWhiteSpace($_) }
+
+foreach ($dnsRecord in $dnsRecords) {
+    if ($dnsRecord -match "Section[\.?\s]*: Answer") {
+        # Capture the Record Name and DNS Record using lookbehind assertions
+        $recordNameMatch = [regex]::Match($dnsRecord, "(?<=\s*Record Name[\.?\s]*: ).+").Value.Trim()
+        $dnsRecordMatch = [regex]::Match($dnsRecord, "(?<=.+ Record[\.?\s]*: ).+").Value.Trim()
+        
+        if(-not [string]::IsNullOrWhiteSpace($recordNameMatch) -and -not [string]::IsNullOrWhiteSpace($dnsRecordMatch)) {
+                $dnsCache[$recordNameMatch] = $dnsRecordMatch
+        }
     }
 }
 
