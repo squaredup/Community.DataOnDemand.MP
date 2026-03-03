@@ -3,7 +3,7 @@
 # Copyright 2018 Squared Up Limited, All Rights Reserved.
 
 # Improved for performance: caches per-PID lookups; avoids extra processes - 02/24/2026
-
+echo "$(date) - Script executed" >> /tmp/scom_script_debug.log
 Format="$1"
 if [ -z "$Format" ]; then
 Format="csv"
