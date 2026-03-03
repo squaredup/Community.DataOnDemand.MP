@@ -15,7 +15,7 @@
     <LanguagePack ID="ENU" IsDefault="true">
       <DisplayStrings>
         <DisplayString ElementID="Community.DataOnDemand.Unix.Task.GetNetstatCsv">
-          <Name>Get Netstat CSV (Data On Demand)</Name>
+          <Name>Get Netstat CSV (Data On Demand) v2</Name>
           <Description>Displays established TCP connections on the target computer.</Description>
         </DisplayString>
       </DisplayStrings>
