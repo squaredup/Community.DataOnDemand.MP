@@ -9,8 +9,8 @@ if [ -z "$Format" ]; then
 Format="csv"
 fi
 
-localHostName=$(hostname)
-processDescMaxLength=128
+localHostName=${HOSTNAME%%.*}
+processDescMaxLength=75
 
 case "$Format" in
   csv)   lineEnd="\n" ;;
@@ -44,7 +44,7 @@ else
 fi
 
 # AWK: filter ESTABLISHED in-process; cache per PID; avoid cut/grep
-$NETCMD 2>/dev/null | awk \
+$NETCMD | head -n 400 2>/dev/null | awk \
   -v ORS="$lineEnd" \
   -v OFS=',' \
   -v host="$localHostName" \
@@ -116,10 +116,10 @@ $NETCMD 2>/dev/null | awk \
       comm = commCache[pid]
       args = argsCache[pid]
     }
-
-    # Output row
-    print host, pid, comm, args, toupper($1), localAddr, localPort, remoteAddr, remotePort, $6, remoteAddr
+   if (localAddr != remoteAddr){
+            # Output row
+            print host, pid, comm, args, toupper($1), localAddr, localPort, remoteAddr, remotePort, $6, remoteAddr
+    }
   }'
 
 exit 0
- 
